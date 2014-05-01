@@ -40,4 +40,6 @@ Visual Studio C++
 
 ## Other useful links ##
 
-[*.md files markdown synatx](https://github.com/fletcher/MultiMarkdown/blob/master/Documentation/Markdown%20Syntax.md "")
+[*.md files markdown synatx](https://github.com/fletcher/MultiMarkdown/blob/master/Documentation/Markdown%20Syntax.md "")  
+[SFML Tutorials](http://www.sfml-dev.org/tutorials/2.1/ "")  
+
