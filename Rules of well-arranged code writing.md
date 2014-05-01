@@ -15,9 +15,9 @@
 
 # Later section #
 Make spaces between the special characters (with an exceptions for parenthesis and semicolon), also when using block of code, place opening and closing brackets (“{“, “}”) in the separate lines, i.e.  
-  
-  for(int i = 0; i < 5; i++)  
-  {  
-  //some.code  
-  }  
+
+    for(int i = 0; i < 5; i++)
+    {
+    //some.code
+    }
   
