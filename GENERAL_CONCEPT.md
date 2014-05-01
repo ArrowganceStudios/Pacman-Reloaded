@@ -14,7 +14,7 @@ Download sources in custom folder:
 
     git clone git://github.com/xd-development/Pacman-Reloaded.git <folder_name>
     
-Update sources for up-to-date version:  
+Update sources for up-to-date version (local):  
 
     git pull git://github.com/xd-development/Pacman-Reloaded.git master
 
