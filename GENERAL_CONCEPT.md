@@ -2,7 +2,13 @@
 
 ## To-do list ##
 
-_to be written_
+1. Menu
+2. Map-system (including spawns, etc)
+3. Movement and collision system
+4. Game-mechanic system
+5. NPC and AI system
+6. Sound system
+7. _to be continued_
 
 ## Basic git commands usage ##
 
