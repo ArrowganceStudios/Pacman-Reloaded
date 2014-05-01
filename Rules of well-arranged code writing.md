@@ -1,6 +1,6 @@
 # Rules of well-arranged code writing #
 1. Use full function/variable names ie. "PlayerControls", not "PlrCon".
-2. 
+
 2. Use proper formatting, more about that in the _later section_.
 
 3. Use comments whenever it’s necessary for understanding the code.
