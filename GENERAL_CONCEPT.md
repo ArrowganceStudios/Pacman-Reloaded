@@ -4,6 +4,24 @@
 
 _to be written_
 
+## Basic git commands usage ##
+
+Download sources:   
+
+    git clone git://github.com/xd-development/Pacman-Reloaded.git
+    
+Download sources in custom folder:  
+
+    git clone git://github.com/xd-development/Pacman-Reloaded.git <folder_name>
+    
+Update sources for up-to-date version:  
+
+    git pull git://github.com/xd-development/Pacman-Reloaded.git master
+
+Update the git repository with own changes:
+
+    git push git://github.com/xd-development/Pacman-Reloaded.git master  
+    
 ## Resources used ##
 
 ### 2D Graphic Engine ###
