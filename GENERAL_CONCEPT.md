@@ -32,10 +32,13 @@ Update the git repository with own changes:
 
 ### 2D Graphic Engine ###
 
+![SFML](http://www.sfml-dev.org/download/goodies/sfml-logo-small.png)  
+
 [SFML - Simple and Fast Multimedia Library](http://www.sfml-dev.org/index.php "")
 
 ### Compiler ###
 
+![VSC++](http://scwww.awdit.com/sicon/165/3a20a744ab427928d6cb4b8e95c2066f.png)  
 Visual Studio C++ 
 
 ## Other useful links ##
