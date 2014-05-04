@@ -32,9 +32,9 @@ Update the git repository with own changes:
 
 ### 2D Graphic Engine ###
 
-![SFML](http://www.sfml-dev.org/download/goodies/sfml-logo-small.png)  
+![Allegro](http://alleg.sourceforge.net/images/logos/awiki_gimp.png)  
 
-[SFML - Simple and Fast Multimedia Library](http://www.sfml-dev.org/index.php "")
+[Allegro 5.0.10](http://alleg.sourceforge.net/download.html "")
 
 ### Compiler ###
 
@@ -44,5 +44,4 @@ Visual Studio C++
 ## Other useful links ##
 
 [*.md files markdown synatx](https://github.com/fletcher/MultiMarkdown/blob/master/Documentation/Markdown%20Syntax.md "")  
-[SFML Tutorials](http://www.sfml-dev.org/tutorials/2.1/ "")  
-
+[Allegro Tutorials](http://alleg.sourceforge.net/a5docs/5.0.10)
