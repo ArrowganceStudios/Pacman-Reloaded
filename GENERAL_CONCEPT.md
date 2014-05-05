@@ -45,3 +45,5 @@ Visual Studio C++
 
 [*.md files markdown synatx](https://github.com/fletcher/MultiMarkdown/blob/master/Documentation/Markdown%20Syntax.md "")  
 [Allegro Tutorials](http://alleg.sourceforge.net/a5docs/5.0.10)
+
+[Allegro Game Tutorial (good one)](http://fixbyproximity.com/2d-game-development-course)
