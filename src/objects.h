@@ -14,6 +14,7 @@ class Pacman
 	int speed;
 	bool mode;
 public:
+	Pacman(int x, int y, int bx, int by, int lives, int speed, bool mode);
 	int GetX();
 	int GetY();
 	int GetBoundX();

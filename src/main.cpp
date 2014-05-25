@@ -5,6 +5,7 @@
 const int WIDTH = 800;
 const int HEIGHT = 600;
 bool keys[] = {false, false, false, false};
+
 int main()
 {
 	//primitve variables
