@@ -1,3 +1,7 @@
+#ifndef OBJECTS_H //prevention of repeated includes
+#define OBJECTS_H
+
+
 enum KEYS{UP, DOWN, LEFT, RIGHT};
 
 class Pacman
@@ -19,3 +23,5 @@ public:
 	bool GetMode();
 	void Move(KEYS direction);
 };
+
+#endif
