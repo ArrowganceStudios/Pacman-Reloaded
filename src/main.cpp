@@ -58,7 +58,7 @@ int main()
 	event_queue = al_create_event_queue();
 	timer = al_create_timer(1.0 / FPS);
 
-	bgSheet = al_load_bitmap("bg.png");
+	bgSheet = al_load_bitmap("data/img/bg.png");
 
 	//event registers
 	al_register_event_source(event_queue, al_get_display_event_source(display));
