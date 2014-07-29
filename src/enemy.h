@@ -13,10 +13,5 @@ public:
 	void Update();
 	void Render();
 
-	void MoveUp();
-	void MoveDown();
-	void MoveLeft();
-	void MoveRight();
-
 	void Collided(int ObjectID);
 }; 

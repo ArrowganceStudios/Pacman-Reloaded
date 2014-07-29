@@ -2,6 +2,7 @@
 
 #include <allegro5\allegro5.h>
 #include <allegro5\allegro_primitives.h>
+#include <allegro5\allegro_image.h>
 #include "globals.h"
 
 class GameObject
@@ -31,11 +32,11 @@ protected:
 public:
 	GameObject();
 
-	void Init(float x, float y, int boundX, int boundY);
+	void Init(float x, float y, int boundX, int boundY, ALLEGRO_BITMAP *image);
 
-	void virtual Render();
-	void virtual Destroy();
-	void virtual Update();
+	void virtual Render(){};
+	void virtual Destroy(){};
+	void virtual Update(){};
 
 	float GetX() {return x;}
 	float GetY() {return y;}

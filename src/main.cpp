@@ -1,50 +1,27 @@
 #include <allegro5\allegro.h>
 #include <allegro5\allegro_image.h>
+
 #include "game_object.h"
 #include "player.h"
 #include "menu.h"
+#include "globals.h"
 
-//Global variables
-bool keys[] = {false, false, false, false};
+//Pacman spelt backwards is Hitler
 
 int main()
 {
-	//primitve variables
-	bool done = false; //event loop fundamental variable
-	bool redraw = true; //check whether the display needs an update
+	////PRIMITIVE VARIABLES
+	bool done = false; 																//event loop fundamental variable
+	bool redraw = true; 															//check whether the display needs an update
 	const int FPS = 60;
 
-	int mapColumns = 19;
-	int mapSize = 19 * 20;
-	int tileSize = 32;
-
-	int map[] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-				 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-				 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1,
-				 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1,
-				 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-				 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1,
-				 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1,
-				 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1,
-				 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1,
-				 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0,
-				 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1,
-				 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1,
-				 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1,
-				 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1,
-				 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1,
-				 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1,
-				 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1,
-				 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1,
-				 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-				 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-	//Allegro variables
+	////ALLLEGRO VARIABLES
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_BITMAP *bgSheet = NULL;
 
-	//inits
+	////INITS
 	if(!al_init())
 		return -1;
 
@@ -60,13 +37,14 @@ int main()
 
 	bgSheet = al_load_bitmap("data/img/bg.png");
 
-	//event registers
+	////EVENT REGISTERS
 	al_register_event_source(event_queue, al_get_display_event_source(display));
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 
 	al_start_timer(timer);
-	//gameloop
+
+	////GAMELOOP
 	while(!done)
 	{
 		ALLEGRO_EVENT ev;
@@ -120,7 +98,7 @@ int main()
 		}
 		else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 		{
-			done = true; //closing the game after clicking X on top-right corner
+			done = true; 												//closing the game after clicking X on top-right corner
 		}
 
 		if(redraw && al_is_event_queue_empty(event_queue))
@@ -134,11 +112,11 @@ int main()
 			}
 
 			al_flip_display();
-			al_clear_to_color(al_map_rgb(0,0,0)); //black background
+			al_clear_to_color(al_map_rgb(0,0,0)); 						//black background
 		}
 	}
 
-	//deallocating memory used for allegro objects
+	//DEALLOCATING MEMORY
 
 	al_destroy_bitmap(bgSheet);
 	al_destroy_display(display);

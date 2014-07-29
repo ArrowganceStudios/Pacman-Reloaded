@@ -8,11 +8,13 @@ protected:
 	float velocity;
 
 public:
-	MobileObject(float x, float y, ALLEGRO_BITMAP *image);
+	MobileObject::MobileObject(void);
 
-	void Render();
-	void Destroy();
-	void Update();
+	void Init(float x, float y, int boundX, int boundY, ALLEGRO_BITMAP *image);
+
+	void virtual Render(){GameObject::Render();}
+	void virtual Destroy(){GameObject::Destroy();}
+	void virtual Update(){GameObject::Update();}
 
 	void MoveUp();
 	void MoveDown();

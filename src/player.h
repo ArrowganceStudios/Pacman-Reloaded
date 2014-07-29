@@ -1,24 +1,21 @@
 #pragma once
-enum KEYS{UP, DOWN, LEFT, RIGHT};
 
-class Pacman 
+#include "mobile_object.h"
+
+class Pacman : public MobileObject
 {
-	int x;
-	int y;
-	int boundx;
-	int boundy;
+protected:
 	int lives;
-	int speed;
-	bool mode;
 public:
-	Pacman(int x, int y, int bx, int by, int lives, int speed, bool mode);
-	int GetX();
-	int GetY();
-	int GetBoundX();
-	int GetBoundY();
-	int GetLives();
-	int GetSpeed();
-	bool GetMode();
-	void Move(KEYS direction);
-};
+	Pacman();
 
+	void Init(float x, float y, int boundX,  int boundY, int velocity, float lives, ALLEGRO_BITMAP *image = NULL);
+
+	void Movement();
+
+	void Destroy();
+	void Update();
+	void Render();
+
+	void Collided(int ObjectID);
+}; 

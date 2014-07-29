@@ -1,48 +1,80 @@
 #include "player.h"
 
-//constructor
-Pacman::Pacman(int x, int y, int bx, int by, int lives, int speed, bool mode)
-	:x(x), y(y), boundx(bx), boundy(by), lives(lives), speed(speed), mode(mode)
+Pacman::Pacman()
 {
-}
-//accessors
-int Pacman::GetX()
+	MobileObject::MobileObject();
+	x = 0;
+	y = 0;
+	boundX = 0;
+	boundY = 0;
+	velocity = 1;
+
+	image = NULL;
+};
+
+void Pacman::Init(float x, float y, int boundX,  int boundY, int velocity, float lives, ALLEGRO_BITMAP *image)
 {
-	return x;
+	MobileObject::Init(x, y, boundX, boundY, image);
+
+	Pacman::velocity = velocity;
+	Pacman::lives = lives;
+
+	maxFrame = 2;
+	curFrame = 0;
+	frameCount = 0;								//depends on sprite NEED TO BE FILLED WITH CORRECT VALUES
+	frameDelay = 3;
+	frameWidth = 32;
+	frameHeight = 32;
+	animationColumns = 2;
+
+	Pacman::image = image;
 }
 
-int Pacman::GetY()
+void Pacman::Movement()
 {
-	return y;
+	if(keys[UP]) MobileObject::MoveUp();
+	else if(keys[DOWN]) MobileObject::MoveDown();
+	else if(keys[LEFT]) MobileObject::MoveLeft();
+	else if(keys[RIGHT]) MobileObject::MoveRight();
 }
 
-int Pacman::GetBoundX()
+void Pacman::Destroy()
 {
-	return boundx;
+	MobileObject::Destroy();
+
+}
+void Pacman::Update()
+{
+	Pacman::Movement();
+
+	if(++frameCount >= frameDelay)
+	{
+		curFrame ++;
+		if(curFrame >= maxFrame)
+			curFrame = 0;
+		else if(curFrame <= 0)
+			curFrame = maxFrame;
+
+		frameCount = 0;
+	}
+	if(Pacman::x < 0)
+		Pacman::x = WIDTH - 1;
+	else if(Pacman::x > WIDTH)
+		Pacman::x = 1;
+
+}
+void Pacman::Render()
+{
+
+	MobileObject::Render();
+
+	int fx = (curFrame % animationColumns) * frameWidth;
+	int fy = (curFrame / animationColumns) * frameHeight;
+
+	al_draw_bitmap_region(image, fx, fy, frameWidth, frameHeight, x - frameWidth / 2, y - frameHeight / 2, 0);
 }
 
-int Pacman::GetBoundY()
+void Pacman::Collided(int ObjectID)
 {
-	return boundy;
-}
 
-int Pacman::GetLives()
-{
-	return lives;
-}
-
-int Pacman::GetSpeed()
-{
-	return speed;
-}
-
-bool Pacman::GetMode()
-{
-	return mode;
-}
-
-//utility
-void Pacman::Move(KEYS direction)
-{
-	//to be implemented
 }

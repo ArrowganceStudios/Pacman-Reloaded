@@ -22,19 +22,22 @@ GameObject::GameObject()
 	collidable = true;
 }
 
-void GameObject::Init(float x, float y, int boundX, int boundY)
+void GameObject::Init(float x, float y, int boundX, int boundY, ALLEGRO_BITMAP *image)
 {
 	GameObject::x = x;
 	GameObject::y = y;
 
 	GameObject::boundX = boundX;
 	GameObject::boundY = boundY;
+
+	GameObject::image = image;
+
 }
 
 //stuff
-void GameObject::Render(){};
-void GameObject::Destroy(){};
-void GameObject::Update(){};
+//void virtual GameObject::Render(){};
+//void virtual GameObject::Destroy(){};
+//void virtual GameObject::Update(){};
 
 bool GameObject::CheckCollisions(GameObject *OtherObject)
 {
@@ -57,3 +60,4 @@ bool GameObject::Collidable()
 {
 	return alive && collidable;
 }
+ 
