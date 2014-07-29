@@ -1,10 +1,13 @@
 #include <allegro5\allegro.h>
-#include "game_object.h"
+#include "objects.h"
 #include "player.h"
 #include "menu.h"
 #include "NPC.h"
 
+
 //Global variables
+const int WIDTH = 800;
+const int HEIGHT = 600;
 bool keys[] = {false, false, false, false};
 
 int main()
