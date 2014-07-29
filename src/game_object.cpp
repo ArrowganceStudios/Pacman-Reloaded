@@ -22,12 +22,33 @@ GameObject::GameObject()
 	collidable = true;
 }
 
-GameObject::Init(float x, float y, int boundX, int boundY)
+GameObject::Init(float x, float y, int boundX, int boundY):
+x(x), y(y), boundX(boundX), boundY(boundY)
+{}
+
+//stuff
+void GameObject::Render(){};
+void GameObject::Destroy(){};
+void GameObject::Update(){};
+
+bool GameObject::CheckCollisions(GameObject *otherObject)
 {
+	float oX = OtherObject->GetX();
+	float oY = OtherObject->GetY();
+	int obX = OtherObject->GetBoundX();
+	int obY = OtherObject->GetBoundY();
 
-	SetX(x);
-	SetY(y);
+	if( x + boundX > oX - obX &&
+		x - boundX < oX + obX &&
+		y + boundY > oY - obY &&
+		y - boundY < oY + obY)
+		return true;
+	else 
+		return false;
+}
 
-	
-
+void GameObject::Collided(int objectID){};
+bool GameObject::Collidable()
+{
+	return alive && collidable;
 }
