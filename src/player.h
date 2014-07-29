@@ -1,8 +1,7 @@
-#ifndef PLAYER_H //prevention from repeating includes
-#define PLAYER_H
+#pragma once
 enum KEYS{UP, DOWN, LEFT, RIGHT};
 
-class Pacman
+class Pacman 
 {
 	int x;
 	int y;
@@ -23,4 +22,3 @@ public:
 	void Move(KEYS direction);
 };
 
-#endif
