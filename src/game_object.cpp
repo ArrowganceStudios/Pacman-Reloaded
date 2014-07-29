@@ -1,4 +1,4 @@
-#include "objects.h"
+#include "game_object.h"
 
 GameObject::GameObject()
 {
@@ -22,16 +22,21 @@ GameObject::GameObject()
 	collidable = true;
 }
 
-GameObject::Init(float x, float y, int boundX, int boundY):
-x(x), y(y), boundX(boundX), boundY(boundY)
-{}
+void GameObject::Init(float x, float y, int boundX, int boundY)
+{
+	GameObject::x = x;
+	GameObject::y = y;
+
+	GameObject::boundX = boundX;
+	GameObject::boundY = boundY;
+}
 
 //stuff
 void GameObject::Render(){};
 void GameObject::Destroy(){};
 void GameObject::Update(){};
 
-bool GameObject::CheckCollisions(GameObject *otherObject)
+bool GameObject::CheckCollisions(GameObject *OtherObject)
 {
 	float oX = OtherObject->GetX();
 	float oY = OtherObject->GetY();
