@@ -30,7 +30,7 @@ void Pacman::Init(float x, float y, int boundX,  int boundY, int velocity, float
 	Pacman::image = image;
 }
 
-void Pacman::Movement()
+void Pacman::Movement(bool *keys)
 {
 	if(keys[UP]) MobileObject::MoveUp();
 	else if(keys[DOWN]) MobileObject::MoveDown();
@@ -43,9 +43,9 @@ void Pacman::Destroy()
 	MobileObject::Destroy();
 
 }
-void Pacman::Update()
+void Pacman::Update(bool *keys)
 {
-	Pacman::Movement();
+	Pacman::Movement(keys);
 
 	if(++frameCount >= frameDelay)
 	{

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "game_object.h"
+#include "globals.h"
 
 class MobileObject : public GameObject
 {

@@ -1,5 +1,6 @@
 #include <allegro5\allegro.h>
 #include <allegro5\allegro_image.h>
+#include <allegro5\allegro_primitives.h>
 
 #include "game_object.h"
 #include "player.h"
@@ -7,6 +8,8 @@
 #include "globals.h"
 
 //Pacman spelt backwards is Hitler
+
+Pacman *player;
 
 int main()
 {
@@ -20,6 +23,7 @@ int main()
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_BITMAP *bgSheet = NULL;
+	ALLEGRO_BITMAP *pmImage = NULL;
 
 	////INITS
 	if(!al_init())
@@ -31,11 +35,18 @@ int main()
 
 	al_install_keyboard();
 	al_init_image_addon();
+	al_init_primitives_addon();
+
+	player = new Pacman();
 
 	event_queue = al_create_event_queue();
 	timer = al_create_timer(1.0 / FPS);
 
-	bgSheet = al_load_bitmap("data/img/bg.png");
+	bgSheet = al_load_bitmap("Sources/data/img/bg.png");
+	pmImage = al_load_bitmap("Sources/data/img/pm.png");
+	al_convert_mask_to_alpha(pmImage, al_map_rgb(255, 255, 255));
+
+	player->Init(WIDTH / 2, HEIGHT / 2, 16, 16, 5, 3, pmImage);
 
 	////EVENT REGISTERS
 	al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -70,6 +81,7 @@ int main()
 				keys[DOWN] = true;
 				break;
 			}
+			
 		}
 		else if(ev.type == ALLEGRO_EVENT_KEY_UP)
 		{
@@ -92,15 +104,17 @@ int main()
 				break;
 			}
 		}
-		else if(ev.type == ALLEGRO_EVENT_TIMER)
-		{
-			redraw = true;
-		}
 		else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 		{
 			done = true; 												//closing the game after clicking X on top-right corner
 		}
+		else if(ev.type == ALLEGRO_EVENT_TIMER)
+		{
+			redraw = true;
 
+			player->Update(keys);
+		}
+	
 		if(redraw && al_is_event_queue_empty(event_queue))
 		{
 			redraw = false;
@@ -110,6 +124,10 @@ int main()
 				al_draw_bitmap_region(bgSheet, tileSize * map[i], 0, tileSize, tileSize, 
 					tileSize * (i % mapColumns), tileSize * (i / mapColumns), 0);
 			}
+
+			player->Render();
+
+			if(keys[LEFT]) al_draw_circle(100, 100, 10, al_map_rgb(255, 255, 255), 10);
 
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0,0,0)); 						//black background
