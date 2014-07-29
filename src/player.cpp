@@ -22,7 +22,7 @@ void Pacman::Init(float x, float y, int boundX,  int boundY, int velocity, float
 	maxFrame = 2;
 	curFrame = 0;
 	frameCount = 0;								//depends on sprite NEED TO BE FILLED WITH CORRECT VALUES
-	frameDelay = 3;
+	frameDelay = 10;
 	frameWidth = 32;
 	frameHeight = 32;
 	animationColumns = 2;

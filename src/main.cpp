@@ -42,11 +42,11 @@ int main()
 	event_queue = al_create_event_queue();
 	timer = al_create_timer(1.0 / FPS);
 
-	bgSheet = al_load_bitmap("Sources/data/img/bg.png");
-	pmImage = al_load_bitmap("Sources/data/img/pm.png");
+	bgSheet = al_load_bitmap("data/img/bg.png");
+	pmImage = al_load_bitmap("data/img/pm.png");
 	al_convert_mask_to_alpha(pmImage, al_map_rgb(255, 255, 255));
 
-	player->Init(WIDTH / 2, HEIGHT / 2, 16, 16, 5, 3, pmImage);
+	player->Init(WIDTH / 2, HEIGHT / 2, 16, 16, 2.5, 3, pmImage);
 
 	////EVENT REGISTERS
 	al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -126,8 +126,6 @@ int main()
 			}
 
 			player->Render();
-
-			if(keys[LEFT]) al_draw_circle(100, 100, 10, al_map_rgb(255, 255, 255), 10);
 
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0,0,0)); 						//black background
