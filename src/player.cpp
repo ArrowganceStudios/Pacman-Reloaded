@@ -19,13 +19,13 @@ void Pacman::Init(float x, float y, int boundX,  int boundY, int velocity, float
 	Pacman::velocity = velocity;
 	Pacman::lives = lives;
 
-	maxFrame = 2;
+	maxFrame = 6;
 	curFrame = 0;
 	frameCount = 0;								//depends on sprite NEED TO BE FILLED WITH CORRECT VALUES
-	frameDelay = 10;
+	frameDelay = 3;
 	frameWidth = 32;
 	frameHeight = 32;
-	animationColumns = 2;
+	animationColumns = 6;
 
 	Pacman::image = image;
 }
