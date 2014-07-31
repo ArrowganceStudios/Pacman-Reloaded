@@ -83,11 +83,11 @@ void Pacman::Update(int keys)
 		frameCount = 0;
 	}
 	if(Pacman::x < 0)
-		Pacman::x = WIDTH + 31;
+		Pacman::x = WIDTH + 32;
 	else if(Pacman::x > WIDTH+32)
 		Pacman::x = 1;
 	if(Pacman::y < 0)
-		Pacman::y = HEIGHT + 31;
+		Pacman::y = HEIGHT + 32;
 	else if (Pacman::y > HEIGHT+32)
 		Pacman::y = 1;
 	// Now it's smooth and silky
