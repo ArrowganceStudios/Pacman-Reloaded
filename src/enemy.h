@@ -2,7 +2,7 @@
 
 #include "mobile_object.h"
 
-class Ghost : public mobile_object
+class Ghost : public MobileObject
 {
 public:
 	Ghost(float x, float y, ALLEGRO_BITMAP *image);

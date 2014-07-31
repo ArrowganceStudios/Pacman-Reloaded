@@ -9,7 +9,7 @@ void MobileObject::Init(float x, float y, int boundX, int boundY, ALLEGRO_BITMAP
 {
 	GameObject::Init(x, y, boundX, boundY, image);
 }
-
+//gotta implement pacman rotating here
 void MobileObject::MoveUp()
 {
 	y -= velocity;

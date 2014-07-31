@@ -60,7 +60,8 @@ int main()
 	{
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
-
+		
+		//this stuff needs to be redone, doesn't really fit a game like Pacman
 		if(ev.type == ALLEGRO_EVENT_KEY_DOWN)
 		{
 			switch(ev.keyboard.keycode)
@@ -108,19 +109,21 @@ int main()
 		{
 			done = true; 												//closing the game after clicking X on top-right corner
 		}
+		//UPDATE
 		else if(ev.type == ALLEGRO_EVENT_TIMER)
 		{
 			redraw = true;
 
 			player->Update(keys);
 		}
-	
+		//RENDERING
 		if(redraw && al_is_event_queue_empty(event_queue))
 		{
 			redraw = false;
 
 			for(int i = 0; i < mapSize; i++)
 			{
+				//drawing map
 				al_draw_bitmap_region(bgSheet, tileSize * map[i], 0, tileSize, tileSize, 
 					tileSize * (i % mapColumns), tileSize * (i / mapColumns), 0);
 			}

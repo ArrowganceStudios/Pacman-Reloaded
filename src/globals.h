@@ -1,5 +1,5 @@
 #pragma once
-namespace{
+namespace{//still dunno why, but k
 const int WIDTH = 640 - 32;
 const int HEIGHT = 640;
 
