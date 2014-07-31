@@ -7,7 +7,6 @@ class MobileObject : public GameObject
 {
 protected:
 	float velocity;
-	int direction;
 
 public:
 	MobileObject::MobileObject(void);
@@ -27,5 +26,4 @@ public:
 	void MoveRight();
 
 	void Collided(int ObjectID);
-	void SetDir(int direction) {MobileObject::direction = direction;}
 };

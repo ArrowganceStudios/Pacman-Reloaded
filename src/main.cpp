@@ -46,7 +46,7 @@ int main()
 	pmImage = al_load_bitmap("data/img/pm.png");
 	al_convert_mask_to_alpha(pmImage, al_map_rgb(255, 255, 255));
 
-	player->Init(WIDTH / 2 + 16, HEIGHT / 2, 16, 16, 1, 3, pmImage);
+	player->Init(WIDTH / 2, HEIGHT / 2, 16, 16, 1, 3, pmImage);
 
 	////EVENT REGISTERS
 	al_register_event_source(event_queue, al_get_display_event_source(display));

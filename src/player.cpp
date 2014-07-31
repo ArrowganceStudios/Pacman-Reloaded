@@ -31,7 +31,6 @@ void Pacman::Init(float x, float y, int boundX,  int boundY, int velocity, float
 	angle = 0;
 
 	Pacman::image = image;
-	Pacman::SetDir(1);
 }
 
 void Pacman::Movement(int keys)
@@ -65,12 +64,7 @@ void Pacman::Destroy()
 }
 void Pacman::Update(int keys)
 {
-	Pacman::Movement(direction);
-	if((direction != keys) && )
-	{
-		direction = keys;
-		Pacman::Movement(keys);
-	}
+	Pacman::Movement(keys);
 
 	if(++frameCount >= frameDelay)
 	{
