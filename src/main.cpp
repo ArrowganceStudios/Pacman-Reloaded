@@ -61,7 +61,6 @@ int main()
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
 		
-		//this stuff needs to be redone, doesn't really fit a game like Pacman
 		if(ev.type == ALLEGRO_EVENT_KEY_DOWN)
 		{
 			switch(ev.keyboard.keycode)	
@@ -84,27 +83,6 @@ int main()
 			}
 			
 		}
-		/*else if(ev.type == ALLEGRO_EVENT_KEY_UP)
-		{
-			switch(ev.keyboard.keycode)
-			{
-			case ALLEGRO_KEY_ESCAPE:
-				done = true;
-				break;
-			case ALLEGRO_KEY_LEFT:
-				keys[LEFT] = false;
-				break;
-			case ALLEGRO_KEY_RIGHT:
-				keys[RIGHT] = false;
-				break;
-			case ALLEGRO_KEY_UP:
-				keys[UP] = false;
-				break;
-			case ALLEGRO_KEY_DOWN:
-				keys[DOWN] = false;
-				break;
-			}
-		}*/
 		else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 		{
 			done = true; 												//closing the game after clicking X on top-right corner
@@ -121,11 +99,9 @@ int main()
 		{
 			redraw = false;
 
+			//drawing map
 			for(int i = 0; i < 20; i++)
 			{
-				//drawing map
-				//al_draw_bitmap_region(bgSheet, tileSize * map[i], 0, tileSize, tileSize, 
-				//	tileSize * (i % mapColumns), tileSize * (i / mapColumns), 0);
 				for(int j = 0; j < 19; j++)
 				{
 					al_draw_bitmap_region(bgSheet, tileSize * map[i][j], 0, tileSize, tileSize,
@@ -144,6 +120,7 @@ int main()
 
 	//DEALLOCATING MEMORY
 
+	al_destroy_bitmap(pmImage);
 	al_destroy_bitmap(bgSheet);
 	al_destroy_display(display);
 	al_destroy_event_queue(event_queue);

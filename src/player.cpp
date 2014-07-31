@@ -21,17 +21,16 @@ void Pacman::Init(float x, float y, int boundX,  int boundY, int velocity, float
 
 	maxFrame = 6;
 	curFrame = 0;
-	frameCount = 0;								//depends on sprite NEED TO BE FILLED WITH CORRECT VALUES
+	frameCount = 0;								
 	frameDelay = 3;
 	frameWidth = 32;
 	frameHeight = 32;
 	animationColumns = 6;
 
-	//that makes the Pacman rotating; I don't know if this can be done fancier
 	angle = 0;
 
 	Pacman::image = image;
-	Pacman::SetDir(1);
+	Pacman::SetDir(-1);
 }
 
 void Pacman::Movement(int keys)
