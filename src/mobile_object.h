@@ -17,6 +17,9 @@ public:
 	void virtual Destroy(){GameObject::Destroy();}
 	void virtual Update(){GameObject::Update();}
 
+	int MyPositionX();
+	int MyPositionY();
+
 	void MoveUp();
 	void MoveDown();
 	void MoveLeft();

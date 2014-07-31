@@ -10,6 +10,16 @@ void MobileObject::Init(float x, float y, int boundX, int boundY, ALLEGRO_BITMAP
 	GameObject::Init(x, y, boundX, boundY, image);
 }
 //gotta implement pacman rotating here
+
+int MobileObject::MyPositionX()
+{
+	return (x + 16) / 32;
+}
+int MobileObject::MyPositionY()
+{
+	return (y + 16) / 32;
+}
+
 void MobileObject::MoveUp()
 {
 	y -= velocity;

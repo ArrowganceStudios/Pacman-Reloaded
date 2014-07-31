@@ -34,11 +34,6 @@ void GameObject::Init(float x, float y, int boundX, int boundY, ALLEGRO_BITMAP *
 
 }
 
-//stuff
-//void virtual GameObject::Render(){};
-//void virtual GameObject::Destroy(){};
-//void virtual GameObject::Update(){};
-
 bool GameObject::CheckCollisions(GameObject *OtherObject)
 {
 	float oX = OtherObject->GetX();

@@ -46,7 +46,7 @@ int main()
 	pmImage = al_load_bitmap("data/img/pm.png");
 	al_convert_mask_to_alpha(pmImage, al_map_rgb(255, 255, 255));
 
-	player->Init(WIDTH / 2, HEIGHT / 2, 16, 16, 2.5, 3, pmImage);
+	player->Init(WIDTH / 2, HEIGHT / 2, 16, 16, 1, 3, pmImage);
 
 	////EVENT REGISTERS
 	al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -132,6 +132,10 @@ int main()
 						tileSize * j, tileSize * i, 0);
 				}
 			}
+
+			al_draw_filled_rectangle(player->MyPositionX()*32, player->MyPositionY()*32, 
+									(player->MyPositionX()*32)-32, (player->MyPositionY()*32)-32,
+																								al_map_rgba_f(1, 1, 1, 0.01));
 
 			player->Render();
 
