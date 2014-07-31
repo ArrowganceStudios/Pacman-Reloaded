@@ -133,11 +133,16 @@ int main()
 		{
 			redraw = false;
 
-			for(int i = 0; i < mapSize; i++)
+			for(int i = 0; i < 20; i++)
 			{
 				//drawing map
-				al_draw_bitmap_region(bgSheet, tileSize * map[i], 0, tileSize, tileSize, 
-					tileSize * (i % mapColumns), tileSize * (i / mapColumns), 0);
+				//al_draw_bitmap_region(bgSheet, tileSize * map[i], 0, tileSize, tileSize, 
+				//	tileSize * (i % mapColumns), tileSize * (i / mapColumns), 0);
+				for(int j = 0; j < 19; j++)
+				{
+					al_draw_bitmap_region(bgSheet, tileSize * map[i][j], 0, tileSize, tileSize,
+						tileSize * j, tileSize * i, 0);
+				}
 			}
 
 			player->Render();
