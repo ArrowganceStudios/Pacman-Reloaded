@@ -66,7 +66,7 @@ void Pacman::Destroy()
 void Pacman::Update(int keys)
 {
 	Pacman::Movement(direction);
-	if((direction != keys) && )
+	if((direction != keys) && !((int)x % 32) && !((int)y % 32))
 	{
 		direction = keys;
 		Pacman::Movement(keys);
