@@ -7,16 +7,15 @@ class Pacman : public MobileObject
 protected:
 	int lives;
 	float angle;
-	bool flip;
 public:
 	Pacman();
 
 	void Init(float x, float y, int boundX,  int boundY, int velocity, float lives, ALLEGRO_BITMAP *image = NULL);
 
-	void Movement(bool *keys);
+	void Movement(int keys);
 
 	void Destroy();
-	void Update(bool *keys);
+	void Update(int keys);
 	void Render();
 
 	void Collided(int ObjectID);

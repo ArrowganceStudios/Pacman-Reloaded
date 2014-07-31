@@ -7,7 +7,8 @@ const int HEIGHT = 640;
 enum ID{PLAYER, ENEMY, COIN, POWERUP, FRUITS};
 enum STATE{TITLE, NORMAL, POWER}; 
 
-bool keys[] = {false, false, false, false};
+int keys = -1;
+//bool keys[] = {false, false, false, false};
 enum KEYS{UP, DOWN, LEFT, RIGHT};
 
 int mapColumns = 19;

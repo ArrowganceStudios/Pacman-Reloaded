@@ -29,36 +29,31 @@ void Pacman::Init(float x, float y, int boundX,  int boundY, int velocity, float
 
 	//that makes the Pacman rotating; I don't know if this can be done fancier
 	angle = 0;
-	flip = false;
 
 	Pacman::image = image;
 }
 
-void Pacman::Movement(bool *keys)
+void Pacman::Movement(int keys)
 {
-	if(keys[UP]) 
+	if(keys == UP) 
 		{
 			MobileObject::MoveUp();
 			angle = -ALLEGRO_PI / 2;
-			flip = false;
 		}
-	else if(keys[DOWN]) 
+	else if(keys == DOWN) 
 		{
 			MobileObject::MoveDown();
 			angle = ALLEGRO_PI / 2;
-			flip = false;
 		}
-	else if(keys[LEFT]) 
+	else if(keys == LEFT) 
 		{
 			MobileObject::MoveLeft();
-			angle = 0;
-			flip = true;
+			angle = ALLEGRO_PI;
 		}
-	else if(keys[RIGHT]) 
+	else if(keys == RIGHT) 
 		{
 			MobileObject::MoveRight();
 			angle = 0;
-			flip = false;
 		}
 }
 
@@ -67,7 +62,7 @@ void Pacman::Destroy()
 	MobileObject::Destroy();
 
 }
-void Pacman::Update(bool *keys)
+void Pacman::Update(int keys)
 {
 	Pacman::Movement(keys);
 
@@ -99,11 +94,6 @@ void Pacman::Render()
 	int fx = (curFrame % animationColumns) * frameWidth;
 	int fy = (curFrame / animationColumns) * frameHeight;
 
-	if(flip)
-		al_draw_tinted_scaled_rotated_bitmap_region(image, fx, fy, frameWidth, frameHeight, 
-		al_map_rgba_f(1, 1, 1, 1.0), frameWidth / 2, frameHeight / 2, x - frameWidth / 2, 
-		y - frameHeight / 2, 1, 1, angle, ALLEGRO_FLIP_HORIZONTAL); 
-	else
 		al_draw_tinted_scaled_rotated_bitmap_region(image, fx, fy, frameWidth, frameHeight, 
 		al_map_rgba_f(1, 1, 1, 1.0), frameWidth / 2, frameHeight / 2, x - frameWidth / 2, 
 		y - frameHeight / 2, 1, 1, angle, 0);

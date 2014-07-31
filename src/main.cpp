@@ -70,28 +70,16 @@ int main()
 				done = true;
 				break;
 			case ALLEGRO_KEY_LEFT:
-				keys[LEFT] = true;
-				keys[RIGHT] = false;		// HIDEOUS
-				keys[UP] = false;
-				keys[DOWN] = false;
+				keys = LEFT;
 				break;
 			case ALLEGRO_KEY_RIGHT:
-				keys[LEFT] = false;
-				keys[RIGHT] = true;			// AS
-				keys[UP] = false;
-				keys[DOWN] = false;
+				keys = RIGHT;
 				break;
 			case ALLEGRO_KEY_UP:
-				keys[LEFT] = false;
-				keys[RIGHT] = false;		// FUCK
-				keys[UP] = true;
-				keys[DOWN] = false;
+				keys = UP;
 				break;
 			case ALLEGRO_KEY_DOWN:
-				keys[LEFT] = false;
-				keys[RIGHT] = false;		// HOW TO SIMPLIFY IT?!
-				keys[UP] = false;
-				keys[DOWN] = true;
+				keys = DOWN;
 				break;
 			}
 			
