@@ -6,6 +6,8 @@ class Pacman : public MobileObject
 {
 protected:
 	int lives;
+	float angle;
+	bool flip;
 public:
 	Pacman();
 

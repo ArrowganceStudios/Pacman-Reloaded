@@ -64,27 +64,39 @@ int main()
 		//this stuff needs to be redone, doesn't really fit a game like Pacman
 		if(ev.type == ALLEGRO_EVENT_KEY_DOWN)
 		{
-			switch(ev.keyboard.keycode)
+			switch(ev.keyboard.keycode)	
 			{
 			case ALLEGRO_KEY_ESCAPE:
 				done = true;
 				break;
 			case ALLEGRO_KEY_LEFT:
 				keys[LEFT] = true;
+				keys[RIGHT] = false;		// HIDEOUS
+				keys[UP] = false;
+				keys[DOWN] = false;
 				break;
 			case ALLEGRO_KEY_RIGHT:
-				keys[RIGHT] = true;
+				keys[LEFT] = false;
+				keys[RIGHT] = true;			// AS
+				keys[UP] = false;
+				keys[DOWN] = false;
 				break;
 			case ALLEGRO_KEY_UP:
+				keys[LEFT] = false;
+				keys[RIGHT] = false;		// FUCK
 				keys[UP] = true;
+				keys[DOWN] = false;
 				break;
 			case ALLEGRO_KEY_DOWN:
+				keys[LEFT] = false;
+				keys[RIGHT] = false;		// HOW TO SIMPLIFY IT?!
+				keys[UP] = false;
 				keys[DOWN] = true;
 				break;
 			}
 			
 		}
-		else if(ev.type == ALLEGRO_EVENT_KEY_UP)
+		/*else if(ev.type == ALLEGRO_EVENT_KEY_UP)
 		{
 			switch(ev.keyboard.keycode)
 			{
@@ -104,7 +116,7 @@ int main()
 				keys[DOWN] = false;
 				break;
 			}
-		}
+		}*/
 		else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 		{
 			done = true; 												//closing the game after clicking X on top-right corner
