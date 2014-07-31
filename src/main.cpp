@@ -133,9 +133,7 @@ int main()
 				}
 			}
 
-			al_draw_filled_rectangle(player->MyPositionX()*32, player->MyPositionY()*32, 
-									(player->MyPositionX()*32)-32, (player->MyPositionY()*32)-32,
-																								al_map_rgba_f(1, 1, 1, 0.01));
+			
 
 			player->Render();
 

@@ -85,11 +85,11 @@ void Pacman::Update(int keys)
 	if(Pacman::x < 0)
 		Pacman::x = WIDTH + 32;
 	else if(Pacman::x > WIDTH+32)
-		Pacman::x = 1;
+		Pacman::x = 0;
 	if(Pacman::y < 0)
 		Pacman::y = HEIGHT + 32;
 	else if (Pacman::y > HEIGHT+32)
-		Pacman::y = 1;
+		Pacman::y = 0;
 	// Now it's smooth and silky
 }
 void Pacman::Render()
