@@ -71,7 +71,13 @@ void Pacman::Render()
 	int fx = (curFrame % animationColumns) * frameWidth;
 	int fy = (curFrame / animationColumns) * frameHeight;
 
-	al_draw_bitmap_region(image, fx, fy, frameWidth, frameHeight, x - frameWidth / 2, y - frameHeight / 2, 0);
+	al_draw_tinted_scaled_rotated_bitmap_region(image, fx, fy, frameWidth, frameHeight, 
+		al_map_rgba_f(1, 1, 1, 1.0), frameWidth / 2, frameHeight / 2, x - frameWidth / 2, 
+		y - frameHeight / 2, 1, 1, 0, 0); //TBI: rotating pacman depending on what dir is he moving to
+										  // can be done by changing the penultimate argument to smth like
+										  // ALLEGRO_PI / 2, u can try it out yourself
+
+	//al_draw_bitmap_region(image, fx, fy, frameWidth, frameHeight, x - frameWidth / 2, y - frameHeight / 2, 0);
 }
 
 void Pacman::Collided(int ObjectID)
