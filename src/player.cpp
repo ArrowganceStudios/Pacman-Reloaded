@@ -46,29 +46,29 @@ void Pacman::Movement(int keys, int map[][19])
 			//std::cout << "x = " << x << " y = " << y << std::endl;
 			//std::cout << "x / 32 " << (int)x / 32 - 1<< " y / 32 " << (int)y / 32 -1<< std::endl;
 			//std::cout << "Up?: " << MobileObject::CanMoveUp();
-			if(MobileObject::CanMoveUp())
-				//MobileObject::MoveUp();
+			if(MobileObject::CanMoveUp() || (int)y % 32)
+				MobileObject::MoveUp();
 			angle = -ALLEGRO_PI / 2;
 		}
 	else if(keys == DOWN) 
 		{
-			std::cout << "down?: " << MobileObject::CanMoveDown();
-			if(MobileObject::CanMoveDown())
-				//MobileObject::MoveDown();
+			//std::cout << "down?: " << MobileObject::CanMoveDown();
+			if(MobileObject::CanMoveDown() || (int)y % 32)
+				MobileObject::MoveDown();
 			angle = ALLEGRO_PI / 2;
 		}
 	else if(keys == LEFT) 
 		{
-			std::cout << "left?: " << MobileObject::CanMoveLeft();
-			if(MobileObject::CanMoveLeft())
-				//MobileObject::MoveLeft();
+			//std::cout << "left?: " << MobileObject::CanMoveLeft();
+			if(MobileObject::CanMoveLeft() || (int)x % 32)
+				MobileObject::MoveLeft();
 			angle = ALLEGRO_PI;
 		}
 	else if(keys == RIGHT) 
 		{
-			std::cout << "right?: " << MobileObject::CanMoveRight();
-			if(MobileObject::CanMoveRight())
-				//MobileObject::MoveRight();
+			//std::cout << "right?: " << MobileObject::CanMoveRight();
+			if(MobileObject::CanMoveRight() || (int)x % 32)
+				MobileObject::MoveRight();
 			angle = 0;
 		}
 }
