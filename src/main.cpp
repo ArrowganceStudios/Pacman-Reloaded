@@ -6,10 +6,12 @@
 #include "player.h"
 #include "menu.h"
 #include "globals.h"
+#include "enemy.h"
 
 //Pacman spelt backwards is Hitler
 
 Pacman *player;
+Ghost *blacky;				// not racist at all
 
 int main()
 {
@@ -24,6 +26,7 @@ int main()
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_BITMAP *bgSheet = NULL;
 	ALLEGRO_BITMAP *pmImage = NULL;
+	ALLEGRO_BITMAP *ghImage = NULL;
 
 	////INITS
 	if(!al_init())
@@ -38,15 +41,20 @@ int main()
 	al_init_primitives_addon();
 
 	player = new Pacman();
+	blacky = new Ghost();
 
 	event_queue = al_create_event_queue();
 	timer = al_create_timer(1.0 / FPS);
 
 	bgSheet = al_load_bitmap("data/img/bg.png");
 	pmImage = al_load_bitmap("data/img/pm.png");
-	al_convert_mask_to_alpha(pmImage, al_map_rgb(255, 255, 255));
+	ghImage = al_load_bitmap("data/img/gh.png");
 
-	player->Init(WIDTH / 2 + 16, HEIGHT / 2, 16, 16, 2.5, 3, pmImage);
+	al_convert_mask_to_alpha(pmImage, al_map_rgb(255, 255, 255));
+	al_convert_mask_to_alpha(ghImage, al_map_rgb(255, 255, 255));
+
+	player->Init(WIDTH / 2 + 16, HEIGHT / 2 + 128, 16, 16, 2.5, 3, pmImage);
+	blacky->Init(WIDTH / 2 + 16, HEIGHT / 2 + 128, 16, 16, 2.5, ghImage);
 
 	////EVENT REGISTERS
 	al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -54,6 +62,8 @@ int main()
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 
 	al_start_timer(timer);
+
+	srand(time(NULL));
 
 	////GAMELOOP
 	while(!done)
@@ -93,6 +103,7 @@ int main()
 			redraw = true;
 
 			player->Update(keys, map);
+			blacky->Update(map);
 		}
 		//RENDERING
 		if(redraw && al_is_event_queue_empty(event_queue))
@@ -102,16 +113,17 @@ int main()
 			//drawing map
 			for(int i = 0; i < 20; i++)
 			{
-				for(int j = 0; j < 19; j++)
+				for(int j = 0; j < 21; j++)
 				{
 					al_draw_bitmap_region(bgSheet, tileSize * map[i][j], 0, tileSize, tileSize,
-						tileSize * j, tileSize * i, 0);
+						tileSize * j - 32, tileSize * i, 0);
 				}
 			}
 
 			
 
 			player->Render();
+			blacky->Render();
 
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0,0,0)); 						//black background
@@ -122,6 +134,7 @@ int main()
 
 	al_destroy_bitmap(pmImage);
 	al_destroy_bitmap(bgSheet);
+	al_destroy_bitmap(ghImage);
 	al_destroy_display(display);
 	al_destroy_event_queue(event_queue);
 	al_destroy_timer(timer);

@@ -18,9 +18,6 @@ public:
 	void virtual Destroy(){GameObject::Destroy();}
 	void virtual Update(){GameObject::Update();}
 
-	int MyPositionX();
-	int MyPositionY();
-
 	int GetColumn();
 	int GetRow();
 

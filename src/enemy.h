@@ -4,14 +4,16 @@
 
 class Ghost : public MobileObject
 {
+protected:
+	int animationRows;
 public:
-	Ghost(float x, float y, ALLEGRO_BITMAP *image);
+	Ghost();
 
-	void Init(ALLEGRO_BITMAP *image= NULL);
+	void Init(float x, float y, int boundX, int boundY, float velocity, ALLEGRO_BITMAP *image);
 
-	void Destroy();
-	void Update();
+	void Destroy(){};
+	void Update(int map[][21]);
 	void Render();
 
-	void Collided(int ObjectID);
+	void Collided(int ObjectID){};
 }; 

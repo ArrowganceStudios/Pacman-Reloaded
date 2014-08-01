@@ -34,7 +34,7 @@ void Pacman::Init(float x, float y, int boundX,  int boundY, int velocity, float
 	Pacman::SetDir(-1);
 }
 
-void Pacman::Movement(int keys, int map[][19])
+void Pacman::Movement(int keys, int map[][21])
 {
 	if(keys == UP) 
 		{
@@ -78,7 +78,7 @@ void Pacman::Destroy()
 	MobileObject::Destroy();
 
 }
-void Pacman::Update(int keys, int map[][19])
+void Pacman::Update(int keys, int map[][21])
 {
 	Pacman::Movement(direction, map);
 	if((direction != keys) && !((int)x % 32) && !((int)y % 32))
@@ -117,13 +117,13 @@ void Pacman::Update(int keys, int map[][19])
 
 		frameCount = 0;
 	}
-	if(Pacman::x < 0)
+	if(Pacman::x < 1)
 		Pacman::x = WIDTH + 32;
-	else if(Pacman::x > WIDTH+32)
+	else if(Pacman::x > WIDTH+31)
 		Pacman::x = 0;
-	if(Pacman::y < 0)
+	if(Pacman::y < 1)
 		Pacman::y = HEIGHT + 32;
-	else if (Pacman::y > HEIGHT+32)
+	else if (Pacman::y > HEIGHT+31)
 		Pacman::y = 0;
 	// Now it's smooth and silky
 }
