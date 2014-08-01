@@ -1,4 +1,5 @@
 #include "enemy.h"
+#include <iostream>
 
 Ghost::Ghost()
 {
@@ -34,6 +35,7 @@ void Ghost::Update(int map[][21])
 {
 	if(!((int)x % 32) && !((int)y % 32))
 	{
+		std::cout << "elo" << std::endl;
 		bool go = false;				// this is the shittiest shitty shit in the shitty history of shit 
 		while(!go)
 		{
@@ -73,16 +75,16 @@ void Ghost::Update(int map[][21])
 	switch(direction)
 	{
 		case UP:
-			MoveUp();
+			if(CanMoveUp()  || (int)y % 32) MoveUp();
 			break;
 		case DOWN:
-			MoveDown();
+			if(CanMoveDown() || (int)y % 32) MoveDown();
 			break;
 		case LEFT:
-			MoveLeft();
+			if(CanMoveLeft() || (int)x % 32) MoveLeft();
 			break;
 		case RIGHT:
-			MoveRight();
+			if(CanMoveRight() || (int)x % 32) MoveRight();
 			break;
 	}
 	if(x < 2)
