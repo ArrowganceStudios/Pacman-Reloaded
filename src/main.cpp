@@ -92,7 +92,7 @@ int main()
 		{
 			redraw = true;
 
-			player->Update(keys);
+			player->Update(keys, map);
 		}
 		//RENDERING
 		if(redraw && al_is_event_queue_empty(event_queue))

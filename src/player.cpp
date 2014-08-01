@@ -1,4 +1,5 @@
 #include "player.h"
+#include <iostream>
 
 Pacman::Pacman()
 {
@@ -33,26 +34,41 @@ void Pacman::Init(float x, float y, int boundX,  int boundY, int velocity, float
 	Pacman::SetDir(-1);
 }
 
-void Pacman::Movement(int keys)
+void Pacman::Movement(int keys, int map[][19])
 {
 	if(keys == UP) 
 		{
-			MobileObject::MoveUp();
+			//std::cout << "is [1][1] free? " << map[10][18] << std::endl;
+			//std::cout << "is the one up free? " << map[MobileObject::GetColumn()][MobileObject::GetRow()] << std::endl;
+			//std::cout << "is the one up free? " << map[0][0] << std::endl;
+			//std::cout << "xC = " << MobileObject::GetColumn() << " yR = " << MobileObject::GetRow() << std::endl;
+			//std::cout << "start pos x = " << WIDTH / 2 + 16 << " start pos y = " << HEIGHT / 2 << std::endl;
+			//std::cout << "x = " << x << " y = " << y << std::endl;
+			//std::cout << "x / 32 " << (int)x / 32 - 1<< " y / 32 " << (int)y / 32 -1<< std::endl;
+			//std::cout << "Up?: " << MobileObject::CanMoveUp();
+			if(MobileObject::CanMoveUp())
+				//MobileObject::MoveUp();
 			angle = -ALLEGRO_PI / 2;
 		}
 	else if(keys == DOWN) 
 		{
-			MobileObject::MoveDown();
+			std::cout << "down?: " << MobileObject::CanMoveDown();
+			if(MobileObject::CanMoveDown())
+				//MobileObject::MoveDown();
 			angle = ALLEGRO_PI / 2;
 		}
 	else if(keys == LEFT) 
 		{
-			MobileObject::MoveLeft();
+			std::cout << "left?: " << MobileObject::CanMoveLeft();
+			if(MobileObject::CanMoveLeft())
+				//MobileObject::MoveLeft();
 			angle = ALLEGRO_PI;
 		}
 	else if(keys == RIGHT) 
 		{
-			MobileObject::MoveRight();
+			std::cout << "right?: " << MobileObject::CanMoveRight();
+			if(MobileObject::CanMoveRight())
+				//MobileObject::MoveRight();
 			angle = 0;
 		}
 }
@@ -62,13 +78,13 @@ void Pacman::Destroy()
 	MobileObject::Destroy();
 
 }
-void Pacman::Update(int keys)
+void Pacman::Update(int keys, int map[][19])
 {
-	Pacman::Movement(direction);
+	Pacman::Movement(direction, map);
 	if((direction != keys) && !((int)x % 32) && !((int)y % 32))
 	{
 		direction = keys;
-		Pacman::Movement(keys);
+		Pacman::Movement(keys, map);
 	}
 
 	if(++frameCount >= frameDelay)

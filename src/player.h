@@ -12,10 +12,10 @@ public:
 
 	void Init(float x, float y, int boundX,  int boundY, int velocity, float lives, ALLEGRO_BITMAP *image = NULL);
 
-	void Movement(int keys);
+	void Movement(int keys, int map[][19]);
 
 	void Destroy();
-	void Update(int keys);
+	void Update(int keys, int map[][19]);
 	void Render();
 
 	void Collided(int ObjectID);

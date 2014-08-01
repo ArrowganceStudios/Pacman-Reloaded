@@ -21,10 +21,18 @@ public:
 	int MyPositionX();
 	int MyPositionY();
 
+	int GetColumn();
+	int GetRow();
+
 	void MoveUp();
 	void MoveDown();
 	void MoveLeft();
 	void MoveRight();
+
+	bool CanMoveUp();
+	bool CanMoveDown();
+	bool CanMoveLeft();
+	bool CanMoveRight();
 
 	void Collided(int ObjectID);
 	void SetDir(int direction) {MobileObject::direction = direction;}
