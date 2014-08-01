@@ -83,8 +83,28 @@ void Pacman::Update(int keys, int map[][19])
 	Pacman::Movement(direction, map);
 	if((direction != keys) && !((int)x % 32) && !((int)y % 32))
 	{
-		direction = keys;
-		Pacman::Movement(keys, map);
+		bool c = false;
+		switch(keys)
+		{
+		case UP:
+			if(CanMoveUp()) c = true;
+			break;
+		case DOWN:
+			if(CanMoveDown()) c = true;
+			break;
+		case RIGHT:
+			if(CanMoveRight()) c = true;
+			break;
+		case LEFT:
+			if(CanMoveLeft()) c = true;
+			break;
+		}
+
+		if(c)
+		{
+			direction = keys;
+			Pacman::Movement(keys, map);
+		}
 	}
 
 	if(++frameCount >= frameDelay)
