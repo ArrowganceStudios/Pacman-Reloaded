@@ -55,7 +55,7 @@ int main()
 	al_convert_mask_to_alpha(ghImage, al_map_rgb(255, 255, 255));
 
 	player->Init(WIDTH / 2 + 16, HEIGHT / 2 + 128, 16, 16, 2.5, 3, pmImage);
-	blacky->Init(WIDTH / 2 + 16, HEIGHT / 2 + 128, 16, 16, 2, ghImage);
+	blacky->Init(WIDTH / 2 + 16, 32 + 128, 16, 16, 2, ghImage);
 
 	////EVENT REGISTERS
 	al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -104,7 +104,7 @@ int main()
 			redraw = true;
 
 			player->Update(keys, map);
-			blacky->Update(map, *player);
+			blacky->Update(map, *player, 0);
 		}
 		//RENDERING
 		if(redraw && al_is_event_queue_empty(event_queue))
