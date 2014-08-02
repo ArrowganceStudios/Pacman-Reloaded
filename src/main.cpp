@@ -1,12 +1,13 @@
 #include <allegro5\allegro.h>
 #include <allegro5\allegro_image.h>
 #include <allegro5\allegro_primitives.h>
-
+#include <iostream>
 #include "game_object.h"
+#include "enemy.h"
 #include "player.h"
 #include "menu.h"
 #include "globals.h"
-#include "enemy.h"
+
 
 //Pacman spelt backwards is Hitler
 
@@ -103,13 +104,13 @@ int main()
 			redraw = true;
 
 			player->Update(keys, map);
-			blacky->Update(map);
+			blacky->Update(map, *player);
 		}
 		//RENDERING
 		if(redraw && al_is_event_queue_empty(event_queue))
 		{
 			redraw = false;
-
+			//std::cout << player->CheckDistance(*blacky) << std::endl;
 			//drawing map
 			for(int i = 0; i < 20; i++)
 			{

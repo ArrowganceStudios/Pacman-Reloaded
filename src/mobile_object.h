@@ -2,6 +2,7 @@
 
 #include "game_object.h"
 #include "globals.h"
+#include "math.h"
 
 class MobileObject : public GameObject
 {
@@ -32,5 +33,9 @@ public:
 	bool CanMoveRight();
 
 	void Collided(int ObjectID);
+
 	void SetDir(int direction) {MobileObject::direction = direction;}
+
+	float CheckDistance(MobileObject &o) {return sqrt((x-o.x)*(x-o.x) + (y-o.y)*(y-o.y));}
+	float AngleToTarget(MobileObject &o) {return atan2(o.y - y, o.x - x);}
 };

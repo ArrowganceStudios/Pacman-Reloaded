@@ -1,5 +1,6 @@
 #include "enemy.h"
 #include <iostream>
+#include "player.h"
 
 Ghost::Ghost()
 {
@@ -29,13 +30,12 @@ void Ghost::Init(float x, float y, int boundX, int boundY, float velocity, ALLEG
 	animationRows = 4;
 
 	Ghost::image = image;
-	Ghost::SetDir(1);
+	Ghost::SetDir(-1);
 }
-void Ghost::Update(int map[][21])
+void Ghost::Update(int map[][21], Pacman &player)
 {
-	if(!((int)x % 32) && !((int)y % 32))
+	/*if(!((int)x % 32) && !((int)y % 32))
 	{
-		std::cout << "elo" << std::endl;
 		bool go = false;				// this is the shittiest shitty shit in the shitty history of shit 
 		while(!go)
 		{
@@ -71,6 +71,32 @@ void Ghost::Update(int map[][21])
 					break;
 			}
 		}
+	}*/
+	//AI
+	if(!((int)x % 32) && !((int)y % 32))
+	{
+		float angle = AngleToTarget(player);
+		int oldDir = direction;
+
+		if(abs(x - player.GetX()) > abs(y - player.GetY()) && (CanMoveRight() || CanMoveLeft()))
+		{
+			if(cos(angle) >= 0 && CanMoveRight())
+				SetDir(RIGHT);
+			else if(cos(angle) < 0 && CanMoveLeft())
+				SetDir(LEFT);
+			else
+				SetDir(rand() % 2);
+		}
+		else
+		{
+			if(sin(angle) >= 0 && CanMoveDown())
+				SetDir(DOWN);
+			else if(sin(angle) < 0 && CanMoveUp())
+				SetDir(UP);
+			else
+				SetDir(rand() % 2 + 2);
+		}
+
 	}
 	switch(direction)
 	{

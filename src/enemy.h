@@ -1,6 +1,7 @@
 #pragma once
 
 #include "mobile_object.h"
+#include "player.h"
 
 class Ghost : public MobileObject
 {
@@ -12,7 +13,7 @@ public:
 	void Init(float x, float y, int boundX, int boundY, float velocity, ALLEGRO_BITMAP *image);
 
 	void Destroy(){};
-	void Update(int map[][21]);
+	void Update(int map[][21], Pacman &player);
 	void Render();
 
 	void Collided(int ObjectID){};
