@@ -173,22 +173,22 @@ void Ghost::AI(int type, Pacman &player)
 		switch(player.GetDirection())
 		{
 		case UP:
-			dy += 4*32;
-			break;
-		case DOWN:
 			dy -= 4*32;
 			break;
+		case DOWN:
+			dy += 4*32;
+			break;
 		case RIGHT:
-			dx += 4*32;
+			dx -= 4*32;
 			break;
 		case LEFT:
-			dx -= 4*32;
+			dx += 4*32;
 			break;
 		}
 
 		angle = AngleToTarget(player, dx, dy);
 
-		if(abs(x - player.GetX() - dx) > abs(y - player.GetY() - dy) && (CanMoveRight() || CanMoveLeft()))
+		if(abs(x - player.GetX() + dx) > abs(y - player.GetY() + dy) && (CanMoveRight() || CanMoveLeft()))
 		{
 			if(cos(angle) >= 0 && CanMoveRight())
 				SetDir(RIGHT);

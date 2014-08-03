@@ -13,6 +13,7 @@
 
 Pacman *player;
 Ghost *blacky;				// not racist at all
+Ghost *pinky;				// which is blacky 2 for now
 
 int main()
 {
@@ -43,6 +44,7 @@ int main()
 
 	player = new Pacman();
 	blacky = new Ghost();
+	pinky = new Ghost();
 
 	event_queue = al_create_event_queue();
 	timer = al_create_timer(1.0 / FPS);
@@ -56,6 +58,7 @@ int main()
 
 	player->Init(WIDTH / 2 + 16, HEIGHT / 2 + 128, 16, 16, 2.5, 3, pmImage);
 	blacky->Init(WIDTH / 2 + 16, 32 + 128, 16, 16, 2, ghImage);
+	pinky->Init(WIDTH / 2 + 48, 32 + 128, 16, 16, 2, ghImage);
 
 	////EVENT REGISTERS
 	al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -105,6 +108,7 @@ int main()
 
 			player->Update(keys, map);
 			blacky->Update(map, *player, 0);
+			pinky->Update(map, *player, 1);
 		}
 		//RENDERING
 		if(redraw && al_is_event_queue_empty(event_queue))
@@ -129,6 +133,7 @@ int main()
 
 			player->Render();
 			blacky->Render();
+			pinky->Render();
 
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0,0,0)); 						//black background
