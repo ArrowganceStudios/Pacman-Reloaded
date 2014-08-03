@@ -3,6 +3,7 @@
 
 #include "game_object.h"
 #include "globals.h"
+#include <allegro5\allegro.h>
 
 class StaticObject : public GameObject
 {
@@ -13,5 +14,4 @@ class StaticObject : public GameObject
 
 	void virtual Destroy(){GameObject::Destroy();}
 	
-	void Collided(int ObjectID);
-}
+};

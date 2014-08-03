@@ -33,7 +33,7 @@ void Ghost::Init(float x, float y, int boundX, int boundY, float velocity, ALLEG
 	Ghost::image = image;
 	Ghost::SetDir(-1);
 }
-void Ghost::Update(int map[][21], Pacman &player, int away, Ghost &enemy)
+void Ghost::Update(int map[][21], float targetX, float targetY, bool targetDirection, int away, Ghost &enemy)
 {
 	/*if(!((int)x % 32) && !((int)y % 32))
 	{
@@ -76,7 +76,7 @@ void Ghost::Update(int map[][21], Pacman &player, int away, Ghost &enemy)
 	//AI
 	if(!((int)x % 32) && !((int)y % 32) && (map[GetRow()][GetColumn()] == 2))
 	{
-		AI(player, away, enemy);
+		AI(targetX, targetY,targetDirection, away, enemy);
 	}
 
 	switch(direction)
@@ -139,17 +139,17 @@ void Ghost::Render()
 	al_draw_bitmap_region(image, fx, fy, frameWidth, frameHeight, x - frameWidth, y - frameHeight, 0);
 }
 
-float Ghost::GetDistanceX(Pacman &player, int dx, Ghost &enemy)
+float Ghost::GetDistanceX(float targetX, int dx, Ghost &enemy)
 {
-	return  abs(enemy.x - player.GetX() + dx);
+	return  abs(enemy.x - targetX + dx);
 }
 
-float Ghost::GetDistanceY(Pacman &player, int dy, Ghost &enemy)
+float Ghost::GetDistanceY(float targetY, int dy, Ghost &enemy)
 {
-	return  abs(enemy.y - player.GetY() + dy);
+	return  abs(enemy.y - targetY + dy);
 }
 
-void Ghost::AI(Pacman &player, int away, Ghost &enemy)
+void Ghost::AI(float targetX, float targetY,bool targetDirection, int away, Ghost &enemy)
 {
 	float angle = 0;
 
@@ -159,7 +159,7 @@ void Ghost::AI(Pacman &player, int away, Ghost &enemy)
 	int dx = 0;
 	int dy = 0;
 
-	switch(player.GetDirection())
+	switch(targetDirection)
 		{
 		case UP:
 			dy += away*32;
@@ -174,21 +174,16 @@ void Ghost::AI(Pacman &player, int away, Ghost &enemy)
 			dx += away*32;
 			break;
 		}
-		
+
+			distanceX = GetDistanceX(targetX, dx, enemy);
+			distanceY = GetDistanceY(targetY, dy, enemy);
 		if(away == 2) //whch means inky, simplest but non-intuitinal condition
 		{
-			distanceX = GetDistanceX(player, dx, enemy);
-			distanceY = GetDistanceY(player, dy, enemy);
 			dx += distanceX;
 			dy += distanceY;
 		}
-		else 
-		{
-			distanceX = GetDistanceX(player, dx, enemy);
-			distanceY = GetDistanceY(player, dy, enemy);
-		}
 
-		angle = AngleToTarget(player, dx, dy);
+		angle = AngleToTarget(targetX, targetY, dx, dy);
 
 		if(distanceX > distanceY && (CanMoveRight() || CanMoveLeft()))
 		{

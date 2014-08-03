@@ -7,6 +7,7 @@
 #include "player.h"
 #include "menu.h"
 #include "globals.h"
+#include "scatter_point.h"
 
 
 //Pacman spelt backwards is Hitler
@@ -16,6 +17,7 @@ Ghost *blacky;
 Ghost *pinky;	
 Ghost *inky;	
 Ghost *clyde;	
+ScatterPoint *clydesScatterPoint;
 
 int main()
 {
@@ -52,6 +54,7 @@ int main()
 	pinky = new Ghost();
 	inky = new Ghost();
 	clyde = new Ghost();
+	clydesScatterPoint = new ScatterPoint();
 
 	event_queue = al_create_event_queue();
 	timer = al_create_timer(1.0 / FPS);
@@ -74,6 +77,7 @@ int main()
 	pinky->Init(WIDTH / 2 + 48, 32 + 128, 16, 16, 2, pinkyImage);
 	inky->Init(WIDTH / 2 + 16, 32 + 128, 16, 16, 2, inkyImage);
 	clyde->Init(WIDTH / 2 - 16, 32 + 128, 16, 16, 2, clydeImage);
+	clydesScatterPoint->Init(-32, 672);
 
 	////EVENT REGISTERS
 	al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -122,13 +126,13 @@ int main()
 			redraw = true;
 
 			player->Update(keys, map);
-			blacky->Update(map, *player, 0, *blacky);
-			pinky->Update(map, *player, 4, *pinky);
-			inky->Update(map, *player, 2, *blacky);
-			if(clyde->GetDistanceX(*player, 8, *clyde))
-				clyde->Update(map, *player, 0, *clyde);
-			
-			
+			blacky->Update(map, player->GetX(), player->GetY(), player->GetDirection(), 0, *blacky);
+			pinky->Update(map, player->GetX(), player->GetY(), player->GetDirection(), 4, *pinky);
+			inky->Update(map,player->GetX(), player->GetY(), player->GetDirection(), 2, *blacky);
+			if(sqrt((pow(clyde->GetDistanceX(player->GetX(), 0, *clyde),2) + pow(clyde->GetDistanceY(player->GetY(), 0, *clyde),2))) <= 8*32)
+				clyde->Update(map, player->GetX(), player->GetY(), player->GetDirection(), 0, *clyde);
+			else 
+				clyde->Update(map, clydesScatterPoint->GetX(), clydesScatterPoint->GetY(), -1, 0, *clyde);
 		}
 		//RENDERING
 		if(redraw && al_is_event_queue_empty(event_queue))

@@ -13,13 +13,13 @@ public:
 	void Init(float x, float y, int boundX, int boundY, float velocity, ALLEGRO_BITMAP *image);
 
 	void Destroy(){};
-	void Update(int map[][21], Pacman &player, int type, Ghost &enemy);
+	void Update(int map[][21], float targetX, float targetY, bool targetDirection, int type, Ghost &enemy);
 	void Render();
 
-	void AI(Pacman &player, int away, Ghost &enemy);
+	void AI(float targetX, float targetY, bool targetDirection, int away, Ghost &enemy);
 
-	float GetDistanceX(Pacman &player,int dx, Ghost &enemy);
-	float GetDistanceY(Pacman &player,int dy, Ghost &enemy);
+	float GetDistanceX(float targetX, int dx, Ghost &enemy);
+	float GetDistanceY(float targetY, int dy, Ghost &enemy);
 
 	
 	void PriorityMovement();
