@@ -18,5 +18,8 @@ public:
 
 	void AI(Pacman &player, int away);
 
+	float GetDistanceX(Pacman &player, int dx);
+	float GetDistanceY(Pacman &player, int dy);
+
 	void Collided(int ObjectID){};
 }; 

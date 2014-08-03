@@ -139,6 +139,16 @@ void Ghost::Render()
 	al_draw_bitmap_region(image, fx, fy, frameWidth, frameHeight, x - frameWidth, y - frameHeight, 0);
 }
 
+float Ghost::GetDistanceX(Pacman &player, int dx)
+{
+	return  abs(x - player.GetX() + dx);
+}
+
+float Ghost::GetDistanceY(Pacman &player, int dy)
+{
+	return  abs(y - player.GetY() + dy);
+}
+
 void Ghost::AI(Pacman &player, int away)
 {
 	float angle = 0;
@@ -165,8 +175,8 @@ void Ghost::AI(Pacman &player, int away)
 			break;
 		}
 
-		distanceX = abs(x - player.GetX() + dx);
-		distanceY = abs(y - player.GetY() + dy);
+		GetDistanceX(player, dx);
+		GetDistanceY(player, dy);
 
 		angle = AngleToTarget(player, dx, dy);
 
