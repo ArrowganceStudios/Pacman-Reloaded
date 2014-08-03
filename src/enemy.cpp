@@ -173,10 +173,10 @@ void Ghost::AI(int type, Pacman &player)
 		switch(player.GetDirection())
 		{
 		case UP:
-			dy -= 4*32;
+			dy += 4*32;
 			break;
 		case DOWN:
-			dy += 4*32;
+			dy -= 4*32;
 			break;
 		case RIGHT:
 			dx -= 4*32;
