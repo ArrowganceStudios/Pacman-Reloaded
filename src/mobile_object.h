@@ -37,7 +37,8 @@ public:
 	void Collided(int ObjectID);
 
 	void SetDir(int direction) {MobileObject::direction = direction;}
+	int GetDirection() {return direction;}
 
 	//float CheckDistance(MobileObject &o) {return sqrt((x-o.x)*(x-o.x) + (y-o.y)*(y-o.y));} //gotta modify this a lil' bit
-	float AngleToTarget(MobileObject &o, int dx = 0, int dy = 0) {return atan2(o.y - y + dy, o.x - x + dx);}
+	float AngleToTarget(MobileObject &o, int dx = 0, int dy = 0) {return atan2(o.y - y - dy, o.x - x - dx);}
 };

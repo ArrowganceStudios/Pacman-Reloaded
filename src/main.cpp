@@ -48,8 +48,8 @@ int main()
 	timer = al_create_timer(1.0 / FPS);
 
 	bgSheet = al_load_bitmap("data/img/bg.png");
-	pmImage = al_load_bitmap("img/pm.png");
-	ghImage = al_load_bitmap("img/gh.png");
+	pmImage = al_load_bitmap("data/img/pm.png");
+	ghImage = al_load_bitmap("data/img/gh.png");
 
 	al_convert_mask_to_alpha(pmImage, al_map_rgb(255, 255, 255));
 	al_convert_mask_to_alpha(ghImage, al_map_rgb(255, 255, 255));
