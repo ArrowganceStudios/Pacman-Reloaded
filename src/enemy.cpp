@@ -33,7 +33,7 @@ void Ghost::Init(float x, float y, int boundX, int boundY, float velocity, ALLEG
 	Ghost::image = image;
 	Ghost::SetDir(-1);
 }
-void Ghost::Update(int map[][21], Pacman &player, int away)
+void Ghost::Update(int map[][21], Pacman &player, int away, Ghost &enemy)
 {
 	/*if(!((int)x % 32) && !((int)y % 32))
 	{
@@ -76,7 +76,7 @@ void Ghost::Update(int map[][21], Pacman &player, int away)
 	//AI
 	if(!((int)x % 32) && !((int)y % 32) && (map[GetRow()][GetColumn()] == 2))
 	{
-		AI(player, away);
+		AI(player, away, enemy);
 	}
 
 	switch(direction)
@@ -139,17 +139,17 @@ void Ghost::Render()
 	al_draw_bitmap_region(image, fx, fy, frameWidth, frameHeight, x - frameWidth, y - frameHeight, 0);
 }
 
-float Ghost::GetDistanceX(Pacman &player, int dx)
+float Ghost::GetDistanceX(Pacman &player, int dx, Ghost &enemy)
 {
-	return  abs(x - player.GetX() + dx);
+	return  abs(enemy.x - player.GetX() + dx);
 }
 
-float Ghost::GetDistanceY(Pacman &player, int dy)
+float Ghost::GetDistanceY(Pacman &player, int dy, Ghost &enemy)
 {
-	return  abs(y - player.GetY() + dy);
+	return  abs(enemy.y - player.GetY() + dy);
 }
 
-void Ghost::AI(Pacman &player, int away)
+void Ghost::AI(Pacman &player, int away, Ghost &enemy)
 {
 	float angle = 0;
 
@@ -174,9 +174,19 @@ void Ghost::AI(Pacman &player, int away)
 			dx += away*32;
 			break;
 		}
-
-		GetDistanceX(player, dx);
-		GetDistanceY(player, dy);
+		
+		if(away == 2) //whch means inky, simplest but non-intuitinal condition
+		{
+			distanceX = GetDistanceX(player, dx, enemy);
+			distanceY = GetDistanceY(player, dy, enemy);
+			dx += distanceX;
+			dy += distanceY;
+		}
+		else 
+		{
+			distanceX = GetDistanceX(player, dx, enemy);
+			distanceY = GetDistanceY(player, dy, enemy);
+		}
 
 		angle = AngleToTarget(player, dx, dy);
 

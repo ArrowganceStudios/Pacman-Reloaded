@@ -13,7 +13,8 @@
 
 Pacman *player;
 Ghost *blacky;				
-Ghost *pinky;				
+Ghost *pinky;	
+Ghost *inky;	
 
 int main()
 {
@@ -30,6 +31,7 @@ int main()
 	ALLEGRO_BITMAP *pmImage = NULL;
 	ALLEGRO_BITMAP *blackyImage = NULL;
 	ALLEGRO_BITMAP *pinkyImage = NULL;
+	ALLEGRO_BITMAP *inkyImage = NULL;
 
 	////INITS
 	if(!al_init())
@@ -46,6 +48,7 @@ int main()
 	player = new Pacman();
 	blacky = new Ghost();
 	pinky = new Ghost();
+	inky = new Ghost();
 
 	event_queue = al_create_event_queue();
 	timer = al_create_timer(1.0 / FPS);
@@ -54,14 +57,17 @@ int main()
 	pmImage = al_load_bitmap("data/img/pm.png");
 	blackyImage = al_load_bitmap("data/img/gh.png");
 	pinkyImage = al_load_bitmap("data/img/gh2.png");
+	inkyImage = al_load_bitmap("data/img/gh3.png");
 
 	al_convert_mask_to_alpha(pmImage, al_map_rgb(255, 255, 255));
 	al_convert_mask_to_alpha(blackyImage, al_map_rgb(255, 255, 255));
 	al_convert_mask_to_alpha(pinkyImage, al_map_rgb(255, 255, 255));
+	al_convert_mask_to_alpha(inkyImage, al_map_rgb(255, 255, 255));
 
 	player->Init(WIDTH / 2 + 16, HEIGHT / 2 + 128, 16, 16, 2.5, 3, pmImage);
 	blacky->Init(WIDTH / 2 + 16, 32 + 128, 16, 16, 2, blackyImage);
 	pinky->Init(WIDTH / 2 + 48, 32 + 128, 16, 16, 2, pinkyImage);
+	inky->Init(WIDTH / 2 + 48, 32 + 128, 16, 16, 2, inkyImage);
 
 	////EVENT REGISTERS
 	al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -110,8 +116,10 @@ int main()
 			redraw = true;
 
 			player->Update(keys, map);
-			blacky->Update(map, *player, 0);
-			pinky->Update(map, *player, 4);
+			blacky->Update(map, *player, 0, *blacky);
+			pinky->Update(map, *player, 4, *pinky);
+			inky->Update(map, *player, 2, *blacky);
+			
 		}
 		//RENDERING
 		if(redraw && al_is_event_queue_empty(event_queue))
@@ -137,6 +145,7 @@ int main()
 			player->Render();
 			blacky->Render();
 			pinky->Render();
+			inky->Render();
 
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0,0,0)); 						//black background
@@ -149,6 +158,7 @@ int main()
 	al_destroy_bitmap(bgSheet);
 	al_destroy_bitmap(blackyImage);
 	al_destroy_bitmap(pinkyImage);
+	al_destroy_bitmap(inkyImage);
 	al_destroy_display(display);
 	al_destroy_event_queue(event_queue);
 	al_destroy_timer(timer);
