@@ -21,5 +21,8 @@ public:
 	float GetDistanceX(Pacman &player,int dx, Ghost &enemy);
 	float GetDistanceY(Pacman &player,int dy, Ghost &enemy);
 
+	
+	void PriorityMovement();
+
 	void Collided(int ObjectID){};
 }; 

@@ -192,20 +192,28 @@ void Ghost::AI(Pacman &player, int away, Ghost &enemy)
 
 		if(distanceX > distanceY && (CanMoveRight() || CanMoveLeft()))
 		{
-			if(cos(angle) >= 0 && CanMoveRight() && (direction != LEFT))
+			if(cos(angle) >= 0 && CanMoveRight() && (GetDirection() != LEFT))
 				SetDir(RIGHT);
-			else if(cos(angle) < 0 && CanMoveLeft() && (direction != RIGHT))
+			else if(cos(angle) < 0 && CanMoveLeft() && (GetDirection() != RIGHT))
 				SetDir(LEFT);
-			else
-				SetDir(rand() % 2);
+			else 
+				PriorityMovement();
 		}
 		else
 		{
-			if(sin(angle) >= 0 && CanMoveDown() && (direction != UP))
+			if(sin(angle) >= 0 && CanMoveDown() && (GetDirection() != UP))
 				SetDir(DOWN);
-			else if(sin(angle) < 0 && CanMoveUp() && (direction != DOWN))
+			else if(sin(angle) < 0 && CanMoveUp() && (GetDirection() != DOWN))
 				SetDir(UP);
 			else
-				SetDir(rand() % 2 + 2);
+				PriorityMovement();
 		}
+}
+
+void Ghost::PriorityMovement()
+{
+	if(CanMoveUp() && (GetDirection() != DOWN)) SetDir(UP);
+	else if(CanMoveLeft() && (GetDirection() != RIGHT)) SetDir(LEFT);
+	else if(CanMoveDown() && (GetDirection() != UP)) SetDir(DOWN);
+	else if(CanMoveRight() && (GetDirection() != LEFT)) SetDir(RIGHT);
 }

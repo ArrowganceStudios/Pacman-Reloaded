@@ -15,6 +15,7 @@ Pacman *player;
 Ghost *blacky;				
 Ghost *pinky;	
 Ghost *inky;	
+Ghost *clyde;	
 
 int main()
 {
@@ -32,6 +33,7 @@ int main()
 	ALLEGRO_BITMAP *blackyImage = NULL;
 	ALLEGRO_BITMAP *pinkyImage = NULL;
 	ALLEGRO_BITMAP *inkyImage = NULL;
+	ALLEGRO_BITMAP *clydeImage = NULL;
 
 	////INITS
 	if(!al_init())
@@ -49,6 +51,7 @@ int main()
 	blacky = new Ghost();
 	pinky = new Ghost();
 	inky = new Ghost();
+	clyde = new Ghost();
 
 	event_queue = al_create_event_queue();
 	timer = al_create_timer(1.0 / FPS);
@@ -58,16 +61,19 @@ int main()
 	blackyImage = al_load_bitmap("data/img/gh.png");
 	pinkyImage = al_load_bitmap("data/img/gh2.png");
 	inkyImage = al_load_bitmap("data/img/gh3.png");
+	clydeImage = al_load_bitmap("data/img/gh4.png");
 
 	al_convert_mask_to_alpha(pmImage, al_map_rgb(255, 255, 255));
 	al_convert_mask_to_alpha(blackyImage, al_map_rgb(255, 255, 255));
 	al_convert_mask_to_alpha(pinkyImage, al_map_rgb(255, 255, 255));
 	al_convert_mask_to_alpha(inkyImage, al_map_rgb(255, 255, 255));
+	al_convert_mask_to_alpha(clydeImage, al_map_rgb(255, 255, 255));
 
 	player->Init(WIDTH / 2 + 16, HEIGHT / 2 + 128, 16, 16, 2.5, 3, pmImage);
 	blacky->Init(WIDTH / 2 + 16, 32 + 128, 16, 16, 2, blackyImage);
 	pinky->Init(WIDTH / 2 + 48, 32 + 128, 16, 16, 2, pinkyImage);
-	inky->Init(WIDTH / 2 + 48, 32 + 128, 16, 16, 2, inkyImage);
+	inky->Init(WIDTH / 2 + 16, 32 + 128, 16, 16, 2, inkyImage);
+	clyde->Init(WIDTH / 2 - 16, 32 + 128, 16, 16, 2, clydeImage);
 
 	////EVENT REGISTERS
 	al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -119,6 +125,9 @@ int main()
 			blacky->Update(map, *player, 0, *blacky);
 			pinky->Update(map, *player, 4, *pinky);
 			inky->Update(map, *player, 2, *blacky);
+			if(clyde->GetDistanceX(*player, 8, *clyde))
+				clyde->Update(map, *player, 0, *clyde);
+			
 			
 		}
 		//RENDERING
@@ -146,6 +155,7 @@ int main()
 			blacky->Render();
 			pinky->Render();
 			inky->Render();
+			clyde->Render();
 
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0,0,0)); 						//black background
@@ -159,6 +169,7 @@ int main()
 	al_destroy_bitmap(blackyImage);
 	al_destroy_bitmap(pinkyImage);
 	al_destroy_bitmap(inkyImage);
+	al_destroy_bitmap(clydeImage);
 	al_destroy_display(display);
 	al_destroy_event_queue(event_queue);
 	al_destroy_timer(timer);
