@@ -73,7 +73,7 @@ void Ghost::Update(int map[][21], Pacman &player, int type)
 		}
 	}*/
 	//AI
-	if(!((int)x % 32) && !((int)y % 32))
+	if(!((int)x % 32) && !((int)y % 32) && (map[GetRow()][GetColumn()] == 2))
 	{
 		AI(type, player);
 	}
@@ -123,18 +123,18 @@ void Ghost::AI(int type, Pacman &player)
 
 		if(abs(x - player.GetX()) > abs(y - player.GetY()) && (CanMoveRight() || CanMoveLeft()))
 		{
-			if(cos(angle) >= 0 && CanMoveRight())
+			if(cos(angle) >= 0 && CanMoveRight() && (direction != LEFT))
 				SetDir(RIGHT);
-			else if(cos(angle) < 0 && CanMoveLeft())
+			else if(cos(angle) < 0 && CanMoveLeft() && (direction != RIGHT))
 				SetDir(LEFT);
 			else
 				SetDir(rand() % 2);
 		}
 		else
 		{
-			if(sin(angle) >= 0 && CanMoveDown())
+			if(sin(angle) >= 0 && CanMoveDown() && (direction != UP))
 				SetDir(DOWN);
-			else if(sin(angle) < 0 && CanMoveUp())
+			else if(sin(angle) < 0 && CanMoveUp() && (direction != DOWN))
 				SetDir(UP);
 			else
 				SetDir(rand() % 2 + 2);

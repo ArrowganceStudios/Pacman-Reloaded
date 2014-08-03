@@ -43,25 +43,25 @@ bool MobileObject::CanMoveUp()
 {
 	//std::cout << "A One up Row = " << GetRow() - 1 << std::endl;
 	//std::cout << "A One up Column = " << GetColumn() << std::endl;
-	return !(map[GetRow() - 1][GetColumn()]);
+	return (map[GetRow() - 1][GetColumn()]);
 }
 bool MobileObject::CanMoveDown()
 {
 	//std::cout << "A One down Row = " << GetRow() + 1 << std::endl;
 	//std::cout << "A One down Column = " << GetColumn() << std::endl;
-	return !(map[GetRow() + 1][GetColumn()]);
+	return (map[GetRow() + 1][GetColumn()]);
 }
 bool MobileObject::CanMoveLeft()
 {
 	//std::cout << "A One left Row = " << GetRow()<< std::endl;
 	//std::cout << "A One left Column = " << GetColumn() -1 << std::endl;
-	return !(map[GetRow()][GetColumn() - 1]);
+	return (map[GetRow()][GetColumn() - 1]);
 }
 bool MobileObject::CanMoveRight()
 {
 	//std::cout << "A One right Row = " << GetRow() << std::endl;
 	//std::cout << "A One right Column = " << GetColumn() + 1<< std::endl;
-	return !(map[GetRow()][GetColumn() + 1]);
+	return (map[GetRow()][GetColumn() + 1]);
 }
 
 void MobileObject::Collided(int ObjectID)

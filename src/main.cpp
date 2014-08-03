@@ -48,14 +48,14 @@ int main()
 	timer = al_create_timer(1.0 / FPS);
 
 	bgSheet = al_load_bitmap("data/img/bg.png");
-	pmImage = al_load_bitmap("data/img/pm.png");
-	ghImage = al_load_bitmap("data/img/gh.png");
+	pmImage = al_load_bitmap("img/pm.png");
+	ghImage = al_load_bitmap("img/gh.png");
 
 	al_convert_mask_to_alpha(pmImage, al_map_rgb(255, 255, 255));
 	al_convert_mask_to_alpha(ghImage, al_map_rgb(255, 255, 255));
 
 	player->Init(WIDTH / 2 + 16, HEIGHT / 2 + 128, 16, 16, 2.5, 3, pmImage);
-	blacky->Init(WIDTH / 2 + 16, 32 + 128, 16, 16, 2, ghImage);
+	blacky->Init(WIDTH / 2 + 16, 32 + 128, 16, 16, 8, ghImage);
 
 	////EVENT REGISTERS
 	al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -116,7 +116,11 @@ int main()
 			{
 				for(int j = 0; j < 21; j++)
 				{
-					al_draw_bitmap_region(bgSheet, tileSize * map[i][j], 0, tileSize, tileSize,
+					if(!map[i][j])
+						al_draw_bitmap_region(bgSheet, 0, 0, tileSize, tileSize,
+						tileSize * j - 32, tileSize * i, 0);
+					else
+						al_draw_bitmap_region(bgSheet, tileSize, 0, tileSize, tileSize,
 						tileSize * j - 32, tileSize * i, 0);
 				}
 			}
