@@ -16,7 +16,7 @@ public:
 	void Update(int map[][21], Pacman &player, int type);
 	void Render();
 
-	void AI(int type, Pacman &player);
+	void AI(Pacman &player, int away);
 
 	void Collided(int ObjectID){};
 }; 

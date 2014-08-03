@@ -1,5 +1,6 @@
 #include "enemy.h"
 #include <iostream>
+#include <math.h>
 #include "player.h"
 
 Ghost::Ghost()
@@ -32,7 +33,7 @@ void Ghost::Init(float x, float y, int boundX, int boundY, float velocity, ALLEG
 	Ghost::image = image;
 	Ghost::SetDir(-1);
 }
-void Ghost::Update(int map[][21], Pacman &player, int type)
+void Ghost::Update(int map[][21], Pacman &player, int away)
 {
 	/*if(!((int)x % 32) && !((int)y % 32))
 	{
@@ -75,7 +76,7 @@ void Ghost::Update(int map[][21], Pacman &player, int type)
 	//AI
 	if(!((int)x % 32) && !((int)y % 32) && (map[GetRow()][GetColumn()] == 2))
 	{
-		AI(type, player);
+		AI(player, away);
 	}
 
 	switch(direction)
@@ -138,15 +139,38 @@ void Ghost::Render()
 	al_draw_bitmap_region(image, fx, fy, frameWidth, frameHeight, x - frameWidth, y - frameHeight, 0);
 }
 
-void Ghost::AI(int type, Pacman &player)
+void Ghost::AI(Pacman &player, int away)
 {
-	float angle;
-	switch(type)
-	{
-	case 0:
-		angle = AngleToTarget(player);
+	float angle = 0;
 
-		if(abs(x - player.GetX()) > abs(y - player.GetY()) && (CanMoveRight() || CanMoveLeft()))
+	int distanceX = 0;
+	int distanceY = 0;
+
+	int dx = 0;
+	int dy = 0;
+
+	switch(player.GetDirection())
+		{
+		case UP:
+			dy += away*32;
+			break;
+		case DOWN:
+			dy -= away*32;
+			break;
+		case RIGHT:
+			dx -= away*32;
+			break;
+		case LEFT:
+			dx += away*32;
+			break;
+		}
+
+		distanceX = abs(x - player.GetX() + dx);
+		distanceY = abs(y - player.GetY() + dy);
+
+		angle = AngleToTarget(player, dx, dy);
+
+		if(distanceX > distanceY && (CanMoveRight() || CanMoveLeft()))
 		{
 			if(cos(angle) >= 0 && CanMoveRight() && (direction != LEFT))
 				SetDir(RIGHT);
@@ -164,48 +188,4 @@ void Ghost::AI(int type, Pacman &player)
 			else
 				SetDir(rand() % 2 + 2);
 		}
-		break;
-	case 1: //not finished yet
-		angle = 0;
-		int dx = 0;
-		int dy = 0;
-
-		switch(player.GetDirection())
-		{
-		case UP:
-			dy += 4*32;
-			break;
-		case DOWN:
-			dy -= 4*32;
-			break;
-		case RIGHT:
-			dx -= 4*32;
-			break;
-		case LEFT:
-			dx += 4*32;
-			break;
-		}
-
-		angle = AngleToTarget(player, dx, dy);
-
-		if(abs(x - player.GetX() + dx) > abs(y - player.GetY() + dy) && (CanMoveRight() || CanMoveLeft()))
-		{
-			if(cos(angle) >= 0 && CanMoveRight())
-				SetDir(RIGHT);
-			else if(cos(angle) < 0 && CanMoveLeft())
-				SetDir(LEFT);
-			else
-				SetDir(rand() % 2);
-		}
-		else
-		{
-			if(sin(angle) >= 0 && CanMoveDown())
-				SetDir(DOWN);
-			else if(sin(angle) < 0 && CanMoveUp())
-				SetDir(UP);
-			else
-				SetDir(rand() % 2 + 2);
-		}
-		break;
-	}
 }

@@ -12,8 +12,8 @@
 //Pacman spelt backwards is Hitler
 
 Pacman *player;
-Ghost *blacky;				// not racist at all
-Ghost *pinky;				// which is blacky 2 for now
+Ghost *blacky;				
+Ghost *pinky;				
 
 int main()
 {
@@ -28,7 +28,8 @@ int main()
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_BITMAP *bgSheet = NULL;
 	ALLEGRO_BITMAP *pmImage = NULL;
-	ALLEGRO_BITMAP *ghImage = NULL;
+	ALLEGRO_BITMAP *blackyImage = NULL;
+	ALLEGRO_BITMAP *pinkyImage = NULL;
 
 	////INITS
 	if(!al_init())
@@ -51,14 +52,16 @@ int main()
 
 	bgSheet = al_load_bitmap("data/img/bg.png");
 	pmImage = al_load_bitmap("data/img/pm.png");
-	ghImage = al_load_bitmap("data/img/gh.png");
+	blackyImage = al_load_bitmap("data/img/gh.png");
+	pinkyImage = al_load_bitmap("data/img/gh2.png");
 
 	al_convert_mask_to_alpha(pmImage, al_map_rgb(255, 255, 255));
-	al_convert_mask_to_alpha(ghImage, al_map_rgb(255, 255, 255));
+	al_convert_mask_to_alpha(blackyImage, al_map_rgb(255, 255, 255));
+	al_convert_mask_to_alpha(pinkyImage, al_map_rgb(255, 255, 255));
 
 	player->Init(WIDTH / 2 + 16, HEIGHT / 2 + 128, 16, 16, 2.5, 3, pmImage);
-	blacky->Init(WIDTH / 2 + 16, 32 + 128, 16, 16, 2, ghImage);
-	pinky->Init(WIDTH / 2 + 48, 32 + 128, 16, 16, 2, ghImage);
+	blacky->Init(WIDTH / 2 + 16, 32 + 128, 16, 16, 2, blackyImage);
+	pinky->Init(WIDTH / 2 + 48, 32 + 128, 16, 16, 2, pinkyImage);
 
 	////EVENT REGISTERS
 	al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -108,7 +111,7 @@ int main()
 
 			player->Update(keys, map);
 			blacky->Update(map, *player, 0);
-			pinky->Update(map, *player, 1);
+			pinky->Update(map, *player, 4);
 		}
 		//RENDERING
 		if(redraw && al_is_event_queue_empty(event_queue))
@@ -144,7 +147,8 @@ int main()
 
 	al_destroy_bitmap(pmImage);
 	al_destroy_bitmap(bgSheet);
-	al_destroy_bitmap(ghImage);
+	al_destroy_bitmap(blackyImage);
+	al_destroy_bitmap(pinkyImage);
 	al_destroy_display(display);
 	al_destroy_event_queue(event_queue);
 	al_destroy_timer(timer);
