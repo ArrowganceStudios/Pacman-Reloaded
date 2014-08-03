@@ -23,7 +23,7 @@ void Ghost::Init(float x, float y, int boundX, int boundY, float velocity, ALLEG
 	maxFrame = 2;
 	curFrame = 0;
 	frameCount = 0;								
-	frameDelay = 6;
+	frameDelay = 15;
 	frameWidth = 32;
 	frameHeight = 32;
 	animationColumns = 2;
@@ -107,9 +107,34 @@ void Ghost::Render()
 {
 	MobileObject::Render();
 
-	int fx = (curFrame % animationColumns) * frameWidth;
-	int fy = (curFrame / animationColumns) * frameHeight;
+	switch(GetDirection())
+	{
+		case UP:
+			animationRows = 0;
+			break;
+		case DOWN:
+			animationRows = 1;
+			break;
+		case LEFT:
+			animationRows = 2;
+			break;
+		case RIGHT:
+			animationRows = 3;
+			break;
+	}
+	if(++frameCount > frameDelay)
+	{
+		curFrame++;
+		if(curFrame >= maxFrame)
+			curFrame = 0;
+		else if(curFrame <= 0)
+			curFrame = maxFrame;
 
+		frameCount = 0;
+	}
+	int fx = (curFrame % animationColumns) * frameWidth;
+	int fy = (animationRows) * frameHeight;
+	
 	al_draw_bitmap_region(image, fx, fy, frameWidth, frameHeight, x - frameWidth, y - frameHeight, 0);
 }
 
