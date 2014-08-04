@@ -5,6 +5,8 @@
 
 Ghost::Ghost()
 {
+	SetID(ENEMY);
+
 	MobileObject::MobileObject();
 	x = 0;
 	y = 0;
@@ -33,7 +35,7 @@ void Ghost::Init(float x, float y, int boundX, int boundY, float velocity, ALLEG
 	Ghost::image = image;
 	Ghost::SetDir(-1);
 }
-void Ghost::Update(int map[][21], float targetX, float targetY, bool targetDirection, int away, Ghost &enemy)
+void Ghost::Update(int map[][21], float targetX, float targetY, int targetDirection, int away, Ghost &enemy)
 {
 	//AI
 	if(!((int)x % 32) && !((int)y % 32) && (map[GetRow()][GetColumn()] == 2))
@@ -111,7 +113,7 @@ float Ghost::GetDistanceY(float targetY, int dy, Ghost &enemy)
 	return  abs(enemy.y - targetY + dy);
 }
 
-void Ghost::AI(float targetX, float targetY,bool targetDirection, int away, Ghost &enemy)
+void Ghost::AI(float targetX, float targetY,int targetDirection, int away, Ghost &enemy)
 {
 	float angle = 0;
 

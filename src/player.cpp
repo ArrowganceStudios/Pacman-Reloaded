@@ -3,6 +3,7 @@
 
 Pacman::Pacman()
 {
+	SetID(PLAYER);
 	MobileObject::MobileObject();
 	x = 0;
 	y = 0;

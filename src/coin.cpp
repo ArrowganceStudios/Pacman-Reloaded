@@ -2,6 +2,7 @@
 
 Coin::Coin()
 {
+	SetID(COIN);
 	StaticObject::StaticObject();
 }
 
