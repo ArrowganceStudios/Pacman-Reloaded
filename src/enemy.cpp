@@ -169,8 +169,20 @@ void Ghost::AI(float targetX, float targetY,bool targetDirection, int away, Ghos
 
 void Ghost::PriorityMovement()
 {
-	if(CanMoveUp() && (GetDirection() != DOWN)) SetDir(UP);
-	else if(CanMoveLeft() && (GetDirection() != RIGHT)) SetDir(LEFT);
-	else if(CanMoveDown() && (GetDirection() != UP)) SetDir(DOWN);
-	else if(CanMoveRight() && (GetDirection() != LEFT)) SetDir(RIGHT);
+	//there is no loop here, as this function is being called every 0.016s when needed anyway.
+	switch(rand() % 4)
+	{
+	case UP:
+		if(CanMoveUp() && (GetDirection() != DOWN)) SetDir(UP);
+		break;
+	case LEFT:
+		if(CanMoveLeft() && (GetDirection() != RIGHT)) SetDir(LEFT);
+		break;
+	case DOWN:
+		if(CanMoveDown() && (GetDirection() != UP)) SetDir(DOWN);
+		break;
+	case RIGHT:
+		if(CanMoveRight() && (GetDirection() != LEFT)) SetDir(RIGHT);
+		break;
+	}
 }
