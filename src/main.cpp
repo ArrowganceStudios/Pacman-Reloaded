@@ -1,6 +1,8 @@
 #include <allegro5\allegro.h>
 #include <allegro5\allegro_image.h>
 #include <allegro5\allegro_primitives.h>
+#include <allegro5\allegro_font.h>
+#include <allegro5\allegro_ttf.h>
 #include <iostream>
 #include "game_object.h"
 #include "enemy.h"
@@ -13,10 +15,15 @@
 //Pacman spelt backwards is Hitler
 
 Pacman *player;
+
 Ghost *blacky;				
 Ghost *pinky;	
 Ghost *inky;	
 Ghost *clyde;	
+
+ScatterPoint *blackysScatterPoint;
+ScatterPoint *pinkysScatterPoint;
+ScatterPoint *inkysScatterPoint;
 ScatterPoint *clydesScatterPoint;
 
 int main()
@@ -25,11 +32,16 @@ int main()
 	bool done = false; 																//event loop fundamental variable
 	bool redraw = true; 															//check whether the display needs an update
 	const int FPS = 60;
+	int ghost_clock = 0;
+	int ghost_clock_tick = 0;
 
 	////ALLLEGRO VARIABLES
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
+	ALLEGRO_FONT *visitor18 = NULL;
+
 	ALLEGRO_TIMER *timer = NULL;
+
 	ALLEGRO_BITMAP *bgSheet = NULL;
 	ALLEGRO_BITMAP *pmImage = NULL;
 	ALLEGRO_BITMAP *blackyImage = NULL;
@@ -48,12 +60,18 @@ int main()
 	al_install_keyboard();
 	al_init_image_addon();
 	al_init_primitives_addon();
+	al_init_font_addon();
+	al_init_ttf_addon();
 
 	player = new Pacman();
 	blacky = new Ghost();
 	pinky = new Ghost();
 	inky = new Ghost();
 	clyde = new Ghost();
+
+	blackysScatterPoint = new ScatterPoint();
+	pinkysScatterPoint = new ScatterPoint();
+	inkysScatterPoint = new ScatterPoint();
 	clydesScatterPoint = new ScatterPoint();
 
 	event_queue = al_create_event_queue();
@@ -65,6 +83,7 @@ int main()
 	pinkyImage = al_load_bitmap("data/img/gh2.png");
 	inkyImage = al_load_bitmap("data/img/gh3.png");
 	clydeImage = al_load_bitmap("data/img/gh4.png");
+	visitor18 = al_load_ttf_font("data/visitor2.ttf", 18, 0);
 
 	al_convert_mask_to_alpha(pmImage, al_map_rgb(255, 255, 255));
 	al_convert_mask_to_alpha(blackyImage, al_map_rgb(255, 255, 255));
@@ -77,7 +96,11 @@ int main()
 	pinky->Init(WIDTH / 2 + 48, 32 + 128, 16, 16, 2, pinkyImage);
 	inky->Init(WIDTH / 2 + 16, 32 + 128, 16, 16, 2, inkyImage);
 	clyde->Init(WIDTH / 2 - 16, 32 + 128, 16, 16, 2, clydeImage);
-	clydesScatterPoint->Init(-32, 672);
+
+	blackysScatterPoint->Init(32, 672);
+	pinkysScatterPoint->Init(576, 672);
+	inkysScatterPoint->Init(32, 32);
+	clydesScatterPoint->Init(576, 32);
 
 	////EVENT REGISTERS
 	al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -123,16 +146,36 @@ int main()
 		//UPDATE
 		else if(ev.type == ALLEGRO_EVENT_TIMER)
 		{
-			redraw = true;
+			ghost_clock++;
+			if(ghost_clock >= 60) 
+			{
+				ghost_clock_tick++;
+				ghost_clock = 0;
+			}
 
+			redraw = true;
 			player->Update(keys, map);
-			blacky->Update(map, player->GetX(), player->GetY(), player->GetDirection(), 0, *blacky);
-			pinky->Update(map, player->GetX(), player->GetY(), player->GetDirection(), 4, *pinky);
-			inky->Update(map,player->GetX(), player->GetY(), player->GetDirection(), 2, *blacky);
-			if(sqrt((pow(clyde->GetDistanceX(player->GetX(), 0, *clyde),2) + pow(clyde->GetDistanceY(player->GetY(), 0, *clyde),2))) <= 8*32)
-				clyde->Update(map, player->GetX(), player->GetY(), player->GetDirection(), 0, *clyde);
-			else 
+
+			
+
+			if(ghost_clock_tick <= 7)
+			{
+				blacky->Update(map, blackysScatterPoint->GetX(), blackysScatterPoint->GetY(), -1, 0, *blacky);
+				pinky->Update(map, pinkysScatterPoint->GetX(), pinkysScatterPoint->GetY(), -1, 4, *pinky);
+				inky->Update(map, inkysScatterPoint->GetX(), inkysScatterPoint->GetY(), -1, 2, *blacky);
 				clyde->Update(map, clydesScatterPoint->GetX(), clydesScatterPoint->GetY(), -1, 0, *clyde);
+			}
+			else if(ghost_clock_tick > 7)
+			{
+				blacky->Update(map, player->GetX(), player->GetY(), player->GetDirection(), 0, *blacky);
+				pinky->Update(map, player->GetX(), player->GetY(), player->GetDirection(), 4, *pinky);
+				inky->Update(map,player->GetX(), player->GetY(), player->GetDirection(), 2, *blacky);
+				if(sqrt((pow(clyde->GetDistanceX(player->GetX(), 0, *clyde),2) + pow(clyde->GetDistanceY(player->GetY(), 0, *clyde),2))) <= 8*32)
+					clyde->Update(map, player->GetX(), player->GetY(), player->GetDirection(), 0, *clyde);
+				else 
+					clyde->Update(map, clydesScatterPoint->GetX(), clydesScatterPoint->GetY(), -1, 0, *clyde);
+				if(ghost_clock_tick >= 27) ghost_clock_tick = 0;
+			}
 		}
 		//RENDERING
 		if(redraw && al_is_event_queue_empty(event_queue))
@@ -160,6 +203,8 @@ int main()
 			pinky->Render();
 			inky->Render();
 			clyde->Render();
+
+			al_draw_textf(visitor18, al_map_rgb(255,255,255), 10, 10, 0, "Seconds: %i", ghost_clock_tick);
 
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0,0,0)); 						//black background
