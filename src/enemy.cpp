@@ -35,44 +35,6 @@ void Ghost::Init(float x, float y, int boundX, int boundY, float velocity, ALLEG
 }
 void Ghost::Update(int map[][21], float targetX, float targetY, bool targetDirection, int away, Ghost &enemy)
 {
-	/*if(!((int)x % 32) && !((int)y % 32))
-	{
-		bool go = false;				// this is the shittiest shitty shit in the shitty history of shit 
-		while(!go)
-		{
-			switch(rand() % 4)
-			{
-				case UP:
-					if(CanMoveUp()) 
-					{
-						Ghost::SetDir(UP);
-						go = true;
-					}
-					break;
-				case DOWN:
-					if(CanMoveDown()) 
-					{
-						Ghost::SetDir(DOWN);
-						go = true;
-					}
-					break;
-				case LEFT:
-					if(CanMoveLeft()) 
-					{
-						Ghost::SetDir(LEFT);
-						go = true;
-					}
-					break;
-				case RIGHT:
-					if(CanMoveRight()) 
-					{
-						Ghost::SetDir(RIGHT);
-						go = true;
-					}
-					break;
-			}
-		}
-	}*/
 	//AI
 	if(!((int)x % 32) && !((int)y % 32) && (map[GetRow()][GetColumn()] == 2))
 	{

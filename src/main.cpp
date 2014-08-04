@@ -4,15 +4,16 @@
 #include <allegro5\allegro_font.h>
 #include <allegro5\allegro_ttf.h>
 #include <iostream>
+#include <list>
+
 #include "game_object.h"
 #include "enemy.h"
 #include "player.h"
 #include "menu.h"
 #include "globals.h"
 #include "scatter_point.h"
+#include "coin.h"
 
-
-//Pacman spelt backwards is Hitler
 
 Pacman *player;
 
@@ -26,6 +27,9 @@ ScatterPoint *pinkysScatterPoint;
 ScatterPoint *inkysScatterPoint;
 ScatterPoint *clydesScatterPoint;
 
+std::list<Coin *> coins;
+std::list<Coin *>::iterator iter;
+
 int main()
 {
 	////PRIMITIVE VARIABLES
@@ -34,6 +38,7 @@ int main()
 	const int FPS = 60;
 	int ghost_clock = 0;
 	int ghost_clock_tick = 0;
+	int points = 0;
 
 	////ALLLEGRO VARIABLES
 	ALLEGRO_DISPLAY *display = NULL;
@@ -91,16 +96,29 @@ int main()
 	al_convert_mask_to_alpha(inkyImage, al_map_rgb(255, 255, 255));
 	al_convert_mask_to_alpha(clydeImage, al_map_rgb(255, 255, 255));
 
-	player->Init(WIDTH / 2 + 16, HEIGHT / 2 + 128, 16, 16, 2.5, 3, pmImage);
-	blacky->Init(WIDTH / 2 + 16, 32 + 128, 16, 16, 2, blackyImage);
-	pinky->Init(WIDTH / 2 + 48, 32 + 128, 16, 16, 2, pinkyImage);
-	inky->Init(WIDTH / 2 + 16, 32 + 128, 16, 16, 2, inkyImage);
-	clyde->Init(WIDTH / 2 - 16, 32 + 128, 16, 16, 2, clydeImage);
+	player->Init(WIDTH / 2 + 16, HEIGHT / 2 + 128, 8, 8, 2.5, 3, pmImage);
+	blacky->Init(WIDTH / 2 + 16, 32 + 128, 8, 8, 2, blackyImage);
+	pinky->Init(WIDTH / 2 + 48, 32 + 128, 8, 8, 2, pinkyImage);
+	inky->Init(WIDTH / 2 + 16, 32 + 128, 8, 8, 2, inkyImage);
+	clyde->Init(WIDTH / 2 - 16, 32 + 128, 8, 8, 2, clydeImage);
 
 	blackysScatterPoint->Init(32, 672);
 	pinkysScatterPoint->Init(576, 672);
 	inkysScatterPoint->Init(32, 32);
 	clydesScatterPoint->Init(576, 32);
+
+	for(int i = 0; i < 21; i++)				//when making state masheen, this can be moved into i.e. KEY_SPACE (i.e. when moving from TITLE to PLAYING)
+	{
+		for(int j = 0; j < 20; j++)
+		{
+			if(map[i][j])
+			{
+				Coin *coin = new Coin();
+				coin->Init((j)*32, (i+1)*32, 1, 1);			//TEMPORARY
+				coins.push_back(coin);
+			}
+		}
+	}
 
 	////EVENT REGISTERS
 	al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -156,7 +174,13 @@ int main()
 			redraw = true;
 			player->Update(keys, map);
 
-			
+			for(iter = coins.begin(); iter != coins.end(); ++iter)
+				if((*iter)->CheckCollisions(player))
+				{
+					(*iter)->Destroy();
+					iter = coins.erase(iter);
+					points += 10;
+				}
 
 			if(ghost_clock_tick <= 7)
 			{
@@ -196,7 +220,8 @@ int main()
 				}
 			}
 
-			
+			for(iter = coins.begin(); iter != coins.end(); ++iter)
+				(*iter)->Render();
 
 			player->Render();
 			blacky->Render();
@@ -204,7 +229,16 @@ int main()
 			inky->Render();
 			clyde->Render();
 
-			al_draw_textf(visitor18, al_map_rgb(255,255,255), 10, 10, 0, "Seconds: %i", ghost_clock_tick);
+			al_draw_rectangle(player->GetX() - player->GetBoundX(),
+							player->GetY() - player->GetBoundY(),
+							player->GetX() + player->GetBoundX(),
+							player->GetY() + player->GetBoundY(), al_map_rgb_f(1, 1, 1), 1);
+			al_draw_rectangle(blacky->GetX() - blacky->GetBoundX(),
+							blacky->GetY() - blacky->GetBoundY(),
+							blacky->GetX() + blacky->GetBoundX(),
+							blacky->GetY() + blacky->GetBoundY(), al_map_rgb_f(1, 1, 1), 1);
+			al_draw_textf(visitor18, al_map_rgb(255,255,255), 5, 5, 0, "Seconds: %i", ghost_clock_tick);
+			al_draw_textf(visitor18, al_map_rgb(255,255,255), 5, 15, 0, "Points: %i", points);
 
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0,0,0)); 						//black background
