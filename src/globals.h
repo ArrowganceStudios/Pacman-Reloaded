@@ -9,7 +9,7 @@ enum STATE{TITLE, PLAYING, LOST};
 enum PLAYINGSTATE{CHASE, SCATTER, FRIGHTENED}; 
 
 int keys = -1;
-enum KEYS{UP, DOWN, LEFT, RIGHT};
+enum KEYS{UP, DOWN, LEFT, RIGHT, ENTER};
 
 int mapColumns = 19;
 int mapSize = 19 * 20;

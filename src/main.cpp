@@ -30,6 +30,12 @@ ScatterPoint *clydesScatterPoint;
 std::list<Coin *> coins;
 std::list<Coin *>::iterator iter;
 
+std::list<GameObject*> objects;
+std::list<GameObject *>::iterator iter2;
+
+void ChangeState(int &state, int newState);
+void ChangePlayingState(int &state, int newState);
+
 int main()
 {
 	////PRIMITIVE VARIABLES
@@ -39,6 +45,10 @@ int main()
 	int ghost_clock = 0;
 	int ghost_clock_tick = 0;
 	int points = 0;
+
+	int state = -1;
+	int PlayingState = -1;
+
 
 	////ALLLEGRO VARIABLES
 	ALLEGRO_DISPLAY *display = NULL;
@@ -53,6 +63,8 @@ int main()
 	ALLEGRO_BITMAP *pinkyImage = NULL;
 	ALLEGRO_BITMAP *inkyImage = NULL;
 	ALLEGRO_BITMAP *clydeImage = NULL;
+	ALLEGRO_BITMAP *titleImage = NULL;
+	ALLEGRO_BITMAP *lostImage = NULL;
 
 	////INITS
 	if(!al_init())
@@ -69,10 +81,19 @@ int main()
 	al_init_ttf_addon();
 
 	player = new Pacman();
+	objects.push_back(player);
+
 	blacky = new Ghost();
+	objects.push_back(blacky);
+
 	pinky = new Ghost();
+	objects.push_back(pinky);
+
 	inky = new Ghost();
+	objects.push_back(inky);
+
 	clyde = new Ghost();
+	objects.push_back(clyde);
 
 	blackysScatterPoint = new ScatterPoint();
 	pinkysScatterPoint = new ScatterPoint();
@@ -89,6 +110,8 @@ int main()
 	inkyImage = al_load_bitmap("data/img/gh3.png");
 	clydeImage = al_load_bitmap("data/img/gh4.png");
 	visitor18 = al_load_ttf_font("data/visitor2.ttf", 18, 0);
+	titleImage = al_load_bitmap("data/img/pacman_Title.png");
+	lostImage = al_load_bitmap("data/img/pacman_Lose.png");
 
 	al_convert_mask_to_alpha(pmImage, al_map_rgb(255, 255, 255));
 	al_convert_mask_to_alpha(blackyImage, al_map_rgb(255, 255, 255));
@@ -102,23 +125,8 @@ int main()
 	inky->Init(WIDTH / 2 + 16, 32 + 128, 8, 8, 2, inkyImage);
 	clyde->Init(WIDTH / 2 - 16, 32 + 128, 8, 8, 2, clydeImage);
 
-	blackysScatterPoint->Init(32, 672);
-	pinkysScatterPoint->Init(576, 672);
-	inkysScatterPoint->Init(32, 32);
-	clydesScatterPoint->Init(576, 32);
+	
 
-	for(int i = 0; i < 21; i++)				//when making state masheen, this can be moved into i.e. KEY_SPACE (i.e. when moving from TITLE to PLAYING)
-	{
-		for(int j = 0; j < 20; j++)
-		{
-			if(map[i][j])
-			{
-				Coin *coin = new Coin();
-				coin->Init((j)*32, (i+1)*32, 1, 1);			//TEMPORARY
-				coins.push_back(coin);
-			}
-		}
-	}
 
 	////EVENT REGISTERS
 	al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -127,7 +135,10 @@ int main()
 
 	al_start_timer(timer);
 
+
 	srand(time(NULL));
+
+	ChangeState(state, TITLE);
 
 	////GAMELOOP
 	while(!done)
@@ -154,6 +165,12 @@ int main()
 			case ALLEGRO_KEY_DOWN:
 				keys = DOWN;
 				break;
+			case ALLEGRO_KEY_ENTER:
+				if(state == TITLE)
+					ChangeState(state, PLAYING);
+				else if(state == LOST)
+					ChangeState(state, PLAYING);
+				break;
 			}
 			
 		}
@@ -164,6 +181,8 @@ int main()
 		//UPDATE
 		else if(ev.type == ALLEGRO_EVENT_TIMER)
 		{
+			if(state == PLAYING)
+			{
 			ghost_clock++;
 			if(ghost_clock >= FPS) 
 			{
@@ -201,6 +220,7 @@ int main()
 					clyde->Update(map, clydesScatterPoint->GetX(), clydesScatterPoint->GetY(), -1, 0, *clyde);
 				if(ghost_clock_tick >= 27) ghost_clock_tick = 0;
 			}
+			}
 		}
 		//RENDERING
 		if(redraw && al_is_event_queue_empty(event_queue))
@@ -208,6 +228,13 @@ int main()
 			redraw = false;
 			//std::cout << player->CheckDistance(*blacky) << std::endl;
 			//drawing map
+			if(state ==TITLE)
+			{
+				al_draw_bitmap(titleImage,0, 0, 0);
+			}
+			else if(state == PLAYING)
+			{
+				
 			for(int i = 0; i < 20; i++)
 			{
 				for(int j = 0; j < 21; j++)
@@ -240,6 +267,12 @@ int main()
 							blacky->GetY() + blacky->GetBoundY(), al_map_rgb_f(1, 1, 1), 1);
 			al_draw_textf(visitor18, al_map_rgb(255,255,255), 5, 5, 0, "Seconds: %i", ghost_clock_tick);
 			al_draw_textf(visitor18, al_map_rgb(255,255,255), 5, 15, 0, "Points: %i", points);
+			}
+			else if(state == LOST)
+			{
+				
+				al_draw_bitmap(lostImage,0, 0, 0);
+			}
 
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0,0,0)); 						//black background
@@ -247,7 +280,26 @@ int main()
 	}
 
 	//DEALLOCATING MEMORY
+	for(iter = coins.begin(); iter != coins.end(); )
+	{
+			delete (*iter);
+			iter = coins.erase(iter);
+	}
 
+	for(iter2 = objects.begin(); iter2 != objects.end(); )
+	{
+			(*iter2)->Destroy();
+			delete (*iter2);
+			iter2 = objects.erase(iter2);
+	}
+	
+	delete blackysScatterPoint;
+	delete pinkysScatterPoint; 
+	delete inkysScatterPoint; 
+	delete clydesScatterPoint;
+
+	al_destroy_bitmap(titleImage);
+	al_destroy_bitmap(lostImage);
 	al_destroy_bitmap(pmImage);
 	al_destroy_bitmap(bgSheet);
 	al_destroy_bitmap(blackyImage);
@@ -258,4 +310,68 @@ int main()
 	al_destroy_event_queue(event_queue);
 	al_destroy_timer(timer);
 	return 0;
+}
+
+void ChangeState(int &state, int newState)
+{
+	if(state ==TITLE)
+	{}
+	else if(state == PLAYING)
+	{
+	}
+	else if(state == LOST)
+	{}
+
+	state = newState;
+
+	if(state ==TITLE)
+	{}
+	else if(state == PLAYING)
+	{
+
+
+
+	for(int i = 0; i < 21; i++)				//when making state masheen, this can be moved into i.e. KEY_SPACE (i.e. when moving from TITLE to PLAYING)
+	{
+		for(int j = 0; j < 20; j++)
+		{
+
+			
+	blackysScatterPoint->Init(32, 672);
+	pinkysScatterPoint->Init(576, 672);
+	inkysScatterPoint->Init(32, 32);
+	clydesScatterPoint->Init(576, 32);
+
+			if(map[i][j])
+			{
+				Coin *coin = new Coin();
+				coin->Init((j)*32, (i+1)*32, 1, 1);			//TEMPORARY
+				coins.push_back(coin);
+			}
+		}
+	}
+	}
+	else if(state == LOST)
+	{}
+}
+
+void ChangePlayingState(int &state, int newState)
+{
+	if(state == CHASE)
+	{}
+	else if(state == SCATTER)
+	{
+	}
+	else if(state == FRIGHTENED)
+	{}
+
+	state = newState;
+
+	if(state == CHASE)
+	{}
+	else if(state == SCATTER)
+	{
+	}
+	else if(state == FRIGHTENED)
+	{}
 }
