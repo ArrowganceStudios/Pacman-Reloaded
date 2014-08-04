@@ -13,7 +13,7 @@ Pacman::Pacman()
 	image = NULL;
 };
 
-void Pacman::Init(float x, float y, int boundX,  int boundY, int velocity, float lives, ALLEGRO_BITMAP *image)
+void Pacman::Init(float x, float y, int boundX,  int boundY, float velocity, float lives, ALLEGRO_BITMAP *image)
 {
 	MobileObject::Init(x, y, boundX, boundY, image);
 
