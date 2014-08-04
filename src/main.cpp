@@ -165,7 +165,7 @@ int main()
 		else if(ev.type == ALLEGRO_EVENT_TIMER)
 		{
 			ghost_clock++;
-			if(ghost_clock >= 60) 
+			if(ghost_clock >= FPS) 
 			{
 				ghost_clock_tick++;
 				ghost_clock = 0;
@@ -174,13 +174,14 @@ int main()
 			redraw = true;
 			player->Update(keys, map);
 
-			for(iter = coins.begin(); iter != coins.end(); ++iter)
+			for(iter = coins.begin(); iter != coins.end();)
 				if((*iter)->CheckCollisions(player))
 				{
 					(*iter)->Destroy();
 					iter = coins.erase(iter);
 					points += 10;
 				}
+				else iter++;
 
 			if(ghost_clock_tick <= 7)
 			{
