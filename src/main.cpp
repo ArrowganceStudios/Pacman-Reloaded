@@ -183,43 +183,43 @@ int main()
 		{
 			if(state == PLAYING)
 			{
-			ghost_clock++;
-			if(ghost_clock >= FPS) 
-			{
-				ghost_clock_tick++;
-				ghost_clock = 0;
-			}
-
-			redraw = true;
-			player->Update(keys, map);
-
-			for(iter = coins.begin(); iter != coins.end();)
-				if((*iter)->CheckCollisions(player))
+				ghost_clock++;
+				if(ghost_clock >= FPS) 
 				{
-					(*iter)->Destroy();
-					iter = coins.erase(iter);
-					points += 10;
+					ghost_clock_tick++;
+					ghost_clock = 0;
 				}
-				else iter++;
 
-			if(ghost_clock_tick <= 7)
-			{
-				blacky->Update(map, blackysScatterPoint->GetX(), blackysScatterPoint->GetY(), -1, 0, *blacky);
-				pinky->Update(map, pinkysScatterPoint->GetX(), pinkysScatterPoint->GetY(), -1, 4, *pinky);
-				inky->Update(map, inkysScatterPoint->GetX(), inkysScatterPoint->GetY(), -1, 2, *blacky);
-				clyde->Update(map, clydesScatterPoint->GetX(), clydesScatterPoint->GetY(), -1, 0, *clyde);
-			}
-			else if(ghost_clock_tick > 7)
-			{
-				blacky->Update(map, player->GetX(), player->GetY(), player->GetDirection(), 0, *blacky);
-				pinky->Update(map, player->GetX(), player->GetY(), player->GetDirection(), 4, *pinky);
-				inky->Update(map,player->GetX(), player->GetY(), player->GetDirection(), 2, *blacky);
-				if(sqrt((pow(clyde->GetDistanceX(player->GetX(), 0, *clyde),2) + pow(clyde->GetDistanceY(player->GetY(), 0, *clyde),2))) <= 8*32)
-					clyde->Update(map, player->GetX(), player->GetY(), player->GetDirection(), 0, *clyde);
-				else 
+				redraw = true;
+				player->Update(keys, map);
+
+				for(iter = coins.begin(); iter != coins.end();)
+					if((*iter)->CheckCollisions(player))
+					{
+						(*iter)->Destroy();
+						iter = coins.erase(iter);
+						points += 10;
+					}
+					else iter++;
+
+				if(ghost_clock_tick <= 7)
+				{
+					blacky->Update(map, blackysScatterPoint->GetX(), blackysScatterPoint->GetY(), -1, 0, *blacky);
+					pinky->Update(map, pinkysScatterPoint->GetX(), pinkysScatterPoint->GetY(), -1, 4, *pinky);
+					inky->Update(map, inkysScatterPoint->GetX(), inkysScatterPoint->GetY(), -1, 2, *blacky);
 					clyde->Update(map, clydesScatterPoint->GetX(), clydesScatterPoint->GetY(), -1, 0, *clyde);
-				if(ghost_clock_tick >= 27) ghost_clock_tick = 0;
-			}
+				}
+				else if(ghost_clock_tick > 7)
+				{
+					blacky->Update(map, player->GetX(), player->GetY(), player->GetDirection(), 0, *blacky);
+					pinky->Update(map, player->GetX(), player->GetY(), player->GetDirection(), 4, *pinky);
+					inky->Update(map,player->GetX(), player->GetY(), player->GetDirection(), 2, *blacky);
+					if(sqrt((pow(clyde->GetDistanceX(player->GetX(), 0, *clyde),2) + pow(clyde->GetDistanceY(player->GetY(), 0, *clyde),2))) <= 8*32)
+						clyde->Update(map, player->GetX(), player->GetY(), player->GetDirection(), 0, *clyde);
+					else 
+						clyde->Update(map, clydesScatterPoint->GetX(), clydesScatterPoint->GetY(), -1, 0, *clyde);
+					if(ghost_clock_tick >= 27) ghost_clock_tick = 0;
+				}
 			}
 		}
 		//RENDERING
@@ -234,43 +234,44 @@ int main()
 			}
 			else if(state == PLAYING)
 			{
-				
-			for(int i = 0; i < 20; i++)
-			{
-				for(int j = 0; j < 21; j++)
+					
+				for(int i = 0; i < 20; i++)
 				{
-					if(!map[i][j])
-						al_draw_bitmap_region(bgSheet, 0, 0, tileSize, tileSize,
-						tileSize * j - 32, tileSize * i, 0);
-					else
-						al_draw_bitmap_region(bgSheet, tileSize, 0, tileSize, tileSize,
-						tileSize * j - 32, tileSize * i, 0);
+					for(int j = 0; j < 21; j++)
+					{
+						if(!map[i][j])
+							al_draw_bitmap_region(bgSheet, 0, 0, tileSize, tileSize,
+							tileSize * j - 32, tileSize * i, 0);
+						else
+							al_draw_bitmap_region(bgSheet, tileSize, 0, tileSize, tileSize,
+							tileSize * j - 32, tileSize * i, 0);
+					}
 				}
-			}
 
-			for(iter = coins.begin(); iter != coins.end(); ++iter)
-				(*iter)->Render();
+				for(iter = coins.begin(); iter != coins.end(); ++iter)
+					(*iter)->Render();
 
-			player->Render();
-			blacky->Render();
-			pinky->Render();
-			inky->Render();
-			clyde->Render();
+				player->Render();
+				blacky->Render();
+				pinky->Render();
+				inky->Render();
+				clyde->Render();
+				
+				//debug
+				al_draw_rectangle(player->GetX() - player->GetBoundX(),
+								player->GetY() - player->GetBoundY(),
+								player->GetX() + player->GetBoundX(),
+								player->GetY() + player->GetBoundY(), al_map_rgb_f(1, 1, 1), 1);
+				al_draw_rectangle(blacky->GetX() - blacky->GetBoundX(),
+								blacky->GetY() - blacky->GetBoundY(),
+								blacky->GetX() + blacky->GetBoundX(),
+								blacky->GetY() + blacky->GetBoundY(), al_map_rgb_f(1, 1, 1), 1);
 
-			al_draw_rectangle(player->GetX() - player->GetBoundX(),
-							player->GetY() - player->GetBoundY(),
-							player->GetX() + player->GetBoundX(),
-							player->GetY() + player->GetBoundY(), al_map_rgb_f(1, 1, 1), 1);
-			al_draw_rectangle(blacky->GetX() - blacky->GetBoundX(),
-							blacky->GetY() - blacky->GetBoundY(),
-							blacky->GetX() + blacky->GetBoundX(),
-							blacky->GetY() + blacky->GetBoundY(), al_map_rgb_f(1, 1, 1), 1);
-			al_draw_textf(visitor18, al_map_rgb(255,255,255), 5, 5, 0, "Seconds: %i", ghost_clock_tick);
-			al_draw_textf(visitor18, al_map_rgb(255,255,255), 5, 15, 0, "Points: %i", points);
+				al_draw_textf(visitor18, al_map_rgb(255,255,255), 5, 5, 0, "Seconds: %i", ghost_clock_tick);
+				al_draw_textf(visitor18, al_map_rgb(255,255,255), 5, 15, 0, "Points: %i", points);
 			}
 			else if(state == LOST)
 			{
-				
 				al_draw_bitmap(lostImage,0, 0, 0);
 			}
 
@@ -317,8 +318,7 @@ void ChangeState(int &state, int newState)
 	if(state ==TITLE)
 	{}
 	else if(state == PLAYING)
-	{
-	}
+	{}
 	else if(state == LOST)
 	{}
 
@@ -328,28 +328,25 @@ void ChangeState(int &state, int newState)
 	{}
 	else if(state == PLAYING)
 	{
+		//ghosts inits
+		blackysScatterPoint->Init(32, 672);
+		pinkysScatterPoint->Init(576, 672);
+		inkysScatterPoint->Init(32, 32);
+		clydesScatterPoint->Init(576, 32);
 
-
-
-	for(int i = 0; i < 21; i++)				//when making state masheen, this can be moved into i.e. KEY_SPACE (i.e. when moving from TITLE to PLAYING)
-	{
-		for(int j = 0; j < 20; j++)
+		//coins inits
+		for(int i = 0; i < 21; i++)				//when making state masheen, this can be moved into i.e. KEY_SPACE (i.e. when moving from TITLE to PLAYING)
 		{
-
-			
-	blackysScatterPoint->Init(32, 672);
-	pinkysScatterPoint->Init(576, 672);
-	inkysScatterPoint->Init(32, 32);
-	clydesScatterPoint->Init(576, 32);
-
-			if(map[i][j])
+			for(int j = 0; j < 20; j++)
 			{
-				Coin *coin = new Coin();
-				coin->Init((j)*32, (i+1)*32, 1, 1);			//TEMPORARY
-				coins.push_back(coin);
+				if(map[i][j] && !(8 < j && j < 12 && 9 < i && i < 12)) //this needs to be done using some new ID tile in the map which will be placed in the ghost house
+				{													   //(temporary fix)
+					Coin *coin = new Coin();
+					coin->Init((j)*32, (i+1)*32, 1, 1);			//TEMPORARY
+					coins.push_back(coin);
+				}
 			}
 		}
-	}
 	}
 	else if(state == LOST)
 	{}
@@ -360,8 +357,7 @@ void ChangePlayingState(int &state, int newState)
 	if(state == CHASE)
 	{}
 	else if(state == SCATTER)
-	{
-	}
+	{}
 	else if(state == FRIGHTENED)
 	{}
 
@@ -370,8 +366,7 @@ void ChangePlayingState(int &state, int newState)
 	if(state == CHASE)
 	{}
 	else if(state == SCATTER)
-	{
-	}
+	{}
 	else if(state == FRIGHTENED)
 	{}
 }
