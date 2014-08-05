@@ -49,7 +49,14 @@ bool MobileObject::CanMoveDown()
 {
 	//std::cout << "A One down Row = " << GetRow() + 1 << std::endl;
 	//std::cout << "A One down Column = " << GetColumn() << std::endl;
-	return (map[GetRow() + 1][GetColumn()]);
+	//if(!(map[GetRow() + 1][GetColumn()] == 3))
+		return (map[GetRow() + 1][GetColumn()]);
+	/*else if(GetID() == PLAYER)
+		return false;
+	else if(PlayingState == FRIGHTENED)
+		return true;
+	else 
+		return false;*/
 }
 bool MobileObject::CanMoveLeft()
 {
