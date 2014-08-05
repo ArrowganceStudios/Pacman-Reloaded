@@ -10,11 +10,13 @@ protected:
 public:
 	Ghost();
 
-	void Init(float x, float y, int boundX, int boundY, float velocity, ALLEGRO_BITMAP *image = NULL);
+	void Init(float x, float y, int boundX, int boundY, float velocity,int state, ALLEGRO_BITMAP *image = NULL);
 
 	void Destroy(){};
-	void Update(int map[][21], float targetX, float targetY, int targetDirection, int type, Ghost &enemy);
+	void Update(int map[][21], float targetX, float targetY, int targetDirection, int away, Ghost &enemy);
 	void Render();
+
+	void  ChangeState(int &state, int newState);
 
 	void AI(float targetX, float targetY, int targetDirection, int away, Ghost &enemy);
 
@@ -22,7 +24,7 @@ public:
 	float GetDistanceY(float targetY, int dy, Ghost &enemy);
 
 	
-	void PriorityMovement();
+	void RandomMovement();
 
 	void Collided(int ObjectID){};
 }; 

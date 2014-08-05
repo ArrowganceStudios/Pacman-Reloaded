@@ -11,11 +11,16 @@ class MobileObject : public GameObject
 protected:
 	float velocity;
 	int direction;
+	int state;
 
 public:
 	MobileObject::MobileObject(void);
 
-	void Init(float x, float y, int boundX, int boundY, ALLEGRO_BITMAP *image);
+
+	void virtual ChangeState(int &state, int newState){}
+	int GetState() {return state;}
+
+	void Init(float x, float y, int boundX, int boundY,int state , ALLEGRO_BITMAP *image);
 
 	void virtual Render(){GameObject::Render();}
 	void virtual Destroy(){GameObject::Destroy();}

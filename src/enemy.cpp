@@ -17,9 +17,9 @@ Ghost::Ghost()
 	image = NULL;
 }
 
-void Ghost::Init(float x, float y, int boundX, int boundY, float velocity, ALLEGRO_BITMAP *image)
+void Ghost::Init(float x, float y, int boundX, int boundY, float velocity,int state , ALLEGRO_BITMAP *image)
 {
-	MobileObject::Init(x, y, boundX, boundY, image);
+	MobileObject::Init(x, y, boundX, boundY,state, image);
 
 	Ghost::velocity = velocity;
 
@@ -32,8 +32,10 @@ void Ghost::Init(float x, float y, int boundX, int boundY, float velocity, ALLEG
 	animationColumns = 2;
 	animationRows = 4;
 
+
 	Ghost::image = image;
 	Ghost::SetDir(-1);
+	Ghost::ChangeState(state, CHASEandSCATTER);
 }
 void Ghost::Update(int map[][21], float targetX, float targetY, int targetDirection, int away, Ghost &enemy)
 {
@@ -66,6 +68,31 @@ void Ghost::Update(int map[][21], float targetX, float targetY, int targetDirect
 		y = HEIGHT + 32;
 	else if (y > HEIGHT+30)
 		y = 0;
+}
+
+void  Ghost::ChangeState(int &state, int newState)
+	{
+		if(state == CHASEandSCATTER)
+			{}
+		else if(state == RETREATING)
+			{}
+		else if(state == FRIGHTENED)
+			{}
+
+		state = newState;
+
+		if(state == CHASEandSCATTER)
+			{
+				velocity = 2;
+			}
+		else if(state == RETREATING)
+			{
+				velocity = 2;
+			}
+		else if(state == FRIGHTENED)
+			{
+				velocity = 1;
+			}
 }
 
 void Ghost::Render()
@@ -102,6 +129,7 @@ void Ghost::Render()
 	
 	al_draw_bitmap_region(image, fx, fy, frameWidth, frameHeight, x - frameWidth, y - frameHeight, 0);
 }
+
 
 float Ghost::GetDistanceX(float targetX, int dx, Ghost &enemy)
 {
@@ -156,7 +184,7 @@ void Ghost::AI(float targetX, float targetY,int targetDirection, int away, Ghost
 			else if(cos(angle) < 0 && CanMoveLeft() && (GetDirection() != RIGHT))
 				SetDir(LEFT);
 			else 
-				PriorityMovement();
+				RandomMovement();
 		}
 		else
 		{
@@ -165,11 +193,11 @@ void Ghost::AI(float targetX, float targetY,int targetDirection, int away, Ghost
 			else if(sin(angle) < 0 && CanMoveUp() && (GetDirection() != DOWN))
 				SetDir(UP);
 			else
-				PriorityMovement();
+				RandomMovement();
 		}
 }
 
-void Ghost::PriorityMovement()
+void Ghost::RandomMovement()
 {
 	//there is no loop here, as this function is being called every 0.016s when needed anyway.
 	switch(rand() % 4)

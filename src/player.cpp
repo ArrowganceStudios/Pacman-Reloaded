@@ -14,9 +14,9 @@ Pacman::Pacman()
 	image = NULL;
 };
 
-void Pacman::Init(float x, float y, int boundX,  int boundY, float velocity, float lives, ALLEGRO_BITMAP *image)
+void Pacman::Init(float x, float y, int boundX,  int boundY, float velocity,float lives,int state,  ALLEGRO_BITMAP *image)
 {
-	MobileObject::Init(x, y, boundX, boundY, image);
+	MobileObject::Init(x, y, boundX, boundY,state, image);
 
 	Pacman::velocity = velocity;
 	Pacman::lives = lives;
@@ -33,6 +33,7 @@ void Pacman::Init(float x, float y, int boundX,  int boundY, float velocity, flo
 
 	Pacman::image = image;
 	Pacman::SetDir(-1);
+	Pacman::ChangeState(state, NORMAL);
 }
 
 void Pacman::Movement(int keys, int map[][21])
@@ -140,6 +141,25 @@ void Pacman::Render()
 		al_map_rgba_f(1, 1, 1, 1.0), frameWidth / 2, frameHeight / 2, x - frameWidth / 2, 
 		y - frameHeight / 2, 1, 1, angle, 0);
 
+}
+
+void Pacman::ChangeState(int &state, int newState)
+{
+	if(state == NORMAL)
+	{}
+	else if(state == POWERUP)
+	{}
+
+	state = newState;
+
+	if(state == NORMAL)
+	{
+		velocity = 2;
+	}
+	else if(state == POWERUP)
+	{
+		velocity = 4;
+	}
 }
 
 void Pacman::Collided(int ObjectID)

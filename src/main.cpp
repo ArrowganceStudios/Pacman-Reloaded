@@ -119,11 +119,11 @@ int main()
 	al_convert_mask_to_alpha(inkyImage, al_map_rgb(255, 255, 255));
 	al_convert_mask_to_alpha(clydeImage, al_map_rgb(255, 255, 255));
 
-	player->Init(WIDTH / 2 + 16, HEIGHT / 2 + 128, 8, 8, 2, 3, pmImage); //vel = 2 coz wallhack ;x
-	blacky->Init(WIDTH / 2 + 16, 32 + 128, 8, 8, 2, blackyImage);
-	pinky->Init(WIDTH / 2 + 48, 32 + 128, 8, 8, 2, pinkyImage);
-	inky->Init(WIDTH / 2 + 16, 32 + 128, 8, 8, 2, inkyImage);
-	clyde->Init(WIDTH / 2 - 16, 32 + 128, 8, 8, 2, clydeImage);
+	player->Init(WIDTH / 2 + 16, HEIGHT / 2 + 128, 8, 8, 2, 3,-1, pmImage); //vel = 2 coz wallhack ;x
+	blacky->Init(WIDTH / 2 + 16, 32 + 128, 8, 8, 2,-1, blackyImage);
+	pinky->Init(WIDTH / 2 + 48, 32 + 128, 8, 8, 2,-1, pinkyImage);
+	inky->Init(WIDTH / 2 + 16, 32 + 128, 8, 8, 2,-1, inkyImage);
+	clyde->Init(WIDTH / 2 - 16, 32 + 128, 8, 8, 2,-1, clydeImage);
 
 	
 
@@ -202,13 +202,14 @@ int main()
 					}
 					else iter++;
 
-				if(ghost_clock_tick <= 7)
+				if(ghost_clock_tick <= 7) 
 				{
 					blacky->Update(map, blackysScatterPoint->GetX(), blackysScatterPoint->GetY(), -1, 0, *blacky);
 					pinky->Update(map, pinkysScatterPoint->GetX(), pinkysScatterPoint->GetY(), -1, 4, *pinky);
 					inky->Update(map, inkysScatterPoint->GetX(), inkysScatterPoint->GetY(), -1, 2, *blacky);
 					clyde->Update(map, clydesScatterPoint->GetX(), clydesScatterPoint->GetY(), -1, 0, *clyde);
 				}
+
 				else if(ghost_clock_tick > 7)
 				{
 					blacky->Update(map, player->GetX(), player->GetY(), player->GetDirection(), 0, *blacky);
@@ -352,21 +353,3 @@ void ChangeState(int &state, int newState)
 	{}
 }
 
-void ChangePlayingState(int &state, int newState)
-{
-	if(state == CHASE)
-	{}
-	else if(state == SCATTER)
-	{}
-	else if(state == FRIGHTENED)
-	{}
-
-	state = newState;
-
-	if(state == CHASE)
-	{}
-	else if(state == SCATTER)
-	{}
-	else if(state == FRIGHTENED)
-	{}
-}

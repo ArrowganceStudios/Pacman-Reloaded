@@ -6,10 +6,11 @@ MobileObject::MobileObject()
 	GameObject::GameObject();
 }
 
-void MobileObject::Init(float x, float y, int boundX, int boundY, ALLEGRO_BITMAP *image)
+void MobileObject::Init(float x, float y, int boundX, int boundY,int state, ALLEGRO_BITMAP *image)
 {
 	GameObject::Init(x, y, boundX, boundY, image);
 }
+
 
 int MobileObject::GetColumn()
 {
