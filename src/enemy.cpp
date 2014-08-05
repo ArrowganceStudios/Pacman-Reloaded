@@ -23,13 +23,13 @@ void Ghost::Init(float x, float y, int boundX, int boundY, float velocity,int st
 
 	Ghost::velocity = velocity;
 
-	maxFrame = 2;
+	maxFrame = 4;
 	curFrame = 0;
 	frameCount = 0;								
-	frameDelay = 15;
+	frameDelay = 6;
 	frameWidth = 32;
 	frameHeight = 32;
-	animationColumns = 2;
+	animationColumns = 4;
 	animationRows = 4;
 
 
