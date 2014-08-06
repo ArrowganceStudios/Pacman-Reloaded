@@ -259,14 +259,14 @@ int main()
 				clyde->Render();
 				
 				//debug
-				al_draw_rectangle(player->GetX() - player->GetBoundX(),
+				/*al_draw_rectangle(player->GetX() - player->GetBoundX(),
 								player->GetY() - player->GetBoundY(),
 								player->GetX() + player->GetBoundX(),
 								player->GetY() + player->GetBoundY(), al_map_rgb_f(1, 1, 1), 1);
 				al_draw_rectangle(blacky->GetX() - blacky->GetBoundX(),
 								blacky->GetY() - blacky->GetBoundY(),
 								blacky->GetX() + blacky->GetBoundX(),
-								blacky->GetY() + blacky->GetBoundY(), al_map_rgb_f(1, 1, 1), 1);
+								blacky->GetY() + blacky->GetBoundY(), al_map_rgb_f(1, 1, 1), 1);*/
 
 				al_draw_textf(visitor18, al_map_rgb(255,255,255), 5, 5, 0, "Seconds: %i", ghost_clock_tick);
 				al_draw_textf(visitor18, al_map_rgb(255,255,255), 5, 15, 0, "Points: %i", points);
@@ -340,7 +340,7 @@ void ChangeState(int &state, int newState)
 		{
 			for(int j = 0; j < 20; j++)
 			{
-				if(map[i][j] && !(8 < j && j < 12 && 9 < i && i < 12)) //this needs to be done using some new ID tile in the map which will be placed in the ghost house
+				if(map[i][j] && map[i][j] != 4) //this needs to be done using some new ID tile in the map which will be placed in the ghost house
 				{													   //(temporary fix)
 					Coin *coin = new Coin();
 					coin->Init((j)*32, (i+1)*32, 1, 1);			//TEMPORARY
