@@ -17,11 +17,14 @@ Ghost::Ghost()
 	image = NULL;
 }
 
-void Ghost::Init(float x, float y, int boundX, int boundY, float velocity,int state , ALLEGRO_BITMAP *image)
+void Ghost::Init(float x, float y, int boundX, int boundY, float velocity, int state, int away, Ghost &enemy, ALLEGRO_BITMAP *image)
 {
 	MobileObject::Init(x, y, boundX, boundY,state, image);
 
 	Ghost::velocity = velocity;
+
+	Ghost::away = away;
+	Ghost::enemy = &enemy;
 
 	maxFrame = 4;
 	curFrame = 0;
@@ -37,12 +40,12 @@ void Ghost::Init(float x, float y, int boundX, int boundY, float velocity,int st
 	Ghost::SetDir(-1);
 	Ghost::ChangeState(state, CHASEandSCATTER);
 }
-void Ghost::Update(int map[][21], float targetX, float targetY, int targetDirection, int away, Ghost &enemy)
+void Ghost::Update(float targetX, float targetY, int targetDirection)
 {
 	//AI
 	if(!((int)x % 32) && !((int)y % 32) && (map[GetRow()][GetColumn()] == 2))
 	{
-		AI(targetX, targetY,targetDirection, away, enemy);
+		AI(targetX, targetY,targetDirection);
 	}
 
 	switch(direction)
@@ -131,17 +134,17 @@ void Ghost::Render()
 }
 
 
-float Ghost::GetDistanceX(float targetX, int dx, Ghost &enemy)
+float Ghost::GetDistanceX(float targetX, int dx)
 {
-	return  abs(enemy.x - targetX + dx);
+	return  abs(enemy->x - targetX + dx);
 }
 
-float Ghost::GetDistanceY(float targetY, int dy, Ghost &enemy)
+float Ghost::GetDistanceY(float targetY, int dy)
 {
-	return  abs(enemy.y - targetY + dy);
+	return  abs(enemy->y - targetY + dy);
 }
 
-void Ghost::AI(float targetX, float targetY,int targetDirection, int away, Ghost &enemy)
+void Ghost::AI(float targetX, float targetY,int targetDirection)
 {
 	float angle = 0;
 
@@ -167,8 +170,8 @@ void Ghost::AI(float targetX, float targetY,int targetDirection, int away, Ghost
 			break;
 		}
 
-			distanceX = GetDistanceX(targetX, dx, enemy);
-			distanceY = GetDistanceY(targetY, dy, enemy);
+			distanceX = GetDistanceX(targetX, dx);
+			distanceY = GetDistanceY(targetY, dy);
 		if(away == 2) //whch means inky, simplest but non-intuitinal condition
 		{
 			dx += distanceX;

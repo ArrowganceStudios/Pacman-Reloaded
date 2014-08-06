@@ -120,10 +120,10 @@ int main()
 	al_convert_mask_to_alpha(clydeImage, al_map_rgb(255, 255, 255));
 
 	player->Init(WIDTH / 2 + 16, HEIGHT / 2 + 128, 8, 8, 2, 3,-1, pmImage); //vel = 2 coz wallhack ;x
-	blacky->Init(WIDTH / 2 + 16, 32 + 128, 8, 8, 2,-1, blackyImage);
-	pinky->Init(WIDTH / 2 + 48, 32 + 128, 8, 8, 2,-1, pinkyImage);
-	inky->Init(WIDTH / 2 + 16, 32 + 128, 8, 8, 2,-1, inkyImage);
-	clyde->Init(WIDTH / 2 - 16, 32 + 128, 8, 8, 2,-1, clydeImage);
+	blacky->Init(WIDTH / 2 + 16, 32 + 128, 8, 8, 2,-1, 0, *blacky, blackyImage);
+	pinky->Init(WIDTH / 2 + 48, 32 + 128, 8, 8, 2,-1, 4, *pinky, pinkyImage);
+	inky->Init(WIDTH / 2 + 16, 32 + 128, 8, 8, 2,-1, 2, *blacky, inkyImage);
+	clyde->Init(WIDTH / 2 - 16, 32 + 128, 8, 8, 2,-1, 0, *clyde, clydeImage);
 
 	
 
@@ -204,21 +204,21 @@ int main()
 
 				if(ghost_clock_tick <= 7) 
 				{
-					blacky->Update(map, blackysScatterPoint->GetX(), blackysScatterPoint->GetY(), -1, 0, *blacky);
-					pinky->Update(map, pinkysScatterPoint->GetX(), pinkysScatterPoint->GetY(), -1, 4, *pinky);
-					inky->Update(map, inkysScatterPoint->GetX(), inkysScatterPoint->GetY(), -1, 2, *blacky);
-					clyde->Update(map, clydesScatterPoint->GetX(), clydesScatterPoint->GetY(), -1, 0, *clyde);
+					blacky->Update(blackysScatterPoint->GetX(), blackysScatterPoint->GetY(), -1);
+					pinky->Update(pinkysScatterPoint->GetX(), pinkysScatterPoint->GetY(), -1);
+					inky->Update(inkysScatterPoint->GetX(), inkysScatterPoint->GetY(), -1);
+					clyde->Update(clydesScatterPoint->GetX(), clydesScatterPoint->GetY(), -1);
 				}
 
 				else if(ghost_clock_tick > 7)
 				{
-					blacky->Update(map, player->GetX(), player->GetY(), player->GetDirection(), 0, *blacky);
-					pinky->Update(map, player->GetX(), player->GetY(), player->GetDirection(), 4, *pinky);
-					inky->Update(map,player->GetX(), player->GetY(), player->GetDirection(), 2, *blacky);
-					if(sqrt((pow(clyde->GetDistanceX(player->GetX(), 0, *clyde),2) + pow(clyde->GetDistanceY(player->GetY(), 0, *clyde),2))) <= 8*32)
-						clyde->Update(map, player->GetX(), player->GetY(), player->GetDirection(), 0, *clyde);
+					blacky->Update(player->GetX(), player->GetY(), player->GetDirection());
+					pinky->Update(player->GetX(), player->GetY(), player->GetDirection());
+					inky->Update(player->GetX(), player->GetY(), player->GetDirection());
+					if(sqrt((pow(clyde->GetDistanceX(player->GetX(), 0),2) + pow(clyde->GetDistanceY(player->GetY(), 0),2))) <= 8*32)
+						clyde->Update(player->GetX(), player->GetY(), player->GetDirection());
 					else 
-						clyde->Update(map, clydesScatterPoint->GetX(), clydesScatterPoint->GetY(), -1, 0, *clyde);
+						clyde->Update(clydesScatterPoint->GetX(), clydesScatterPoint->GetY(), -1);
 					if(ghost_clock_tick >= 27) ghost_clock_tick = 0;
 				}
 			}
