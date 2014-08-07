@@ -29,7 +29,7 @@ void Ghost::Init(float x, float y, int boundX, int boundY, int state, int away, 
 	maxFrame = 4;
 	curFrame = 0;
 	frameCount = 0;								
-	frameDelay = 6;
+	frameDelay = 5;
 	frameWidth = 32;
 	frameHeight = 32;
 	animationColumns = 4;

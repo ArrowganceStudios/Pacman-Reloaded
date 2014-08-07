@@ -103,15 +103,15 @@ int main()
 	event_queue = al_create_event_queue();
 	timer = al_create_timer(1.0 / FPS);
 
-	bgSheet = al_load_bitmap("data/img/bg.png");
-	pmImage = al_load_bitmap("data/img/pm.png");
-	blackyImage = al_load_bitmap("data/img/gh.png");
-	pinkyImage = al_load_bitmap("data/img/gh2.png");
-	inkyImage = al_load_bitmap("data/img/gh3.png");
-	clydeImage = al_load_bitmap("data/img/gh4.png");
-	visitor18 = al_load_ttf_font("data/visitor2.ttf", 18, 0);
-	titleImage = al_load_bitmap("data/img/pacman_Title.png");
-	lostImage = al_load_bitmap("data/img/pacman_Lose.png");
+	bgSheet = al_load_bitmap("Sources/data/img/bg.png");
+	pmImage = al_load_bitmap("Sources/data/img/pm.png");
+	blackyImage = al_load_bitmap("Sources/data/img/gh.png");
+	pinkyImage = al_load_bitmap("Sources/data/img/gh2.png");
+	inkyImage = al_load_bitmap("Sources/data/img/gh3.png");
+	clydeImage = al_load_bitmap("Sources/data/img/gh4.png");
+	visitor18 = al_load_ttf_font("Sources/data/visitor2.ttf", 18, 0);
+	titleImage = al_load_bitmap("Sources/data/img/pacman_Title.png");
+	lostImage = al_load_bitmap("Sources/data/img/pacman_Lose.png");
 
 	al_convert_mask_to_alpha(pmImage, al_map_rgb(255, 255, 255));
 	al_convert_mask_to_alpha(blackyImage, al_map_rgb(255, 255, 255));

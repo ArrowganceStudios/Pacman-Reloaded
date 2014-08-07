@@ -23,7 +23,7 @@ void Pacman::Init(float x, float y, int boundX,  int boundY, float lives,int sta
 	maxFrame = 6;
 	curFrame = 0;
 	frameCount = 0;								
-	frameDelay = 3;
+	frameDelay = 4;
 	frameWidth = 32;
 	frameHeight = 32;
 	animationColumns = 6;
