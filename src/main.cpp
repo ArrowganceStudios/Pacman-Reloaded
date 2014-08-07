@@ -109,7 +109,7 @@ int main()
 	pinkyImage = al_load_bitmap("data/img/gh2.png");
 	inkyImage = al_load_bitmap("data/img/gh3.png");
 	clydeImage = al_load_bitmap("data/img/gh4.png");
-	visitor18 = al_load_ttf_font("data/visitor2.ttf", 18, 0);
+	visitor18 = al_load_ttf_font("data/visitor2.ttf", 30, 0);
 	titleImage = al_load_bitmap("data/img/pacman_Title.png");
 	lostImage = al_load_bitmap("data/img/pacman_Lose.png");
 
@@ -232,6 +232,7 @@ int main()
 			if(state ==TITLE)
 			{
 				al_draw_bitmap(titleImage,0, 0, 0);
+				al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2, HEIGHT - 30, ALLEGRO_ALIGN_CENTER, "Press ENTER to play");
 			}
 			else if(state == PLAYING)
 			{
@@ -268,8 +269,7 @@ int main()
 								blacky->GetX() + blacky->GetBoundX(),
 								blacky->GetY() + blacky->GetBoundY(), al_map_rgb_f(1, 1, 1), 1);*/
 
-				al_draw_textf(visitor18, al_map_rgb(255,255,255), 5, 5, 0, "Seconds: %i", ghost_clock_tick);
-				al_draw_textf(visitor18, al_map_rgb(255,255,255), 5, 15, 0, "Points: %i", points);
+				al_draw_textf(visitor18, al_map_rgb(255,255,255), 6, 6, 0, "Points: %i", points);
 			}
 			else if(state == LOST)
 			{
