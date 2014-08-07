@@ -13,7 +13,7 @@
 #include "globals.h"
 #include "scatter_point.h"
 #include "coin.h"
-
+#include "power_up.h"
 
 Pacman *player;
 
@@ -27,10 +27,12 @@ ScatterPoint *pinkysScatterPoint;
 ScatterPoint *inkysScatterPoint;
 ScatterPoint *clydesScatterPoint;
 
-std::list<Coin *> coins;
-std::list<Coin *>::iterator iter;
+//std::list<Coin *> coins;
+//std::list<Coin *>::iterator iter;
 
 std::list<GameObject*> objects;
+
+std::list<GameObject *>::iterator iter;
 std::list<GameObject *>::iterator iter2;
 
 void ChangeState(int &state, int newState);
@@ -44,7 +46,6 @@ int main()
 	const int FPS = 60;
 	int ghost_clock = 0;
 	int ghost_clock_tick = 0;
-	int points = 0;
 
 	int state = -1;
 	int PlayingState = -1;
@@ -193,14 +194,38 @@ int main()
 				redraw = true;
 				player->Update(keys);
 
-				for(iter = coins.begin(); iter != coins.end();)
-					if((*iter)->CheckCollisions(player))
+				/*for(iter = objects.begin(); iter != objects.end(); ++iter)            //this loop creates crash and i dont know why, its seems it never reaches end. 
+				{                                                                       //i dont think it has something to do with functions (change those o for() std::cout smth and u will see)
+
+					if( ! (*iter)->Collidable() ) continue;
+
+					for(iter2 = iter; iter2 != objects.end(); ++iter2)
 					{
-						(*iter)->Destroy();
-						iter = coins.erase(iter);
-						points += 10;
+						if( !(*iter2)->Collidable() ) continue;
+						if( (*iter)->GetID() == (*iter2)->GetID()) continue;
+
+						if( (*iter)->CheckCollisions((*iter2)))
+						{
+							(*iter)->Collided( (*iter2)->GetID());
+							(*iter2)->Collided( (*iter)->GetID());
+						}
 					}
-					else iter++;
+				}*/
+				
+					for(iter = objects.begin(); iter != objects.end(); )
+					{
+						if((*iter)->GetID() == COIN && ! (*iter)->GetAlive())    //temporary, should do it by changing collidable and checking collidable somewhere and make action - destroy for coins and changestate to fridgthened for ghosts(cause we dont want ghosts to be destroyed after collided)
+						{
+							(*iter)->Destroy();
+							delete (*iter);
+							iter = objects.erase(iter);
+						}
+						else
+							iter++;
+					}
+		
+
+					
 
 				if(ghost_clock_tick <= 7) 
 				{
@@ -250,11 +275,20 @@ int main()
 					}
 				}
 
-				for(iter = coins.begin(); iter != coins.end(); ++iter)
-					(*iter)->Render();
+				
+				for(iter = objects.begin(); iter != objects.end(); ++iter)
+				{
+					if((*iter)->GetID() == COIN || (*iter)->GetID() == POWERUP)
+						(*iter)->Render();
+				}
+				
 
-				for(iter2 = objects.begin(); iter2 != objects.end(); ++iter2)
-					(*iter2)->Render();
+				for(iter = objects.begin(); iter != objects.end(); ++iter)
+				{
+					if((*iter)->GetID() == ENEMY || (*iter)->GetID() == PLAYER)
+						(*iter)->Render();
+				}
+
 				
 				//debug
 				/*al_draw_rectangle(player->GetX() - player->GetBoundX(),
@@ -266,7 +300,7 @@ int main()
 								blacky->GetX() + blacky->GetBoundX(),
 								blacky->GetY() + blacky->GetBoundY(), al_map_rgb_f(1, 1, 1), 1);*/
 
-				al_draw_textf(visitor18, al_map_rgb(255,255,255), 6, 6, 0, "Points: %i", points);
+				al_draw_textf(visitor18, al_map_rgb(255,255,255), 6, 6, 0, "Points: %i", player->GetPoints());
 			}
 			else if(state == LOST)
 			{
@@ -279,17 +313,13 @@ int main()
 	}
 
 	//DEALLOCATING MEMORY
-	for(iter = coins.begin(); iter != coins.end(); )
-	{
-			delete (*iter);
-			iter = coins.erase(iter);
-	}
+	
 
-	for(iter2 = objects.begin(); iter2 != objects.end(); )
+	for(iter = objects.begin(); iter != objects.end(); )
 	{
-			(*iter2)->Destroy();
-			delete (*iter2);
-			iter2 = objects.erase(iter2);
+			(*iter)->Destroy();
+			delete (*iter);
+			iter = objects.erase(iter);
 	}
 	
 	delete blackysScatterPoint;
@@ -345,11 +375,17 @@ void ChangeState(int &state, int newState)
 		{
 			for(int j = 0; j < 20; j++)
 			{
-				if(map[i][j] && map[i][j] != 4) //this needs to be done using some new ID tile in the map which will be placed in the ghost house
+				if(map[i][j] && map[i][j] != 4 &&  map[i][j] != 5 ) //this needs to be done using some new ID tile in the map which will be placed in the ghost house
 				{													   //(temporary fix)
 					Coin *coin = new Coin();
 					coin->Init((j)*tileSize, (i+1)*tileSize, 1, 1);			//TEMPORARY
-					coins.push_back(coin);
+					objects.push_back(coin);
+				}
+				else if(map[i][j]  == 5)
+				{
+					PowerUp *powerup = new PowerUp();
+					powerup->Init((j)*tileSize, (i+1)*tileSize, 6, 6);			//TEMPORARY
+					objects.push_back(powerup);
 				}
 			}
 		}

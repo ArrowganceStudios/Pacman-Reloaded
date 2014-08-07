@@ -32,5 +32,5 @@ public:
 	
 	void RandomMovement();
 
-	void Collided(int ObjectID){};
+	void Collided(int ObjectID);
 }; 

@@ -4,12 +4,13 @@
 
 class PowerUp : public StaticObject
 {
+public:
 	PowerUp();
-	Init(float x, float y, int boundX, int boundY);
+	void Init(float x, float y, int boundX, int boundY);
 
-	void Collided(ObjectID);
+	void Collided(int ObjectID);
 
 	void Destroy();
 	void Render();
 
-}
+};

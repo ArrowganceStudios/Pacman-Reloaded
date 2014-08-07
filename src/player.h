@@ -7,6 +7,7 @@ class Pacman : public MobileObject
 protected:
 	int lives;
 	float angle;
+	int points;
 public:
 	Pacman();
 
@@ -21,4 +22,6 @@ public:
 	void Render();
 
 	void Collided(int ObjectID);
+	
+	int GetPoints();
 }; 

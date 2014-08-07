@@ -39,6 +39,7 @@ public:
 	bool CanMoveLeft();
 	bool CanMoveRight();
 
+	void GetCollidable();
 	void Collided(int ObjectID);
 
 	void SetDir(int direction) {MobileObject::direction = direction;}

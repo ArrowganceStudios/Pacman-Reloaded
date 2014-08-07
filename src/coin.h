@@ -11,4 +11,6 @@ public:
 
 	void Destroy();
 	void Render();
+
+	void Collided(int ObjectID);
 };

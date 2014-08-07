@@ -220,3 +220,15 @@ void Ghost::RandomMovement()
 		break;
 	}
 }
+
+void Ghost::Collided(int ObjectID)
+{
+	/*if(ObjectID == PLAYER)
+		if(state == FRIGHTENED)
+			
+			
+			
+	*/
+
+
+}

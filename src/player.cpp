@@ -28,6 +28,8 @@ void Pacman::Init(float x, float y, int boundX,  int boundY, float lives,int sta
 	frameHeight = 32;
 	animationColumns = 6;
 
+	points = 0;
+
 	angle = 0;
 
 	if(image != NULL)
@@ -153,7 +155,25 @@ void Pacman::ChangeState(int &state, int newState)
 	}
 }
 
+
+int Pacman::GetPoints()
+{
+	return points;
+}
+
 void Pacman::Collided(int ObjectID)
 {
+	if(ObjectID == COIN)
+		points += 10;
+	/*if(ObjectID == ENEMY)
+		if(state == NORMAL)
+			lives--;
+		else
+			points += n*200;*/  //where n is number of already eaten ghosts
+	if(ObjectID == POWERUP)
+	{
+		points += 100; //dunno
+		//ChangeState(state, POWERUP);
+	}
 
 }
