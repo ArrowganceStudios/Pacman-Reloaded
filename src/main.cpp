@@ -119,7 +119,7 @@ int main()
 	al_convert_mask_to_alpha(inkyImage, al_map_rgb(255, 255, 255));
 	al_convert_mask_to_alpha(clydeImage, al_map_rgb(255, 255, 255));
 
-	player->Init((WIDTH + tileSize) / 2, (HEIGHT + tileSize * 8) / 2, 8, 8, 3, -1, pmImage); //vel = 2 coz wallhack ;x
+	player->Init((WIDTH + tileSize) / 2, (HEIGHT + tileSize * 8) / 2, 8, 8, 3, -1, pmImage); 
 	blacky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, -1, 0, *blacky, blackyImage);
 	pinky->Init((WIDTH + tileSize * 3) / 2, tileSize * 5, 8, 8, -1, 4, *pinky, pinkyImage);
 	inky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, -1, 2, *blacky, inkyImage);
@@ -191,7 +191,7 @@ int main()
 				}
 
 				redraw = true;
-				player->Update(keys, map);
+				player->Update(keys);
 
 				for(iter = coins.begin(); iter != coins.end();)
 					if((*iter)->CheckCollisions(player))
@@ -253,11 +253,8 @@ int main()
 				for(iter = coins.begin(); iter != coins.end(); ++iter)
 					(*iter)->Render();
 
-				player->Render();
-				blacky->Render();
-				pinky->Render();
-				inky->Render();
-				clyde->Render();
+				for(iter2 = objects.begin(); iter2 != objects.end(); ++iter2)
+					(*iter2)->Render();
 				
 				//debug
 				/*al_draw_rectangle(player->GetX() - player->GetBoundX(),
@@ -329,14 +326,22 @@ void ChangeState(int &state, int newState)
 	{}
 	else if(state == PLAYING)
 	{
-		//ghosts inits
+		
+		//scatter points inits
 		blackysScatterPoint->Init(tileSize, tileSize * 21);
 		pinkysScatterPoint->Init(tileSize * 18, tileSize * 21);
 		inkysScatterPoint->Init(tileSize, tileSize);
 		clydesScatterPoint->Init(tileSize * 18, tileSize);
 
+		//ghosts inits
+		player->Init((WIDTH + tileSize) / 2, (HEIGHT + tileSize * 8) / 2, 8, 8, 3, -1 ); 
+		blacky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, -1, 0, *blacky );
+		pinky->Init((WIDTH + tileSize * 3) / 2, tileSize * 5, 8, 8, -1, 4, *pinky );
+		inky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, -1, 2, *blacky );
+		clyde->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, -1, 0, *clyde );
+	
 		//coins inits
-		for(int i = 0; i < 21; i++)				//when making state masheen, this can be moved into i.e. KEY_SPACE (i.e. when moving from TITLE to PLAYING)
+		for(int i = 0; i < 21; i++)				
 		{
 			for(int j = 0; j < 20; j++)
 			{

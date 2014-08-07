@@ -30,8 +30,6 @@ void GameObject::Init(float x, float y, int boundX, int boundY, ALLEGRO_BITMAP *
 	GameObject::boundX = boundX;
 	GameObject::boundY = boundY;
 
-	GameObject::image = image;
-
 }
 
 bool GameObject::CheckCollisions(GameObject *OtherObject)

@@ -35,8 +35,9 @@ void Ghost::Init(float x, float y, int boundX, int boundY, int state, int away, 
 	animationColumns = 4;
 	animationRows = 4;
 
+	if(image != NULL)
+		Ghost::image = image;
 
-	Ghost::image = image;
 	Ghost::SetDir(-1);
 	Ghost::ChangeState(state, CHASEandSCATTER);
 }

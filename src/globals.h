@@ -41,4 +41,5 @@ namespace
 	//2 - intersection point
 	//3 - Ghost House doors
 	//4 - Ghost House
+	//5 - Power Ups
 }

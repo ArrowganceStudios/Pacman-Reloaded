@@ -30,12 +30,14 @@ void Pacman::Init(float x, float y, int boundX,  int boundY, float lives,int sta
 
 	angle = 0;
 
-	Pacman::image = image;
+	if(image != NULL)
+		Pacman::image = image;
+
 	Pacman::SetDir(-1);
 	Pacman::ChangeState(state, NORMAL);
 }
 
-void Pacman::Movement(int keys, int map[][21])
+void Pacman::Movement(int keys)
 {
 	if(keys == UP) 
 		{
@@ -69,9 +71,9 @@ void Pacman::Destroy()
 
 }
 
-void Pacman::Update(int keys, int map[][21])
+void Pacman::Update(int keys)
 {
-	Pacman::Movement(direction, map);
+	Pacman::Movement(direction);
 	if((direction != keys) && !((int)x % tileSize) && !((int)y % tileSize))
 	{
 		bool c = false;
@@ -94,7 +96,7 @@ void Pacman::Update(int keys, int map[][21])
 		if(c)
 		{
 			direction = keys;
-			Pacman::Movement(keys, map);
+			Pacman::Movement(keys);
 		}
 	}
 
