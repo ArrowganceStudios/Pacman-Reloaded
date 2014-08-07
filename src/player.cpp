@@ -39,25 +39,25 @@ void Pacman::Movement(int keys, int map[][21])
 {
 	if(keys == UP) 
 		{
-			if(MobileObject::CanMoveUp() || (int)y % 32)
+			if(MobileObject::CanMoveUp() || (int)y % tileSize)
 				MobileObject::MoveUp();
 			angle = -ALLEGRO_PI / 2;
 		}
 	else if(keys == DOWN) 
 		{
-			if(MobileObject::CanMoveDown() || (int)y % 32)
+			if(MobileObject::CanMoveDown() || (int)y % tileSize)
 				MobileObject::MoveDown();
 			angle = ALLEGRO_PI / 2;
 		}
 	else if(keys == LEFT) 
 		{
-			if(MobileObject::CanMoveLeft() || (int)x % 32)
+			if(MobileObject::CanMoveLeft() || (int)x % tileSize)
 				MobileObject::MoveLeft();
 			angle = ALLEGRO_PI;
 		}
 	else if(keys == RIGHT) 
 		{
-			if(MobileObject::CanMoveRight() || (int)x % 32)
+			if(MobileObject::CanMoveRight() || (int)x % tileSize)
 				MobileObject::MoveRight();
 			angle = 0;
 		}
@@ -72,7 +72,7 @@ void Pacman::Destroy()
 void Pacman::Update(int keys, int map[][21])
 {
 	Pacman::Movement(direction, map);
-	if((direction != keys) && !((int)x % 32) && !((int)y % 32))
+	if((direction != keys) && !((int)x % tileSize) && !((int)y % tileSize))
 	{
 		bool c = false;
 		switch(keys)
@@ -109,11 +109,11 @@ void Pacman::Update(int keys, int map[][21])
 		frameCount = 0;
 	}
 	if(Pacman::x < 1)
-		Pacman::x = WIDTH + 32;
+		Pacman::x = WIDTH + tileSize;
 	else if(Pacman::x > WIDTH+31)
 		Pacman::x = 0;
 	if(Pacman::y < 1)
-		Pacman::y = HEIGHT + 32;
+		Pacman::y = HEIGHT + tileSize;
 	else if (Pacman::y > HEIGHT+31)
 		Pacman::y = 0;
 }
@@ -143,7 +143,7 @@ void Pacman::ChangeState(int &state, int newState)
 
 	if(state == NORMAL)
 	{
-		velocity = 2.5;
+		velocity = 2.3;
 	}
 	else if(state == POWERUP)
 	{

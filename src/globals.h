@@ -12,9 +12,8 @@ namespace
 	int keys = -1;
 	enum KEYS{UP, DOWN, LEFT, RIGHT, ENTER};
 	
-	int mapColumns = 19;
-	int mapSize = 19 * 20;
-	int tileSize = 32;
+	const int mapSize = 19 * 20;
+	const int tileSize = 32;
 	
 	int map[20][21] =		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 							 0, 0, 2, 1, 1, 2, 1, 1, 1, 2, 0, 2, 1, 1, 1, 2, 1, 1, 2, 0, 0,

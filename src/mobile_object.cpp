@@ -15,12 +15,12 @@ void MobileObject::Init(float x, float y, int boundX, int boundY,int state, ALLE
 int MobileObject::GetColumn()
 {
 	//std::cout << "Column: " << ((int) x) / 32 - 1 << std::endl;
-	return ((int) x) / 32;
+	return ((int) x) / tileSize;
 }
 int MobileObject::GetRow()
 {
 	//std::cout << "Row: " << ((int) y) / 32 - 1 << std::endl;
-	return ((int) y) / 32 - 1;
+	return ((int) y) / tileSize - 1;
 }
 
 void MobileObject::MoveUp()

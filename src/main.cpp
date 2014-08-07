@@ -119,11 +119,11 @@ int main()
 	al_convert_mask_to_alpha(inkyImage, al_map_rgb(255, 255, 255));
 	al_convert_mask_to_alpha(clydeImage, al_map_rgb(255, 255, 255));
 
-	player->Init(WIDTH / 2 + 16, HEIGHT / 2 + 128, 8, 8, 3, -1, pmImage); //vel = 2 coz wallhack ;x
-	blacky->Init(WIDTH / 2 + 16, 32 + 128, 8, 8, -1, 0, *blacky, blackyImage);
-	pinky->Init(WIDTH / 2 + 48, 32 + 128, 8, 8, -1, 4, *pinky, pinkyImage);
-	inky->Init(WIDTH / 2 + 16, 32 + 128, 8, 8, -1, 2, *blacky, inkyImage);
-	clyde->Init(WIDTH / 2 - 16, 32 + 128, 8, 8, -1, 0, *clyde, clydeImage);
+	player->Init((WIDTH + tileSize) / 2, (HEIGHT + tileSize * 8) / 2, 8, 8, 3, -1, pmImage); //vel = 2 coz wallhack ;x
+	blacky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, -1, 0, *blacky, blackyImage);
+	pinky->Init((WIDTH + tileSize * 3) / 2, tileSize * 5, 8, 8, -1, 4, *pinky, pinkyImage);
+	inky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, -1, 2, *blacky, inkyImage);
+	clyde->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, -1, 0, *clyde, clydeImage);
 
 	
 
@@ -215,7 +215,7 @@ int main()
 					blacky->Update(player->GetX(), player->GetY(), player->GetDirection());
 					pinky->Update(player->GetX(), player->GetY(), player->GetDirection());
 					inky->Update(player->GetX(), player->GetY(), player->GetDirection());
-					if(sqrt((pow(clyde->GetDistanceX(player->GetX(), 0),2) + pow(clyde->GetDistanceY(player->GetY(), 0),2))) <= 8*32)
+					if(sqrt((pow(clyde->GetDistanceX(player->GetX(), 0),2) + pow(clyde->GetDistanceY(player->GetY(), 0),2))) <= 8*tileSize)
 						clyde->Update(player->GetX(), player->GetY(), player->GetDirection());
 					else 
 						clyde->Update(clydesScatterPoint->GetX(), clydesScatterPoint->GetY(), -1);
@@ -242,10 +242,10 @@ int main()
 					{
 						if(!map[i][j])
 							al_draw_bitmap_region(bgSheet, 0, 0, tileSize, tileSize,
-							tileSize * j - 32, tileSize * i, 0);
+							tileSize * j - tileSize, tileSize * i, 0);
 						else
 							al_draw_bitmap_region(bgSheet, tileSize, 0, tileSize, tileSize,
-							tileSize * j - 32, tileSize * i, 0);
+							tileSize * j - tileSize, tileSize * i, 0);
 					}
 				}
 
@@ -330,10 +330,10 @@ void ChangeState(int &state, int newState)
 	else if(state == PLAYING)
 	{
 		//ghosts inits
-		blackysScatterPoint->Init(32, 672);
-		pinkysScatterPoint->Init(576, 672);
-		inkysScatterPoint->Init(32, 32);
-		clydesScatterPoint->Init(576, 32);
+		blackysScatterPoint->Init(tileSize, tileSize * 21);
+		pinkysScatterPoint->Init(tileSize * 18, tileSize * 21);
+		inkysScatterPoint->Init(tileSize, tileSize);
+		clydesScatterPoint->Init(tileSize * 18, tileSize);
 
 		//coins inits
 		for(int i = 0; i < 21; i++)				//when making state masheen, this can be moved into i.e. KEY_SPACE (i.e. when moving from TITLE to PLAYING)
@@ -343,7 +343,7 @@ void ChangeState(int &state, int newState)
 				if(map[i][j] && map[i][j] != 4) //this needs to be done using some new ID tile in the map which will be placed in the ghost house
 				{													   //(temporary fix)
 					Coin *coin = new Coin();
-					coin->Init((j)*32, (i+1)*32, 1, 1);			//TEMPORARY
+					coin->Init((j)*tileSize, (i+1)*tileSize, 1, 1);			//TEMPORARY
 					coins.push_back(coin);
 				}
 			}

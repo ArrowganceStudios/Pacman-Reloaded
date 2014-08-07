@@ -43,7 +43,7 @@ void Ghost::Init(float x, float y, int boundX, int boundY, int state, int away, 
 void Ghost::Update(float targetX, float targetY, int targetDirection)
 {
 	//AI
-	if(!((int)x % 32) && !((int)y % 32) && (map[GetRow()][GetColumn()] == 2))
+	if(!((int)x % tileSize) && !((int)y % tileSize) && (map[GetRow()][GetColumn()] == 2))
 	{
 		AI(targetX, targetY,targetDirection);
 	}
@@ -51,24 +51,24 @@ void Ghost::Update(float targetX, float targetY, int targetDirection)
 	switch(direction)
 	{
 		case UP:
-			if(CanMoveUp()  || (int)y % 32) MoveUp();
+			if(CanMoveUp()  || (int)y % tileSize) MoveUp();
 			break;
 		case DOWN:
-			if(CanMoveDown() || (int)y % 32) MoveDown();
+			if(CanMoveDown() || (int)y % tileSize) MoveDown();
 			break;
 		case LEFT:
-			if(CanMoveLeft() || (int)x % 32) MoveLeft();
+			if(CanMoveLeft() || (int)x % tileSize) MoveLeft();
 			break;
 		case RIGHT:
-			if(CanMoveRight() || (int)x % 32) MoveRight();
+			if(CanMoveRight() || (int)x % tileSize) MoveRight();
 			break;
 	}
 	if(x < 2)
-		x = WIDTH + 32;
+		x = WIDTH + tileSize;
 	else if(x > WIDTH+30)
 		x = 0;
 	if(y < 2)
-		y = HEIGHT + 32;
+		y = HEIGHT + tileSize;
 	else if (y > HEIGHT+30)
 		y = 0;
 }
@@ -157,16 +157,16 @@ void Ghost::AI(float targetX, float targetY,int targetDirection)
 	switch(targetDirection)
 		{
 		case UP:
-			dy += away*32;
+			dy += away*tileSize;
 			break;
 		case DOWN:
-			dy -= away*32;
+			dy -= away*tileSize;
 			break;
 		case RIGHT:
-			dx -= away*32;
+			dx -= away*tileSize;
 			break;
 		case LEFT:
-			dx += away*32;
+			dx += away*tileSize;
 			break;
 		}
 
