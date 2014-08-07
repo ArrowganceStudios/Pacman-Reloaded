@@ -17,7 +17,7 @@ Ghost::Ghost()
 	image = NULL;
 }
 
-void Ghost::Init(float x, float y, int boundX, int boundY, float velocity, int state, int away, Ghost &enemy, ALLEGRO_BITMAP *image)
+void Ghost::Init(float x, float y, int boundX, int boundY, int state, int away, Ghost &enemy, ALLEGRO_BITMAP *image)
 {
 	MobileObject::Init(x, y, boundX, boundY,state, image);
 

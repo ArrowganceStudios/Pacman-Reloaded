@@ -13,7 +13,7 @@ protected:
 public:
 	Ghost();
 
-	void Init(float x, float y, int boundX, int boundY, float velocity, int state, int away, Ghost &enemy, ALLEGRO_BITMAP *image = NULL);
+	void Init(float x, float y, int boundX, int boundY, int state, int away, Ghost &enemy, ALLEGRO_BITMAP *image = NULL);
 
 	void Destroy(){};
 	void Update(float targetX, float targetY, int targetDirection);

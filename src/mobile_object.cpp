@@ -26,18 +26,26 @@ int MobileObject::GetRow()
 void MobileObject::MoveUp()
 {
 	y -= velocity;
+	if((int)y % 32 == 31)
+		y++;
 }
 void MobileObject::MoveDown()
 {
 	y += velocity;
+	if((int)y % 32 == 1)
+		y--;
 }
 void MobileObject::MoveLeft()
 {
 	x -= velocity;
+	if((int)x % 32 == 31)
+		x++;
 }
 void MobileObject::MoveRight()
 {
 	x += velocity;
+	if((int)x % 32 == 1)
+		x--;
 }
 
 bool MobileObject::CanMoveUp()

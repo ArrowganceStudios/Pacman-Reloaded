@@ -119,11 +119,11 @@ int main()
 	al_convert_mask_to_alpha(inkyImage, al_map_rgb(255, 255, 255));
 	al_convert_mask_to_alpha(clydeImage, al_map_rgb(255, 255, 255));
 
-	player->Init(WIDTH / 2 + 16, HEIGHT / 2 + 128, 8, 8, 2, 3,-1, pmImage); //vel = 2 coz wallhack ;x
-	blacky->Init(WIDTH / 2 + 16, 32 + 128, 8, 8, 2,-1, 0, *blacky, blackyImage);
-	pinky->Init(WIDTH / 2 + 48, 32 + 128, 8, 8, 2,-1, 4, *pinky, pinkyImage);
-	inky->Init(WIDTH / 2 + 16, 32 + 128, 8, 8, 2,-1, 2, *blacky, inkyImage);
-	clyde->Init(WIDTH / 2 - 16, 32 + 128, 8, 8, 2,-1, 0, *clyde, clydeImage);
+	player->Init(WIDTH / 2 + 16, HEIGHT / 2 + 128, 8, 8, 3, -1, pmImage); //vel = 2 coz wallhack ;x
+	blacky->Init(WIDTH / 2 + 16, 32 + 128, 8, 8, -1, 0, *blacky, blackyImage);
+	pinky->Init(WIDTH / 2 + 48, 32 + 128, 8, 8, -1, 4, *pinky, pinkyImage);
+	inky->Init(WIDTH / 2 + 16, 32 + 128, 8, 8, -1, 2, *blacky, inkyImage);
+	clyde->Init(WIDTH / 2 - 16, 32 + 128, 8, 8, -1, 0, *clyde, clydeImage);
 
 	
 
