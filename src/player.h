@@ -15,7 +15,7 @@ public:
 
 	void Movement(int keys);
 
-	void  ChangeState(int &state, int newState);
+	void ChangeState(int newState);
 
 	void Destroy();
 	void Update(int keys);
@@ -24,4 +24,7 @@ public:
 	void Collided(int ObjectID);
 	
 	int GetPoints();
+	int GetLives();
+	int GetState();
+	void TakeLive();
 }; 

@@ -2,7 +2,7 @@
 
 PowerUp::PowerUp()
 {
-	SetID(POWERUP);
+	SetID(PILL);
 	StaticObject::StaticObject();
 }
 

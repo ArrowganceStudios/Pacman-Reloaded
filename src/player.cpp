@@ -14,9 +14,9 @@ Pacman::Pacman()
 	image = NULL;
 };
 
-void Pacman::Init(float x, float y, int boundX,  int boundY, float lives,int state,  ALLEGRO_BITMAP *image)
+void Pacman::Init(float x, float y, int boundX,  int boundY, float lives, int state,  ALLEGRO_BITMAP *image)
 {
-	MobileObject::Init(x, y, boundX, boundY,state, image);
+	MobileObject::Init(x, y, boundX, boundY, state, image);
 
 	Pacman::lives = lives;
 
@@ -36,7 +36,7 @@ void Pacman::Init(float x, float y, int boundX,  int boundY, float lives,int sta
 		Pacman::image = image;
 
 	Pacman::SetDir(-1);
-	Pacman::ChangeState(state, NORMAL);
+	Pacman::ChangeState(NORMAL);
 }
 
 void Pacman::Movement(int keys)
@@ -136,7 +136,7 @@ void Pacman::Render()
 
 }
 
-void Pacman::ChangeState(int &state, int newState)
+void Pacman::ChangeState(int newState)
 {
 	if(state == NORMAL)
 	{}
@@ -161,16 +161,33 @@ int Pacman::GetPoints()
 	return points;
 }
 
+int Pacman::GetLives()
+{
+	return lives;
+}
+
+int Pacman::GetState()
+{
+	return state;
+}
+
+void Pacman::TakeLive()
+{
+	Pacman::lives--;
+}
+
 void Pacman::Collided(int ObjectID)
 {
 	if(ObjectID == COIN)
 		points += 10;
-	/*if(ObjectID == ENEMY)
-		if(state == NORMAL)
-			lives--;
-		else
-			points += n*200;*/  //where n is number of already eaten ghosts
-	if(ObjectID == POWERUP)
+	if(ObjectID == ENEMY)
+		if(GetState() == NORMAL)
+		{
+			ChangeState(DYING);
+		}
+		//else
+			//points += n*200;*/  //where n is number of already eaten ghosts
+	if(ObjectID == PILL)
 	{
 		points += 100; //dunno
 		//ChangeState(state, POWERUP);
