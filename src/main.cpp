@@ -46,7 +46,7 @@ int main()
 	int clock = 0;
 	int clock_tick = 0;
 	int dead_clock = 0;
-
+	int spawn_clock = 0;
 	int state = -1;
 	int PlayingState = -1;
 
@@ -195,6 +195,9 @@ int main()
 
 				if(player->GetState() != DYING)
 				{
+					if(spawn_clock < 2*FPS && spawn_clock++)				
+						continue;
+					else {
 					player->Update(keys);
 
 					for(iter = objects.begin(); iter != objects.end(); ++iter)           
@@ -226,7 +229,6 @@ int main()
 						inky->Update(inkysScatterPoint->GetX(), inkysScatterPoint->GetY(), -1);
 						clyde->Update(clydesScatterPoint->GetX(), clydesScatterPoint->GetY(), -1);
 					}
-
 					else if(clock_tick > 7)
 					{
 						blacky->Update(player->GetX(), player->GetY(), player->GetDirection());
@@ -237,13 +239,14 @@ int main()
 						else 
 							clyde->Update(clydesScatterPoint->GetX(), clydesScatterPoint->GetY(), -1);
 						if(clock_tick >= 27) clock_tick = 0;
-					}
+					} }
 				}
 				else
 				{
 					if(++dead_clock > 2*FPS)
 					{
 						dead_clock = 0;
+						spawn_clock = 0;
 						player->TakeLive();
 						if(player->GetLives() > 0)
 						{
@@ -311,6 +314,7 @@ int main()
 				for(int i = 0; i < player->GetLives(); i++)
 					al_draw_filled_circle(20*(i+1), HEIGHT - 14, 7, al_map_rgb_f(1, 1, 0));
 				if(player->GetState() == DYING) al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH/2, HEIGHT/2, ALLEGRO_ALIGN_CENTER, "lel faget");
+				if(spawn_clock < 2 * FPS) al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH/2, HEIGHT/2, ALLEGRO_ALIGN_CENTER, "Ready?");
 			}
 			else if(state == LOST)
 			{
