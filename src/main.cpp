@@ -195,51 +195,53 @@ int main()
 
 				if(player->GetState() != DYING)
 				{
-					if(spawn_clock < 2*FPS && spawn_clock++)				
+					if(spawn_clock < 2*FPS && spawn_clock++)	//ik it looks dumb, but w/e, didn't have anything better on my mind, sorry.			
 						continue;
-					else {
-					player->Update(keys);
+					else 
+					{
+						player->Update(keys);
 
-					for(iter = objects.begin(); iter != objects.end(); ++iter)           
-					{                                                              
-						if( ! (*iter)->Collidable() ) continue;
-						if(player->CheckCollisions((*iter)))
-						{
-							(*iter)->Collided( player->GetID());
-							player->Collided( (*iter)->GetID());
+						for(iter = objects.begin(); iter != objects.end(); ++iter)           
+						{                                                              
+							if( ! (*iter)->Collidable() ) continue;
+							if(player->CheckCollisions((*iter)))
+							{
+								(*iter)->Collided( player->GetID());
+								player->Collided( (*iter)->GetID());
+							}
+						
 						}
-					
-					}
-					for(iter = objects.begin(); iter != objects.end(); )
-					{
-						if(((*iter)->GetID() == COIN || (*iter)->GetID() == PILL) && ! (*iter)->GetAlive())    //temporary, should do it by changing collidable and checking collidable somewhere and make action - destroy for coins and changestate to fridgthened for ghosts(cause we dont want ghosts to be destroyed after collided)
+						for(iter = objects.begin(); iter != objects.end(); )
 						{
-							(*iter)->Destroy();
-							delete (*iter);
-							iter = objects.erase(iter);
+							if(((*iter)->GetID() == COIN || (*iter)->GetID() == PILL) && ! (*iter)->GetAlive())    //temporary, should do it by changing collidable and checking collidable somewhere and make action - destroy for coins and changestate to fridgthened for ghosts(cause we dont want ghosts to be destroyed after collided)
+							{
+								(*iter)->Destroy();
+								delete (*iter);
+								iter = objects.erase(iter);
+							}
+							else
+								iter++;
 						}
-						else
-							iter++;
-					}
 
-					if(clock_tick <= 7) 
-					{
-						blacky->Update(blackysScatterPoint->GetX(), blackysScatterPoint->GetY(), -1);
-						pinky->Update(pinkysScatterPoint->GetX(), pinkysScatterPoint->GetY(), -1);
-						inky->Update(inkysScatterPoint->GetX(), inkysScatterPoint->GetY(), -1);
-						clyde->Update(clydesScatterPoint->GetX(), clydesScatterPoint->GetY(), -1);
-					}
-					else if(clock_tick > 7)
-					{
-						blacky->Update(player->GetX(), player->GetY(), player->GetDirection());
-						pinky->Update(player->GetX(), player->GetY(), player->GetDirection());
-						inky->Update(player->GetX(), player->GetY(), player->GetDirection());
-						if(sqrt((pow(clyde->GetDistanceX(player->GetX(), 0),2) + pow(clyde->GetDistanceY(player->GetY(), 0),2))) <= 8*tileSize)
-							clyde->Update(player->GetX(), player->GetY(), player->GetDirection());
-						else 
+						if(clock_tick <= 7) 
+						{
+							blacky->Update(blackysScatterPoint->GetX(), blackysScatterPoint->GetY(), -1);
+							pinky->Update(pinkysScatterPoint->GetX(), pinkysScatterPoint->GetY(), -1);
+							inky->Update(inkysScatterPoint->GetX(), inkysScatterPoint->GetY(), -1);
 							clyde->Update(clydesScatterPoint->GetX(), clydesScatterPoint->GetY(), -1);
-						if(clock_tick >= 27) clock_tick = 0;
-					} }
+						}
+						else if(clock_tick > 7)
+						{
+							blacky->Update(player->GetX(), player->GetY(), player->GetDirection());
+							pinky->Update(player->GetX(), player->GetY(), player->GetDirection());
+							inky->Update(player->GetX(), player->GetY(), player->GetDirection());
+							if(sqrt((pow(clyde->GetDistanceX(player->GetX(), 0),2) + pow(clyde->GetDistanceY(player->GetY(), 0),2))) <= 8*tileSize)
+								clyde->Update(player->GetX(), player->GetY(), player->GetDirection());
+							else 
+								clyde->Update(clydesScatterPoint->GetX(), clydesScatterPoint->GetY(), -1);
+							if(clock_tick >= 27) clock_tick = 0;
+						} 
+					}
 				}
 				else
 				{
