@@ -362,27 +362,9 @@ void ChangeState(int &state, int newState)
 	if(state == PLAYING)
 		player->Init((WIDTH + tileSize) / 2, (HEIGHT + tileSize * 8) / 2, 8, 8, player->GetLives(), NORMAL); 
 	else if(state == LOST || state == TITLE)
+	{
 		player->Init((WIDTH + tileSize) / 2, (HEIGHT + tileSize * 8) / 2, 8, 8, 3, NORMAL); 
 
-	state = newState;
-
-	if(state ==TITLE)
-	{}
-	else if(state == PLAYING)
-	{
-		
-		//scatter points inits
-		blackysScatterPoint->Init(tileSize, tileSize * 21);
-		pinkysScatterPoint->Init(tileSize * 18, tileSize * 21);
-		inkysScatterPoint->Init(tileSize, tileSize);
-		clydesScatterPoint->Init(tileSize * 18, tileSize);
-
-		//ghosts inits
-		blacky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, -1, 0, *blacky);
-		pinky->Init((WIDTH + tileSize * 3) / 2, tileSize * 5, 8, 8, -1, 4, *pinky);
-		inky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, -1, 2, *blacky);
-		clyde->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, -1, 0, *clyde);
-	
 		//coins inits
 		for(iter = objects.begin(); iter != objects.end();)			//removing old coins/pills
 		{
@@ -409,6 +391,24 @@ void ChangeState(int &state, int newState)
 				}
 			}
 		}
+	}
+	state = newState;
+
+	if(state ==TITLE)
+	{}
+	else if(state == PLAYING)
+	{
+		//scatter points inits
+		blackysScatterPoint->Init(tileSize, tileSize * 21);
+		pinkysScatterPoint->Init(tileSize * 18, tileSize * 21);
+		inkysScatterPoint->Init(tileSize, tileSize);
+		clydesScatterPoint->Init(tileSize * 18, tileSize);
+
+		//ghosts inits
+		blacky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, -1, 0, *blacky);
+		pinky->Init((WIDTH + tileSize * 3) / 2, tileSize * 5, 8, 8, -1, 4, *pinky);
+		inky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, -1, 2, *blacky);
+		clyde->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, -1, 0, *clyde);
 	}
 	else if(state == LOST)
 	{}
