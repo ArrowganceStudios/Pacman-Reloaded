@@ -201,7 +201,7 @@ void Pacman::Collided(int ObjectID)
 
 void Pacman::Clock()
 {
-	if(GetState() == POWERUP)
+	if(GetState() == POWERUP) //it cannot work like this unluckily (i.e. ghost in retreating mode)
 	{
 		clock_tick++;
 

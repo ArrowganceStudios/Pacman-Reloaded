@@ -133,7 +133,7 @@ void Ghost::ChangeState(int newState)
 		SetTarget(304, 320, -1, 0); //test
 		clock_tick = 0;
 		//image = al_load_bitmap("data/img/gh5.png");
-		velocity = 1;
+		velocity = 1.1;
 	}
 }
 
@@ -295,5 +295,5 @@ void Ghost::Collided(int ObjectID)
 {
 	if(state == FRIGHTENED)
 		ChangeState(RETREATING);
-	std::cout << GhostID << " has collided!\n";
+	//std::cout << GhostID << " has collided!\n";
 }
