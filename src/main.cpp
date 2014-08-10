@@ -186,13 +186,15 @@ int main()
 		{
 			if(state == PLAYING) //if we're in playing state
 			{
-				clock++;	//this shit is gotta be changed keyword: CLOCK
+				clock++;
 				if(clock >= FPS ) 
 				{
+					player->Clock();
 					blacky->Clock();
 					pinky->Clock();
 					inky->Clock();
 					clyde->Clock();
+
 					clock = 0;
 				}//till here
 
@@ -216,6 +218,8 @@ int main()
 								player->Collided( (*iter)->GetID());
 								if((*iter)->GetID() == PILL)
 								{
+									player->ChangeState(POWERUP);
+
 									blacky->ChangeState(FRIGHTENED); //ghosts list ?
 									pinky->ChangeState(FRIGHTENED);
 									inky->ChangeState(FRIGHTENED);

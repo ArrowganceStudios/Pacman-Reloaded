@@ -74,9 +74,6 @@ void Ghost::Update()
 		if(state == CHASE && GhostID != CLYDE)
 			SetTarget(player->GetX(),player->GetY(), player->GetDirection(), away);
 
-		if(state == FRIGHTENED)
-			RandomMovement();
-		else
 			AI(GhostID);
 	}
 
@@ -106,10 +103,11 @@ void Ghost::Update()
 }
 
 void Ghost::SetScatterPoint(float ScatterPointX, float ScatterPointY)
-	{
-		Ghost::ScatterPointX = ScatterPointX;
-		Ghost::ScatterPointY = ScatterPointY;
-	}
+{
+	Ghost::ScatterPointX = ScatterPointX;
+	Ghost::ScatterPointY = ScatterPointY;
+}
+
 void Ghost::ChangeState(int newState)
 {
 	state = newState;
@@ -132,6 +130,7 @@ void Ghost::ChangeState(int newState)
 	}
 	else if(state == FRIGHTENED)
 	{
+		SetTarget(304, 320, -1, 0); //test
 		clock_tick = 0;
 		//image = al_load_bitmap("data/img/gh5.png");
 		velocity = 1;
@@ -296,4 +295,5 @@ void Ghost::Collided(int ObjectID)
 {
 	if(state == FRIGHTENED)
 		ChangeState(RETREATING);
+	std::cout << GhostID << " has collided!\n";
 }

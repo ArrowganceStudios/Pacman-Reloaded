@@ -30,6 +30,8 @@ void Pacman::Init(float x, float y, int boundX,  int boundY, float lives,  ALLEG
 
 	points = 0;
 
+	clock_tick = 0;
+
 	angle = 0;
 
 	if(image != NULL)
@@ -153,7 +155,7 @@ void Pacman::ChangeState(int newState)
 	}
 	else if(state == POWERUP)
 	{
-		velocity = 4;
+		velocity = 3;
 	}
 }
 
@@ -195,4 +197,18 @@ void Pacman::Collided(int ObjectID)
 		//ChangeState(state, POWERUP);
 	}
 
+}
+
+void Pacman::Clock()
+{
+	if(GetState() == POWERUP)
+	{
+		clock_tick++;
+
+		if(clock_tick >= 7)
+		{
+			ChangeState(NORMAL);
+			clock_tick = 0;
+		}
+	}
 }

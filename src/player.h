@@ -8,6 +8,7 @@ protected:
 	int lives;
 	float angle;
 	int points;
+	int clock_tick;
 public:
 	Pacman();
 
@@ -27,4 +28,5 @@ public:
 	int GetLives();
 	int GetState();
 	void TakeLive();
+	void Clock();
 }; 

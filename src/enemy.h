@@ -16,8 +16,6 @@ private:
 	float ScatterPointY;
 	int clock_tick;
 	int GhostID;
-	static int scatter_clock;
-	static int frightened_clock;
 
 protected:
 	int animationRows;
