@@ -64,15 +64,20 @@ void Ghost::Update()
 	{
 
 		if(GhostID == CLYDE && state != FRIGHTENED)
+		{
 			if(sqrt((pow(GetDistanceX(player->GetX(), 0),2) + pow(GetDistanceY(player->GetY(), 0),2))) <= 8*tileSize)
-					ChangeState(CHASE);
+				ChangeState(CHASE);
 			else 
-					ChangeState(SCATTER);
+				ChangeState(SCATTER);
+		}
 
 		if(state == CHASE && GhostID != CLYDE)
-				SetTarget(player->GetX(),player->GetY(), player->GetDirection(), away);
+			SetTarget(player->GetX(),player->GetY(), player->GetDirection(), away);
 
-		AI(GhostID);
+		if(state == FRIGHTENED)
+			RandomMovement();
+		else
+			AI(GhostID);
 	}
 
 	switch(direction)
@@ -104,42 +109,38 @@ void Ghost::SetScatterPoint(float ScatterPointX, float ScatterPointY)
 	{
 		Ghost::ScatterPointX = ScatterPointX;
 		Ghost::ScatterPointY = ScatterPointY;
-		
-
 	}
-void  Ghost::ChangeState(int newState)
+void Ghost::ChangeState(int newState)
+{
+	state = newState;
+	
+	if(state == CHASE)
 	{
-		
-			state = newState;
-			
-			if(state == CHASE)
-				{
-					SetTarget(player->GetX(),player->GetY(), player->GetDirection(), away);
-					velocity = 2;
-				}
-			else if(state == SCATTER)
-				{
-					SetTarget(ScatterPointX, ScatterPointY, -1, 0);
-					velocity = 2;
-				}
-			else if(state == RETREATING)
-				{
-					//image = al_load_bitmap("data/img/gh6.png");
-					SetTarget(304, 320, -1, 0);
-					velocity = 2;
-				}
-			else if(state == FRIGHTENED)
-				{
-					clock_tick = 0;
-					//image = al_load_bitmap("data/img/gh5.png");
-					velocity = 1;
-				}
-		
+		SetTarget(player->GetX(),player->GetY(), player->GetDirection(), away);
+		velocity = 2;
+	}
+	else if(state == SCATTER)
+	{
+		SetTarget(ScatterPointX, ScatterPointY, -1, 0);
+		velocity = 2;
+	}
+	else if(state == RETREATING)
+	{
+		//image = al_load_bitmap("data/img/gh6.png");
+		SetTarget(304, 320, -1, 0); // ^this gotta be handled different way than constantly reinitializing
+		velocity = 2;				// a bitmap. I do belive it was just a placeholder tho.
+	}
+	else if(state == FRIGHTENED)
+	{
+		clock_tick = 0;
+		//image = al_load_bitmap("data/img/gh5.png");
+		velocity = 1;
+	}
 }
 
 void Ghost::Render()
 {
-	MobileObject::Render();
+	MobileObject::Render(); //srsly? Do we actually need that?
 
 	switch(GetDirection())
 	{
@@ -156,6 +157,7 @@ void Ghost::Render()
 			animationRows = 3;
 			break;
 	}
+
 	if(++frameCount > frameDelay)
 	{
 		curFrame++;
@@ -166,29 +168,29 @@ void Ghost::Render()
 
 		frameCount = 0;
 	}
+
 	int fx = (curFrame % animationColumns) * frameWidth;
 	int fy = (animationRows) * frameHeight;
 	
 	al_draw_bitmap_region(image, fx, fy, frameWidth, frameHeight, x - frameWidth, y - frameHeight, 0);
 }
 
-void Ghost::Clock()
+//idk how, but imo the stuff underneath should be handled different way. but srsly don't ask me how coz i have no idea.
+void Ghost::Clock() //it just doesn't feel right when I look at it. I might come up with something interesting soon tho.
 {
-	if(state == FRIGHTENED || state == SCATTER)
-		if(clock_tick == 7)
-			ChangeState(CHASE);
-		else if(state == CHASE) //why it doesnt change?
-			if(clock_tick == 0)
-			{
-				std::cout << "e";
-				ChangeState(SCATTER);
-			}
+	if((state == FRIGHTENED || state == SCATTER) && clock_tick == 7)
+		ChangeState(CHASE);
+	else if(state == CHASE && clock_tick == 0)
+	{
+		std::cout << "e";
+		ChangeState(SCATTER);
+	}
+
 	std::cout << clock_tick;
 	clock_tick++;
 			
 	if(clock_tick >= 27)
 		clock_tick = 0;
-
 }
 
 float Ghost::GetDistanceX(float targetX, int dx)
@@ -215,58 +217,58 @@ void Ghost::ReverseDirection()
 
 void Ghost::AI(int GhostID)
 {
-		float angle = 0;
+	float angle = 0;
 
-		int distanceX = 0;
-		int distanceY = 0;
+	int distanceX = 0;
+	int distanceY = 0;
 
-		int dx = 0;
-		int dy = 0;
-		switch(targetDirection)
-			{
-			case UP:
-				dy += away*tileSize;
-				break;
-			case DOWN:
-				dy -= away*tileSize;
-				break;
-			case RIGHT:
-				dx -= away*tileSize;
-				break;
-			case LEFT:
-				dx += away*tileSize;
-				break;
-			}
+	int dx = 0;
+	int dy = 0;
+	switch(targetDirection)
+	{
+	case UP:
+		dy += away*tileSize;
+		break;
+	case DOWN:
+		dy -= away*tileSize;
+		break;
+	case RIGHT:
+		dx -= away*tileSize;
+		break;
+	case LEFT:
+		dx += away*tileSize;
+		break;
+	}
 
-				distanceX = GetDistanceX(targetX, dx);
-				distanceY = GetDistanceY(targetY, dy);
-			if(GhostID == INKY) //whch means inky, simplest but non-intuitinal condition
-			{
-				dx += distanceX;
-				dy += distanceY;
-			}
+	distanceX = GetDistanceX(targetX, dx);
+	distanceY = GetDistanceY(targetY, dy);
 
-			angle = AngleToTarget(targetX, targetY, dx, dy);
+	if(GhostID == INKY)
+	{
+		dx += distanceX;
+		dy += distanceY;
+	}
+
+	angle = AngleToTarget(targetX, targetY, dx, dy);
 	
-			if(distanceX > distanceY && (CanMoveRight() || CanMoveLeft()))
-			{
-				if(cos(angle) >= 0 && CanMoveRight() && (GetDirection() != LEFT))
-					SetDir(RIGHT);
-				else if(cos(angle) < 0 && CanMoveLeft() && (GetDirection() != RIGHT))
-					SetDir(LEFT);
-				else 
-					RandomMovement();
-			}
-			else
-			{
-				if(sin(angle) >= 0 && CanMoveDown() && (GetDirection() != UP))
-					SetDir(DOWN);
-				else if(sin(angle) < 0 && CanMoveUp() && (GetDirection() != DOWN))
-					SetDir(UP);
-				else
-					RandomMovement();
-			}
-	
+	if(distanceX > distanceY && (CanMoveRight() || CanMoveLeft()))
+	{
+		if(cos(angle) >= 0 && CanMoveRight() && (GetDirection() != LEFT))
+			SetDir(RIGHT);
+		else if(cos(angle) < 0 && CanMoveLeft() && (GetDirection() != RIGHT))
+			SetDir(LEFT);
+		else 
+			RandomMovement();
+	}
+	else
+	{
+		if(sin(angle) >= 0 && CanMoveDown() && (GetDirection() != UP))
+			SetDir(DOWN);
+		else if(sin(angle) < 0 && CanMoveUp() && (GetDirection() != DOWN))
+			SetDir(UP);
+		else
+			RandomMovement();
+	}
 }
 
 
@@ -294,6 +296,4 @@ void Ghost::Collided(int ObjectID)
 {
 	if(state == FRIGHTENED)
 		ChangeState(RETREATING);
-		
-
 }
