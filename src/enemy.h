@@ -31,7 +31,7 @@ public:
 	void Update();
 	void Render();
 
-	void SetImage(ALLEGRO_BITMAP *newImage);
+	void SetImage(ALLEGRO_BITMAP *newImage = NULL);
 
 	void ChangeState(int newState);
 

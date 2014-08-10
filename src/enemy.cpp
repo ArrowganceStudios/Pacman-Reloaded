@@ -3,6 +3,9 @@
 #include <math.h>
 #include "player.h"
 
+static ALLEGRO_BITMAP *fImage = NULL;
+static ALLEGRO_BITMAP *eImage = NULL;
+
 
 Ghost::Ghost()
 {
@@ -130,7 +133,7 @@ void Ghost::ChangeState(int newState)
 	}
 	else if(state == FRIGHTENED)
 	{
-		SetTarget(304, 320, -1, 0); //test
+		ReverseDirection();
 		clock_tick = 0;
 		velocity = 1.1;
 	}
@@ -239,6 +242,12 @@ void Ghost::ReverseDirection()
 
 void Ghost::AI(int GhostID)
 {
+	if(GetState() == FRIGHTENED)
+	{
+		RandomMovement();
+		return;
+	}
+
 	float angle = 0;
 
 	int distanceX = 0;
