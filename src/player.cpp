@@ -14,9 +14,9 @@ Pacman::Pacman()
 	image = NULL;
 };
 
-void Pacman::Init(float x, float y, int boundX,  int boundY, float lives, int state,  ALLEGRO_BITMAP *image)
+void Pacman::Init(float x, float y, int boundX,  int boundY, float lives,  ALLEGRO_BITMAP *image)
 {
-	MobileObject::Init(x, y, boundX, boundY, state, image);
+	MobileObject::Init(x, y, boundX, boundY, image);
 
 	Pacman::lives = lives;
 
@@ -141,7 +141,9 @@ void Pacman::ChangeState(int newState)
 	if(state == NORMAL)
 	{}
 	else if(state == POWERUP)
-	{}
+	{
+	
+	}
 
 	state = newState;
 

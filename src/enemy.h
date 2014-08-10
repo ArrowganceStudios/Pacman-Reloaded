@@ -8,27 +8,42 @@ class Ghost : public MobileObject
 private:
 	int away;
 	Ghost *enemy;
+	Pacman *player;
+	float targetX;
+	float targetY;
+	int targetDirection;
+	float ScatterPointX;
+	float ScatterPointY;
+	int clock_tick;
+	int GhostID;
+
 protected:
 	int animationRows;
 public:
+
 	Ghost();
 
-	void Init(float x, float y, int boundX, int boundY, int state, int away, Ghost &enemy, ALLEGRO_BITMAP *image = NULL);
+	void Init(float x, float y, int boundX, int boundY, Ghost &enemy, Pacman &player,int GhostID, ALLEGRO_BITMAP *image = NULL);
 
 	void Destroy(){};
-	void Update(float targetX, float targetY, int targetDirection);
+	void Update();
 	void Render();
 
-	void ChangeState(int &state, int newState);
+	void ChangeState(int newState);
 
-	void AI(float targetX, float targetY, int targetDirection);
+	void ReverseDirection();
+
+	
+	void SetTarget(float targetX, float targetY, int targetDirection,int away);
+
+	void AI(float targetX, float targetY, int targetDirection, int GhostID);
 
 	float GetDistanceX(float targetX, int dx);
 	float GetDistanceY(float targetY, int dy);
-
-	void SetAway(int away) {Ghost::away = away;}
-
-	void SetLeadingGhost(Ghost &enemy) {*Ghost::enemy = enemy;}
+	
+	void Clock();
+	
+	void SetScatterPoint(float ScatterPointX, float ScatterPointY);
 	
 	void RandomMovement();
 

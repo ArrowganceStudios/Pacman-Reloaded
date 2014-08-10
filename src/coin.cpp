@@ -24,8 +24,5 @@ void Coin::Render()
 
 void Coin::Collided(int ObjectID)
 {
-	if(ObjectID == PLAYER)
-	{
 		SetAlive(false);
-	}
 }

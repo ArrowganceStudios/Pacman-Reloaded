@@ -11,7 +11,7 @@ protected:
 public:
 	Pacman();
 
-	void Init(float x, float y, int boundX,  int boundY, float lives,int state, ALLEGRO_BITMAP *image = NULL);
+	void Init(float x, float y, int boundX,  int boundY, float lives, ALLEGRO_BITMAP *image = NULL);
 
 	void Movement(int keys);
 

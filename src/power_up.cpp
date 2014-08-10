@@ -25,5 +25,7 @@ void PowerUp::Render()
 void PowerUp::Collided(int ObjectID)
 {
 	if(ObjectID == PLAYER)
+	{
 		SetAlive(false);
+	}
 }

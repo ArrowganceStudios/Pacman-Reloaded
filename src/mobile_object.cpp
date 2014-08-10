@@ -4,9 +4,11 @@
 MobileObject::MobileObject()
 {
 	GameObject::GameObject();
+	
+	state = -1;
 }
 
-void MobileObject::Init(float x, float y, int boundX, int boundY,int state, ALLEGRO_BITMAP *image)
+void MobileObject::Init(float x, float y, int boundX, int boundY, ALLEGRO_BITMAP *image)
 {
 	GameObject::Init(x, y, boundX, boundY, image);
 }

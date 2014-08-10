@@ -32,10 +32,14 @@ ScatterPoint *clydesScatterPoint;
 
 std::list<GameObject*> objects;
 
+
+std::list<Ghost*> ghosts;  //what do u think about using it?
+
 std::list<GameObject *>::iterator iter;
 
+std::list<Ghost *>::iterator iter2;
+
 void ChangeState(int &state, int newState);
-void ChangePlayingState(int &state, int newState);
 
 int main()
 {
@@ -47,8 +51,8 @@ int main()
 	int clock_tick = 0;
 	int dead_clock = 0;
 	int spawn_clock = 0;
+	int fright_clock = 0;
 	int state = -1;
-	int PlayingState = -1;
 
 
 	////ALLLEGRO VARIABLES
@@ -120,11 +124,11 @@ int main()
 	al_convert_mask_to_alpha(inkyImage, al_map_rgb(255, 255, 255));
 	al_convert_mask_to_alpha(clydeImage, al_map_rgb(255, 255, 255));
 
-	player->Init((WIDTH + tileSize) / 2, (HEIGHT + tileSize * 8) / 2, 8, 8, 3, -1, pmImage); 
-	blacky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, -1, 0, *blacky, blackyImage);
-	pinky->Init((WIDTH + tileSize * 3) / 2, tileSize * 5, 8, 8, -1, 4, *pinky, pinkyImage);
-	inky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, -1, 2, *blacky, inkyImage);
-	clyde->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, -1, 0, *clyde, clydeImage);
+	player->Init((WIDTH + tileSize) / 2, (HEIGHT + tileSize * 8) / 2, 8, 8, 3, pmImage); 
+	blacky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, *blacky, *player,BLACKY, blackyImage);
+	pinky->Init((WIDTH + tileSize * 3) / 2, tileSize * 5, 8, 8, *pinky,*player,PINKY, pinkyImage);
+	inky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, *blacky, *player,INKY, inkyImage);
+	clyde->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, *clyde,*player,CLYDE, clydeImage);
 
 	
 
@@ -140,6 +144,7 @@ int main()
 	srand(time(NULL));
 
 	ChangeState(state, TITLE);
+
 
 	////GAMELOOP
 	while(!done)
@@ -185,9 +190,12 @@ int main()
 			if(state == PLAYING)
 			{
 				clock++;
-				if(clock >= FPS) 
+				if(clock >= FPS ) 
 				{
-					clock_tick++;
+					blacky->Clock();
+					pinky->Clock();
+					inky->Clock();
+					clyde->Clock();
 					clock = 0;
 				}
 
@@ -208,9 +216,18 @@ int main()
 							{
 								(*iter)->Collided( player->GetID());
 								player->Collided( (*iter)->GetID());
+								if((*iter)->GetID() == PILL)
+								{
+									blacky->ChangeState(FRIGHTENED); //ghosts list ?
+									pinky->ChangeState(FRIGHTENED);
+									inky->ChangeState(FRIGHTENED);
+									clyde->ChangeState(FRIGHTENED);
+
+								}
 							}
 						
 						}
+
 						for(iter = objects.begin(); iter != objects.end(); )
 						{
 							if(((*iter)->GetID() == COIN || (*iter)->GetID() == PILL) && ! (*iter)->GetAlive())    //temporary, should do it by changing collidable and checking collidable somewhere and make action - destroy for coins and changestate to fridgthened for ghosts(cause we dont want ghosts to be destroyed after collided)
@@ -222,25 +239,14 @@ int main()
 							else
 								iter++;
 						}
-
-						if(clock_tick <= 7) 
-						{
-							blacky->Update(blackysScatterPoint->GetX(), blackysScatterPoint->GetY(), -1);
-							pinky->Update(pinkysScatterPoint->GetX(), pinkysScatterPoint->GetY(), -1);
-							inky->Update(inkysScatterPoint->GetX(), inkysScatterPoint->GetY(), -1);
-							clyde->Update(clydesScatterPoint->GetX(), clydesScatterPoint->GetY(), -1);
+						
+						
+						
+						for(iter = objects.begin(); iter != objects.end(); ++iter)       //ghosts list ?     
+						{                                                              
+							if((*iter)->GetID() == ENEMY )
+								(*iter)->Update();
 						}
-						else if(clock_tick > 7)
-						{
-							blacky->Update(player->GetX(), player->GetY(), player->GetDirection());
-							pinky->Update(player->GetX(), player->GetY(), player->GetDirection());
-							inky->Update(player->GetX(), player->GetY(), player->GetDirection());
-							if(sqrt((pow(clyde->GetDistanceX(player->GetX(), 0),2) + pow(clyde->GetDistanceY(player->GetY(), 0),2))) <= 8*tileSize)
-								clyde->Update(player->GetX(), player->GetY(), player->GetDirection());
-							else 
-								clyde->Update(clydesScatterPoint->GetX(), clydesScatterPoint->GetY(), -1);
-							if(clock_tick >= 27) clock_tick = 0;
-						} 
 					}
 				}
 				else
@@ -321,6 +327,7 @@ int main()
 			else if(state == LOST)
 			{
 				al_draw_bitmap(lostImage,0, 0, 0);
+				al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2, HEIGHT - 30, ALLEGRO_ALIGN_CENTER, "Press ENTER to play again");
 			}
 
 			al_flip_display();
@@ -360,10 +367,10 @@ int main()
 void ChangeState(int &state, int newState)
 {
 	if(state == PLAYING)
-		player->Init((WIDTH + tileSize) / 2, (HEIGHT + tileSize * 8) / 2, 8, 8, player->GetLives(), NORMAL); 
+		player->Init((WIDTH + tileSize) / 2, (HEIGHT + tileSize * 8) / 2, 8, 8, player->GetLives()); 
 	else if(state == LOST || state == TITLE)
 	{
-		player->Init((WIDTH + tileSize) / 2, (HEIGHT + tileSize * 8) / 2, 8, 8, 3, NORMAL); 
+		player->Init((WIDTH + tileSize) / 2, (HEIGHT + tileSize * 8) / 2, 8, 8, 3); 
 
 		//coins inits
 		for(iter = objects.begin(); iter != objects.end();)			//removing old coins/pills
@@ -405,10 +412,16 @@ void ChangeState(int &state, int newState)
 		clydesScatterPoint->Init(tileSize * 18, tileSize);
 
 		//ghosts inits
-		blacky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, -1, 0, *blacky);
-		pinky->Init((WIDTH + tileSize * 3) / 2, tileSize * 5, 8, 8, -1, 4, *pinky);
-		inky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, -1, 2, *blacky);
-		clyde->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, -1, 0, *clyde);
+		blacky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8,*blacky, *player, BLACKY);
+		pinky->Init((WIDTH + tileSize * 3) / 2, tileSize * 5, 8, 8, *pinky, *player, PINKY);
+		inky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8,*blacky, *player, INKY);
+		clyde->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, *clyde, *player, CLYDE);
+
+		
+		blacky->SetScatterPoint(blackysScatterPoint->GetX(), blackysScatterPoint->GetY());
+		pinky->SetScatterPoint(pinkysScatterPoint->GetX(), pinkysScatterPoint->GetY());
+		inky->SetScatterPoint(inkysScatterPoint->GetX(), inkysScatterPoint->GetY());
+		clyde->SetScatterPoint(clydesScatterPoint->GetX(), clydesScatterPoint->GetY());
 	}
 	else if(state == LOST)
 	{}
