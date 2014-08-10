@@ -37,7 +37,7 @@ std::list<Ghost*> ghosts;  //what do u think about using it?
 
 std::list<GameObject *>::iterator iter;
 
-std::list<Ghost *>::iterator iter2;
+std::list<Ghost *>::iterator iter2; //what is that for? ~sand3r
 
 void ChangeState(int &state, int newState);
 
@@ -50,8 +50,8 @@ int main()
 	int clock = 0;
 	int clock_tick = 0;
 	int dead_clock = 0;
-	int spawn_clock = 0;
-	int fright_clock = 0;
+	int spawn_clock = 0; //this is gotta be moved to the Ghost class as static int, and be prompted from there
+	int fright_clock = 0; //same as above
 	int state = -1;
 
 
@@ -125,10 +125,10 @@ int main()
 	al_convert_mask_to_alpha(clydeImage, al_map_rgb(255, 255, 255));
 
 	player->Init((WIDTH + tileSize) / 2, (HEIGHT + tileSize * 8) / 2, 8, 8, 3, pmImage); 
-	blacky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, *blacky, *player,BLACKY, blackyImage);
-	pinky->Init((WIDTH + tileSize * 3) / 2, tileSize * 5, 8, 8, *pinky,*player,PINKY, pinkyImage);
-	inky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, *blacky, *player,INKY, inkyImage);
-	clyde->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, *clyde,*player,CLYDE, clydeImage);
+	blacky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, *blacky, *player, BLACKY, blackyImage);
+	pinky->Init((WIDTH + tileSize * 3) / 2, tileSize * 5, 8, 8, *pinky, *player, PINKY, pinkyImage);
+	inky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, *blacky, *player, INKY, inkyImage);
+	clyde->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, *clyde, *player, CLYDE, clydeImage);
 
 	
 
@@ -140,11 +140,9 @@ int main()
 
 	al_start_timer(timer);
 
+	srand(time(NULL)); //rng
 
-	srand(time(NULL));
-
-	ChangeState(state, TITLE);
-
+	ChangeState(state, TITLE); // title screen + entering TITLE state
 
 	////GAMELOOP
 	while(!done)
@@ -152,6 +150,7 @@ int main()
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
 		
+		//Keyboard inputs handeling
 		if(ev.type == ALLEGRO_EVENT_KEY_DOWN)
 		{
 			switch(ev.keyboard.keycode)	
@@ -172,10 +171,8 @@ int main()
 				keys = DOWN;
 				break;
 			case ALLEGRO_KEY_ENTER:
-				if(state == TITLE)
-					ChangeState(state, PLAYING);
-				else if(state == LOST)
-					ChangeState(state, PLAYING);
+				if(state != PLAYING)
+					ChangeState(state, PLAYING); //entering PLAYING state
 				break;
 			}
 			
@@ -187,9 +184,9 @@ int main()
 		//UPDATE
 		else if(ev.type == ALLEGRO_EVENT_TIMER)
 		{
-			if(state == PLAYING)
+			if(state == PLAYING) //if we're in playing state
 			{
-				clock++;
+				clock++;	//this shit is gotta be changed keyword: CLOCK
 				if(clock >= FPS ) 
 				{
 					blacky->Clock();
@@ -197,18 +194,19 @@ int main()
 					inky->Clock();
 					clyde->Clock();
 					clock = 0;
-				}
+				}//till here
 
 				redraw = true;
 
-				if(player->GetState() != DYING)
+				if(player->GetState() != DYING) // if player is alive
 				{
 					if(spawn_clock < 2*FPS && spawn_clock++)	//ik it looks dumb, but w/e, didn't have anything better on my mind, sorry.			
 						continue;
 					else 
-					{
+					{//after spawning timer
 						player->Update(keys);
 
+						//COLLISIONS CHECK
 						for(iter = objects.begin(); iter != objects.end(); ++iter)           
 						{                                                              
 							if( ! (*iter)->Collidable() ) continue;
@@ -226,8 +224,9 @@ int main()
 								}
 							}
 						
-						}
+						} //endof collisions check
 
+						//destroying dead coins/powerups
 						for(iter = objects.begin(); iter != objects.end(); )
 						{
 							if(((*iter)->GetID() == COIN || (*iter)->GetID() == PILL) && ! (*iter)->GetAlive())    //temporary, should do it by changing collidable and checking collidable somewhere and make action - destroy for coins and changestate to fridgthened for ghosts(cause we dont want ghosts to be destroyed after collided)
@@ -240,48 +239,45 @@ int main()
 								iter++;
 						}
 						
-						
-						
-						for(iter = objects.begin(); iter != objects.end(); ++iter)       //ghosts list ?     
-						{                                                              
+						//Ghosts update
+						for(iter = objects.begin(); iter != objects.end(); ++iter)       //ghosts list ? -    
+						{                                                                // ^ good idea ~sand3r
 							if((*iter)->GetID() == ENEMY )
 								(*iter)->Update();
 						}
-					}
-				}
-				else
+					}//endif after spawning timer
+				} //endif player is alive
+				else //if player is dead
 				{
-					if(++dead_clock > 2*FPS)
+					if(++dead_clock > 2*FPS) //dying & spawning pauses
 					{
 						dead_clock = 0;
 						spawn_clock = 0;
+
 						player->TakeLive();
-						if(player->GetLives() > 0)
+						if(player->GetLives() > 0) //if player still got lives left
 						{
-							ChangeState(state, PLAYING);
+							ChangeState(state, PLAYING); //entering PLAYING state again, even tho we're inside it. (to reinitialize pacaman and ghosts position)
 							player->ChangeState(NORMAL);
 						}
 						else
 							ChangeState(state, LOST);
 					}
 				}
-			}
+			} //endif playing state
 		}
 		//RENDERING
 		if(redraw && al_is_event_queue_empty(event_queue))
 		{
 			redraw = false;
-			//drawing map
-			if(state ==TITLE)
+
+			if(state ==TITLE) //drawing title screen
 			{
 				al_draw_bitmap(titleImage,0, 0, 0);
 				al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2, HEIGHT - 30, ALLEGRO_ALIGN_CENTER, "Press ENTER to play");
 			}
-			else if(state == PLAYING)
-			{
-					
-			
-
+			else if(state == PLAYING) //in PLAYING state
+			{	//drawing map
 				for(int i = 0; i < 20; i++)
 				{
 					for(int j = 0; j < 21; j++)
@@ -295,45 +291,40 @@ int main()
 					}
 				}
 
-				
+				//rendering remaining coins/powerups
 				for(iter = objects.begin(); iter != objects.end(); ++iter)
 				{
 					if((*iter)->GetID() == COIN || (*iter)->GetID() == PILL)
 						(*iter)->Render();
 				}
 				
-
+				//rendering player & ghosts
 				for(iter = objects.begin(); iter != objects.end(); ++iter)
 				{
 					if((*iter)->GetID() == ENEMY || (*iter)->GetID() == PLAYER)
 						(*iter)->Render();
 				}
 
-				
-				//debug
-				/*al_draw_rectangle(player->GetX() - player->GetBoundX(),
-								player->GetY() - player->GetBoundY(),
-								player->GetX() + player->GetBoundX(),
-								player->GetY() + player->GetBoundY(), al_map_rgb_f(1, 1, 1), 1);
-				al_draw_rectangle(blacky->GetX() - blacky->GetBoundX(),
-								blacky->GetY() - blacky->GetBoundY(),
-								blacky->GetX() + blacky->GetBoundX(),
-								blacky->GetY() + blacky->GetBoundY(), al_map_rgb_f(1, 1, 1), 1);*/
-
+				//rendering remaining points text
 				al_draw_textf(visitor18, al_map_rgb(255,255,255), 6, 6, 0, "Points: %i", player->GetPoints());
+
+				//debug for ghost states
 				al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2, BLACKY*30, ALLEGRO_ALIGN_CENTER, "blacky %i",blacky->GetState());
-	
-	al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2, PINKY*30, ALLEGRO_ALIGN_CENTER, "pinky %i", pinky->GetState());
-	
-	al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2, INKY*30, ALLEGRO_ALIGN_CENTER, "inky %i", inky->GetState());
-	
-	al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2,  CLYDE*30, ALLEGRO_ALIGN_CENTER, "clyde %i", clyde->GetState());
+				al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2, PINKY*30, ALLEGRO_ALIGN_CENTER, "pinky %i", pinky->GetState());
+				al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2, INKY*30, ALLEGRO_ALIGN_CENTER, "inky %i", inky->GetState());
+				al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2,  CLYDE*30, ALLEGRO_ALIGN_CENTER, "clyde %i", clyde->GetState());
+				
+				//rendering remaining lives
 				for(int i = 0; i < player->GetLives(); i++)
 					al_draw_filled_circle(20*(i+1), HEIGHT - 14, 7, al_map_rgb_f(1, 1, 0));
+				
+				//rendering text after pacman's death
 				if(player->GetState() == DYING) al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH/2, HEIGHT/2, ALLEGRO_ALIGN_CENTER, "lel faget");
+				
+				//rendering text at the start of the round
 				if(spawn_clock < 2 * FPS) al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH/2, HEIGHT/2, ALLEGRO_ALIGN_CENTER, "Ready?");
-			}
-			else if(state == LOST)
+			} //endif PLAYING state
+			else if(state == LOST) //lost screen
 			{
 				al_draw_bitmap(lostImage,0, 0, 0);
 				al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2, HEIGHT - 30, ALLEGRO_ALIGN_CENTER, "Press ENTER to play again");
@@ -388,13 +379,13 @@ void ChangeState(int &state, int newState)
 				iter = objects.erase(iter);
 			else iter++;
 		}
-
+		//spawning new coins
 		for(int i = 0; i < 21; i++)				
 		{
 			for(int j = 0; j < 20; j++)
 			{
-				if(map[i][j] && map[i][j] != 4 &&  map[i][j] != 5 ) //this needs to be done using some new ID tile in the map which will be placed in the ghost house
-				{													   //(temporary fix)
+				if(map[i][j] && map[i][j] != 4 &&  map[i][j] != 5 )
+				{
 					Coin *coin = new Coin();
 					coin->Init((j)*tileSize, (i+1)*tileSize, 1, 1);			//TEMPORARY
 					objects.push_back(coin);
@@ -408,6 +399,7 @@ void ChangeState(int &state, int newState)
 			}
 		}
 	}
+
 	state = newState;
 
 	if(state ==TITLE)
@@ -433,6 +425,8 @@ void ChangeState(int &state, int newState)
 		clyde->SetScatterPoint(clydesScatterPoint->GetX(), clydesScatterPoint->GetY());
 	}
 	else if(state == LOST)
-	{}
+	{
+		
+	}
 }
 
