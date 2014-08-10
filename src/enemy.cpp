@@ -62,22 +62,18 @@ void Ghost::Update()
 	//AI
 	if(!((int)x % tileSize) && !((int)y % tileSize) && (map[GetRow()][GetColumn()] == 2))
 	{
-		if(state == CHASE)
-				SetTarget(player->GetX(),player->GetY(), player->GetDirection(), away);
 
 		if(GhostID == CLYDE && state != FRIGHTENED)
 			if(sqrt((pow(GetDistanceX(player->GetX(), 0),2) + pow(GetDistanceY(player->GetY(), 0),2))) <= 8*tileSize)
-			{
-				if(state != CHASE)
 					ChangeState(CHASE);
-			}
 			else 
-				if(state != SCATTER)
 					ChangeState(SCATTER);
 
-		AI(targetX, targetY,targetDirection, GhostID);
-	}
+		if(state == CHASE && GhostID != CLYDE)
+				SetTarget(player->GetX(),player->GetY(), player->GetDirection(), away);
 
+		AI(GhostID);
+	}
 
 	switch(direction)
 	{
@@ -113,17 +109,16 @@ void Ghost::SetScatterPoint(float ScatterPointX, float ScatterPointY)
 	}
 void  Ghost::ChangeState(int newState)
 	{
+		
 			state = newState;
 			
 			if(state == CHASE)
 				{
-					ReverseDirection();
 					SetTarget(player->GetX(),player->GetY(), player->GetDirection(), away);
 					velocity = 2;
 				}
 			else if(state == SCATTER)
 				{
-					ReverseDirection();
 					SetTarget(ScatterPointX, ScatterPointY, -1, 0);
 					velocity = 2;
 				}
@@ -135,7 +130,6 @@ void  Ghost::ChangeState(int newState)
 				}
 			else if(state == FRIGHTENED)
 				{
-					ReverseDirection();
 					clock_tick = 0;
 					//image = al_load_bitmap("data/img/gh5.png");
 					velocity = 1;
@@ -183,9 +177,13 @@ void Ghost::Clock()
 	if(state == FRIGHTENED || state == SCATTER)
 		if(clock_tick == 7)
 			ChangeState(CHASE);
-		else if(state == CHASE)
+		else if(state == CHASE) //why it doesnt change?
 			if(clock_tick == 0)
+			{
+				std::cout << "e";
 				ChangeState(SCATTER);
+			}
+	std::cout << clock_tick;
 	clock_tick++;
 			
 	if(clock_tick >= 27)
@@ -215,15 +213,8 @@ void Ghost::ReverseDirection()
 		SetDir(UP);
 }
 
-void Ghost::AI(float targetX, float targetY,int targetDirection, int GhostID)
+void Ghost::AI(int GhostID)
 {
-	if(state == FRIGHTENED)
-	{
-		RandomMovement();	
-	}	
-
-	else
-	{
 		float angle = 0;
 
 		int distanceX = 0;
@@ -231,7 +222,6 @@ void Ghost::AI(float targetX, float targetY,int targetDirection, int GhostID)
 
 		int dx = 0;
 		int dy = 0;
-
 		switch(targetDirection)
 			{
 			case UP:
@@ -276,7 +266,7 @@ void Ghost::AI(float targetX, float targetY,int targetDirection, int GhostID)
 				else
 					RandomMovement();
 			}
-	}
+	
 }
 
 

@@ -36,7 +36,7 @@ public:
 	
 	void SetTarget(float targetX, float targetY, int targetDirection,int away);
 
-	void AI(float targetX, float targetY, int targetDirection, int GhostID);
+	void AI(int GhostID);
 
 	float GetDistanceX(float targetX, int dx);
 	float GetDistanceY(float targetY, int dy);
