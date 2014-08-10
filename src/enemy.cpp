@@ -3,6 +3,7 @@
 #include <math.h>
 #include "player.h"
 
+
 Ghost::Ghost()
 {
 	SetID(ENEMY);
@@ -40,7 +41,7 @@ void Ghost::Init(float x, float y, int boundX, int boundY, Ghost &enemy, Pacman 
 	clock_tick = 0;
 
 	if(image != NULL)
-		Ghost::image = image;
+		Ghost::defaultImage = image;
 	 
 	Ghost::SetDir(-1);
 	Ghost::ChangeState(CHASE);
@@ -124,15 +125,13 @@ void Ghost::ChangeState(int newState)
 	}
 	else if(state == RETREATING)
 	{
-		//image = al_load_bitmap("data/img/gh6.png");
-		SetTarget(304, 320, -1, 0); // ^this gotta be handled different way than constantly reinitializing
-		velocity = 2;				// a bitmap. I do belive it was just a placeholder tho.
+		SetTarget(304, 320, -1, 0); 
+		velocity = 2;
 	}
 	else if(state == FRIGHTENED)
 	{
 		SetTarget(304, 320, -1, 0); //test
 		clock_tick = 0;
-		//image = al_load_bitmap("data/img/gh5.png");
 		velocity = 1.1;
 	}
 }
@@ -141,22 +140,42 @@ void Ghost::Render()
 {
 	MobileObject::Render(); //srsly? Do we actually need that?
 
-	switch(GetDirection())
+	if(state != FRIGHTENED)
 	{
-		case UP:
-			animationRows = 0;
-			break;
-		case DOWN:
-			animationRows = 1;
-			break;
-		case LEFT:
-			animationRows = 2;
-			break;
-		case RIGHT:
-			animationRows = 3;
-			break;
+		switch(GetDirection())
+		{
+			case UP:
+				animationRows = 0;
+				break;
+			case DOWN:
+				animationRows = 1;
+				break;
+			case LEFT:
+				animationRows = 2;
+				break;
+			case RIGHT:
+				animationRows = 3;
+				break;
+		}
 	}
-
+	else 
+		{
+			animationRows = 0;
+			SetImage(fImage);
+		}
+	if(state == RETREATING)
+	{
+		animationColumns = 1;
+		animationRows = 3;
+		maxFrame = 1;
+		SetImage(eImage);
+	}
+	else
+	{
+		animationRows = 4;
+		animationColumns = 4;
+		maxFrame = 4;
+	}
 	if(++frameCount > frameDelay)
 	{
 		curFrame++;
@@ -174,6 +193,10 @@ void Ghost::Render()
 	al_draw_bitmap_region(image, fx, fy, frameWidth, frameHeight, x - frameWidth, y - frameHeight, 0);
 }
 
+void Ghost::SetImage(ALLEGRO_BITMAP *newImage)
+{
+	Ghost::image = newImage;
+}
 //idk how, but imo the stuff underneath should be handled different way. but srsly don't ask me how coz i have no idea.
 void Ghost::Clock() //it just doesn't feel right when I look at it. I might come up with something interesting soon tho.
 {
@@ -297,3 +320,4 @@ void Ghost::Collided(int ObjectID)
 		ChangeState(RETREATING);
 	//std::cout << GhostID << " has collided!\n";
 }
+

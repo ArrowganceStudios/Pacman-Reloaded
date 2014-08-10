@@ -67,6 +67,8 @@ int main()
 	ALLEGRO_BITMAP *blackyImage = NULL;
 	ALLEGRO_BITMAP *pinkyImage = NULL;
 	ALLEGRO_BITMAP *inkyImage = NULL;
+	ALLEGRO_BITMAP *fearImage = NULL;
+	ALLEGRO_BITMAP *eyesImage = NULL;
 	ALLEGRO_BITMAP *clydeImage = NULL;
 	ALLEGRO_BITMAP *titleImage = NULL;
 	ALLEGRO_BITMAP *lostImage = NULL;
@@ -114,9 +116,12 @@ int main()
 	pinkyImage = al_load_bitmap("data/img/gh2.png");
 	inkyImage = al_load_bitmap("data/img/gh3.png");
 	clydeImage = al_load_bitmap("data/img/gh4.png");
+	fearImage = al_load_bitmap("data/img/gf.png");
+	eyesImage = al_load_bitmap("data/img/eyes.png");
 	visitor18 = al_load_ttf_font("data/visitor2.ttf", 30, 0);
 	titleImage = al_load_bitmap("data/img/pacman_Title.png");
 	lostImage = al_load_bitmap("data/img/pacman_Lose.png");
+
 
 	al_convert_mask_to_alpha(pmImage, al_map_rgb(255, 255, 255));
 	al_convert_mask_to_alpha(blackyImage, al_map_rgb(255, 255, 255));
@@ -362,6 +367,8 @@ int main()
 	al_destroy_bitmap(pinkyImage);
 	al_destroy_bitmap(inkyImage);
 	al_destroy_bitmap(clydeImage);
+	al_destroy_bitmap(fearImage);
+	al_destroy_bitmap(eyesImage);
 	al_destroy_display(display);
 	al_destroy_event_queue(event_queue);
 	al_destroy_timer(timer);

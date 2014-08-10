@@ -19,8 +19,10 @@ private:
 
 protected:
 	int animationRows;
+	ALLEGRO_BITMAP *defaultImage;
 public:
-
+	static ALLEGRO_BITMAP *fImage;
+	static ALLEGRO_BITMAP *eImage;
 	Ghost();
 
 	void Init(float x, float y, int boundX, int boundY, Ghost &enemy, Pacman &player,int GhostID, ALLEGRO_BITMAP *image = NULL);
@@ -28,6 +30,8 @@ public:
 	void Destroy(){};
 	void Update();
 	void Render();
+
+	void SetImage(ALLEGRO_BITMAP *newImage);
 
 	void ChangeState(int newState);
 
