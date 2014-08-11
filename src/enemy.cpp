@@ -17,7 +17,7 @@ Ghost::Ghost()
 	image = NULL;
 }
 
-void Ghost::Init(float x, float y, int boundX, int boundY, Ghost &enemy, Pacman &player,int GhostID, ALLEGRO_BITMAP *image)
+void Ghost::Init(float x, float y, int boundX, int boundY, Ghost &enemy, Pacman &player,int GhostID, ALLEGRO_BITMAP *image, ALLEGRO_BITMAP *fimage, ALLEGRO_BITMAP *eimage)
 {
 	MobileObject::Init(x, y, boundX, boundY, image);
 
@@ -39,12 +39,14 @@ void Ghost::Init(float x, float y, int boundX, int boundY, Ghost &enemy, Pacman 
 
 	clock_tick = 0;
 
-	if(image != NULL)
+	if(image != NULL && fimage != NULL && eimage != NULL)
 	{
 		Ghost::defaultImage = image;
 		Ghost::image = image;
+		Ghost::fImage = fimage;
+		Ghost::eImage = eimage;
 	}
-	 
+	
 	Ghost::SetDir(-1);
 	Ghost::ChangeState(CHASE);
 }
@@ -66,7 +68,7 @@ void Ghost::Update()
 	if(!((int)x % tileSize) && !((int)y % tileSize) && (map[GetRow()][GetColumn()] == 2))
 	{
 
-		if(GhostID == CLYDE && state != FRIGHTENED)
+		if(GhostID == CLYDE && state != FRIGHTENED && state != RETREATING)
 		{
 			if(sqrt((pow(GetDistanceX(player->GetX(), 0),2) + pow(GetDistanceY(player->GetY(), 0),2))) <= 8*tileSize)
 				ChangeState(CHASE);
@@ -117,21 +119,25 @@ void Ghost::ChangeState(int newState)
 	
 	if(state == CHASE)
 	{
+		SetCollidable(true);
 		SetTarget(player->GetX(),player->GetY(), player->GetDirection(), away);
 		velocity = 2;
 	}
 	else if(state == SCATTER)
 	{
+		SetCollidable(true);
 		SetTarget(ScatterPointX, ScatterPointY, -1, 0);
 		velocity = 2;
 	}
 	else if(state == RETREATING)
 	{
+		SetCollidable(false);
 		SetTarget(304, 320, -1, 0); 
 		velocity = 2;
 	}
 	else if(state == FRIGHTENED)
 	{
+		SetCollidable(true);
 		ReverseDirection();
 		clock_tick = 0;
 		velocity = 1.1;
@@ -159,25 +165,24 @@ void Ghost::Render()
 				animationRows = 3;
 				break;
 		}
-	}/*
-	else 
-		{
-			animationRows = 0;
-			//SetImage(fImage);
-		}
-	if(state == RETREATING)
-	{
-		animationColumns = 1;
-		animationRows = 3;
-		maxFrame = 1;
-		//SetImage(eImage);
 	}
 	else
 	{
-		animationRows = 4;
+		animationRows = 0;
+		SetImage(fImage);
+	}
+	if(state == RETREATING)
+	{
+		animationColumns = 1;
+		maxFrame = 1;
+		SetImage(eImage);
+	}
+	if(state == CHASE || state == SCATTER)
+	{
 		animationColumns = 4;
 		maxFrame = 4;
-	}*/
+		SetImage(defaultImage);
+	}
 	if(++frameCount > frameDelay)
 	{
 		curFrame++;

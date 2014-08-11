@@ -33,7 +33,7 @@ protected:
 public:
 	Ghost();
 
-	void Init(float x, float y, int boundX, int boundY, Ghost &enemy, Pacman &player,int GhostID, ALLEGRO_BITMAP *image = NULL);
+	void Init(float x, float y, int boundX, int boundY, Ghost &enemy, Pacman &player,int GhostID, ALLEGRO_BITMAP *image = NULL, ALLEGRO_BITMAP *fimage = NULL, ALLEGRO_BITMAP *eimage = NULL);
 
 	void Destroy(){};
 	void Update();

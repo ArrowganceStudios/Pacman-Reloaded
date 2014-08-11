@@ -189,12 +189,12 @@ void Pacman::Collided(int ObjectID)
 		{						//it cannot work like this unluckily (i.e. ghost in retreating mode)
 			ChangeState(DYING); //we've gotta use the Ghost iterator in order to check the ghost state during collision
 		}
-		//else
-			//points += n*200;*/  //where n is number of already eaten ghosts
+		else
+			points += 200;
 	if(ObjectID == PILL)
 	{
-		points += 100; //dunno
-		//ChangeState(state, POWERUP);
+		points += 100;
+		clock_tick = 0;
 	}
 
 }

@@ -128,12 +128,14 @@ int main()
 	al_convert_mask_to_alpha(pinkyImage, al_map_rgb(255, 255, 255));
 	al_convert_mask_to_alpha(inkyImage, al_map_rgb(255, 255, 255));
 	al_convert_mask_to_alpha(clydeImage, al_map_rgb(255, 255, 255));
+	al_convert_mask_to_alpha(fearImage, al_map_rgb(255, 255, 255));
+	al_convert_mask_to_alpha(eyesImage, al_map_rgb(255, 255, 255));
 
 	player->Init((WIDTH + tileSize) / 2, (HEIGHT + tileSize * 8) / 2, 8, 8, 3, pmImage); 
-	blacky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, *blacky, *player, BLACKY, blackyImage);
-	pinky->Init((WIDTH + tileSize * 3) / 2, tileSize * 5, 8, 8, *pinky, *player, PINKY, pinkyImage);
-	inky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, *blacky, *player, INKY, inkyImage);
-	clyde->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, *clyde, *player, CLYDE, clydeImage);
+	blacky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, *blacky, *player, BLACKY, blackyImage, fearImage, eyesImage);
+	pinky->Init((WIDTH + tileSize * 3) / 2, tileSize * 5, 8, 8, *pinky, *player, PINKY, pinkyImage, fearImage, eyesImage);
+	inky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, *blacky, *player, INKY, inkyImage, fearImage, eyesImage);
+	clyde->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, *clyde, *player, CLYDE, clydeImage, fearImage, eyesImage);
 
 	
 
@@ -224,11 +226,14 @@ int main()
 								if((*iter)->GetID() == PILL)
 								{
 									player->ChangeState(POWERUP);
-
-									blacky->ChangeState(FRIGHTENED); //ghosts list ?
-									pinky->ChangeState(FRIGHTENED);
-									inky->ChangeState(FRIGHTENED);
-									clyde->ChangeState(FRIGHTENED);
+									if(blacky->GetState() != RETREATING)
+										blacky->ChangeState(FRIGHTENED); //ghosts list ?
+									if(pinky->GetState() != RETREATING)
+										pinky->ChangeState(FRIGHTENED);
+									if(inky->GetState() != RETREATING)
+										inky->ChangeState(FRIGHTENED);
+									if(clyde->GetState() != RETREATING)
+										clyde->ChangeState(FRIGHTENED);
 
 								}
 							}
