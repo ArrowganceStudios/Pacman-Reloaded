@@ -3,10 +3,6 @@
 #include <math.h>
 #include "player.h"
 
-static ALLEGRO_BITMAP *fImage = NULL;
-static ALLEGRO_BITMAP *eImage = NULL;
-
-
 Ghost::Ghost()
 {
 	SetID(ENEMY);
@@ -44,7 +40,7 @@ void Ghost::Init(float x, float y, int boundX, int boundY, Ghost &enemy, Pacman 
 	clock_tick = 0;
 
 	if(image != NULL)
-		Ghost::defaultImage = image;
+		Ghost::image = image;
 	 
 	Ghost::SetDir(-1);
 	Ghost::ChangeState(CHASE);
@@ -142,7 +138,7 @@ void Ghost::ChangeState(int newState)
 void Ghost::Render()
 {
 	MobileObject::Render(); //srsly? Do we actually need that?
-
+	
 	if(state != FRIGHTENED)
 	{
 		switch(GetDirection())
@@ -160,25 +156,25 @@ void Ghost::Render()
 				animationRows = 3;
 				break;
 		}
-	}
+	}/*
 	else 
 		{
 			animationRows = 0;
-			SetImage(fImage);
+			//SetImage(fImage);
 		}
 	if(state == RETREATING)
 	{
 		animationColumns = 1;
 		animationRows = 3;
 		maxFrame = 1;
-		SetImage(eImage);
+		//SetImage(eImage);
 	}
 	else
 	{
 		animationRows = 4;
 		animationColumns = 4;
 		maxFrame = 4;
-	}
+	}*/
 	if(++frameCount > frameDelay)
 	{
 		curFrame++;
