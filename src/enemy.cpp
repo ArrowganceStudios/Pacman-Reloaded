@@ -40,7 +40,10 @@ void Ghost::Init(float x, float y, int boundX, int boundY, Ghost &enemy, Pacman 
 	clock_tick = 0;
 
 	if(image != NULL)
+	{
+		Ghost::defaultImage = image;
 		Ghost::image = image;
+	}
 	 
 	Ghost::SetDir(-1);
 	Ghost::ChangeState(CHASE);

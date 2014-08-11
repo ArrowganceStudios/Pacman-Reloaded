@@ -7,22 +7,30 @@ class Ghost : public MobileObject
 {
 private:
 	int away;
+
 	Ghost *enemy;
 	Pacman *player;
+
 	float targetX;
 	float targetY;
+
 	int targetDirection;
+
 	float ScatterPointX;
 	float ScatterPointY;
+
 	int clock_tick;
+
 	int GhostID;
+
+	ALLEGRO_BITMAP *defaultImage;
+	ALLEGRO_BITMAP *fImage;
+	ALLEGRO_BITMAP *eImage;
 
 protected:
 	int animationRows;
-	ALLEGRO_BITMAP *defaultImage;
+	
 public:
-	//static ALLEGRO_BITMAP *fImage;
-	//static ALLEGRO_BITMAP *eImage;
 	Ghost();
 
 	void Init(float x, float y, int boundX, int boundY, Ghost &enemy, Pacman &player,int GhostID, ALLEGRO_BITMAP *image = NULL);
