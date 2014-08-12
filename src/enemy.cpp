@@ -84,7 +84,7 @@ void Ghost::Update()
 		if(state == CHASE && GhostID != CLYDE)
 			SetTarget(player->GetX(),player->GetY(), player->GetDirection(), away);
 
-		if(map[GetRow()][GetColumn()] == 4)
+		if(map[GetRow()][GetColumn()] == 4) 
 		{
 			SetTarget(300, 280, -1, 0);
 		}
@@ -92,13 +92,13 @@ void Ghost::Update()
 		if(state != RETREATING)
 			AI(GhostID);
 		else
-			AI(BLACKY); //so it goes str8 into the ghost house
+			AI(BLACKY); //so it goes str8 into the ghost house  //why BLACKY?
 	}
 
 	switch(direction)
 	{
 		case UP:
-			if(CanMoveUp()  || (int)y % tileSize) MoveUp();
+			if((CanMoveUp()  || (int)y % tileSize)) MoveUp();
 			break;
 		case DOWN:
 			if(CanMoveDown() || (int)y % tileSize) MoveDown();
@@ -146,7 +146,7 @@ void Ghost::ChangeState(int newState)
 	else if(state == RETREATING)
 	{
 		SetCollidable(false);
-		SetTarget(304, 320, -1, 0); 
+		SetTarget(320, 320, -1, 0); 
 		velocity = 2;
 	}
 	else if(state == FRIGHTENED)
@@ -264,6 +264,9 @@ void Ghost::AI(int GhostID)
 		return;
 	}
 
+	if(GhostID == INKY && GetState() == RETREATING)
+		enemy = this;
+
 	float angle = 0;
 
 	int distanceX = 0;
@@ -290,7 +293,7 @@ void Ghost::AI(int GhostID)
 	distanceX = GetDistanceX(targetX, dx);
 	distanceY = GetDistanceY(targetY, dy);
 
-	if(GhostID == INKY)
+	if(GhostID == INKY && GetState() != RETREATING)
 	{
 		dx += distanceX;
 		dy += distanceY;
@@ -305,17 +308,25 @@ void Ghost::AI(int GhostID)
 		else if(cos(angle) < 0 && CanMoveLeft() && (GetDirection() != RIGHT))
 			SetDir(LEFT);
 		else 
+		{
+			std::cout << GhostID << std::endl;
 			RandomMovement();
+		}
 	}
-	else
+	else if(distanceX < distanceY && (CanMoveUp() || CanMoveDown()))
 	{
 		if(sin(angle) >= 0 && CanMoveDown() && (GetDirection() != UP))
 			SetDir(DOWN);
 		else if(sin(angle) < 0 && CanMoveUp() && (GetDirection() != DOWN))
 			SetDir(UP);
-		else
+		else 
+		{
+			std::cout << GhostID << std::endl;
 			RandomMovement();
+		}
 	}
+	else 
+		RandomMovement();
 }
 
 

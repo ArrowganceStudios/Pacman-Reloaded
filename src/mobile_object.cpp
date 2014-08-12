@@ -60,7 +60,9 @@ bool MobileObject::CanMoveDown()
 {
 	//std::cout << "A One down Row = " << GetRow() + 1 << std::endl;
 	//std::cout << "A One down Column = " << GetColumn() << std::endl;
-	//if(!(map[GetRow() + 1][GetColumn()] == 3))
+	if(GetState() != RETREATING && (map[GetRow() + 1][GetColumn()] == 3)) //is it even legal ?;o Now retreating is enum 4, and pacman has 3 states so he wont be able to get in, but ghosts will only in fright. I feel like it's cheating, but i don't have other idea
+		return 0;
+	else
 		return (map[GetRow() + 1][GetColumn()]);
 	/*else if(GetID() == PLAYER)
 		return false;

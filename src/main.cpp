@@ -30,14 +30,16 @@ ScatterPoint *clydesScatterPoint;
 //std::list<Coin *> coins;
 //std::list<Coin *>::iterator iter;
 
-std::list<GameObject*> objects;
 
 
 std::list<Ghost*> ghosts;  //what do u think about using it?
 
+std::list<Ghost *>::iterator iter2; //what is that for? ~sand3r // look up ~me
+
+std::list<GameObject*> objects;
+
 std::list<GameObject *>::iterator iter;
 
-std::list<Ghost *>::iterator iter2; //what is that for? ~sand3r
 
 void ChangeState(int &state, int newState);
 
@@ -92,15 +94,19 @@ int main()
 
 	blacky = new Ghost();
 	objects.push_back(blacky);
+	ghosts.push_back(blacky);
 
 	pinky = new Ghost();
 	objects.push_back(pinky);
+	ghosts.push_back(pinky);
 
 	inky = new Ghost();
 	objects.push_back(inky);
+	ghosts.push_back(inky);
 
 	clyde = new Ghost();
 	objects.push_back(clyde);
+	ghosts.push_back(clyde);
 
 	blackysScatterPoint = new ScatterPoint();
 	pinkysScatterPoint = new ScatterPoint();
@@ -197,11 +203,10 @@ int main()
 				if(clock >= FPS ) 
 				{
 					player->Clock();
-					blacky->Clock();
-					pinky->Clock();
-					inky->Clock();
-					clyde->Clock();
-
+					for(iter2 = ghosts.begin(); iter2 != ghosts.end(); ++iter2)
+					{
+						(*iter2)->Clock();
+					}
 					clock = 0;
 				}//till here
 
@@ -226,14 +231,11 @@ int main()
 								if((*iter)->GetID() == PILL)
 								{
 									player->ChangeState(POWERUP);
-									if(blacky->GetState() != RETREATING)
-										blacky->ChangeState(FRIGHTENED); //ghosts list ?
-									if(pinky->GetState() != RETREATING)
-										pinky->ChangeState(FRIGHTENED);
-									if(inky->GetState() != RETREATING)
-										inky->ChangeState(FRIGHTENED);
-									if(clyde->GetState() != RETREATING)
-										clyde->ChangeState(FRIGHTENED);
+									for(iter2 = ghosts.begin(); iter2 != ghosts.end(); ++iter2)
+									{
+										if((*iter2)->GetState() != RETREATING)
+											(*iter2)->ChangeState(FRIGHTENED);
+									}
 
 								}
 							}
@@ -254,10 +256,9 @@ int main()
 						}
 						
 						//Ghosts update
-						for(iter = objects.begin(); iter != objects.end(); ++iter)       //ghosts list ? -    
+						for(iter2 = ghosts.begin(); iter2 != ghosts.end(); ++iter2)       //ghosts list ? -    
 						{                                                                // ^ good idea ~sand3r
-							if((*iter)->GetID() == ENEMY )
-								(*iter)->Update();
+								(*iter2)->Update();
 						}
 					}//endif after spawning timer
 				} //endif player is alive
@@ -361,6 +362,11 @@ int main()
 			iter = objects.erase(iter);
 	}
 	
+	for(iter2 = ghosts.begin(); iter2 != ghosts.end(); )
+	{
+			iter2 = ghosts.erase(iter2);
+	}
+
 	delete blackysScatterPoint;
 	delete pinkysScatterPoint; 
 	delete inkysScatterPoint; 
