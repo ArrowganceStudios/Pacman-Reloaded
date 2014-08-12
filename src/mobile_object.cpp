@@ -64,7 +64,7 @@ bool MobileObject::CanMoveDown()
 		return (map[GetRow() + 1][GetColumn()]);
 	/*else if(GetID() == PLAYER)
 		return false;
-	else if(PlayingState == FRIGHTENED)
+	else if(PlayingState == FRIGHTENED) //wat
 		return true;
 	else 
 		return false;*/

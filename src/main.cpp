@@ -323,11 +323,13 @@ int main()
 				al_draw_textf(visitor18, al_map_rgb(255,255,255), 6, 6, 0, "Points: %i", player->GetPoints());
 
 				//debug for ghost states
-				al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2, BLACKY*30, ALLEGRO_ALIGN_CENTER, "blacky %i",blacky->GetState());
+				/*al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2, BLACKY*30, ALLEGRO_ALIGN_CENTER, "blacky %i",blacky->GetState());
 				al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2, PINKY*30, ALLEGRO_ALIGN_CENTER, "pinky %i", pinky->GetState());
 				al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2, INKY*30, ALLEGRO_ALIGN_CENTER, "inky %i", inky->GetState());
-				al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2,  CLYDE*30, ALLEGRO_ALIGN_CENTER, "clyde %i", clyde->GetState());
+				al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2,  CLYDE*30, ALLEGRO_ALIGN_CENTER, "clyde %i", clyde->GetState());*/
 				
+				//rendering ghost house doors
+				al_draw_line(283, 305, 325, 305, al_map_rgb(0, 0, 0), 8);
 				//rendering remaining lives
 				for(int i = 0; i < player->GetLives(); i++)
 					al_draw_filled_circle(20*(i+1), HEIGHT - 14, 7, al_map_rgb_f(1, 1, 0));

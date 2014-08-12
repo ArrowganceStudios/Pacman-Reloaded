@@ -65,8 +65,13 @@ void Ghost::SetTarget(float targetX, float targetY, int targetDirection, int awa
 void Ghost::Update()
 {
 	//AI
-	if(!((int)x % tileSize) && !((int)y % tileSize) && (map[GetRow()][GetColumn()] == 2))
+	if(!((int)x % tileSize) && !((int)y % tileSize) && ((map[GetRow()][GetColumn()] == 2) || (map[GetRow()][GetColumn()] == 4)))
 	{
+		if(GetState() == RETREATING && map[GetRow()][GetColumn()] == 4) //not sure whether it should stay here
+		{																//or be put into AI somehow
+			ChangeState(CHASE);
+			return;
+		}
 
 		if(GhostID == CLYDE && state != FRIGHTENED && state != RETREATING)
 		{
@@ -79,7 +84,15 @@ void Ghost::Update()
 		if(state == CHASE && GhostID != CLYDE)
 			SetTarget(player->GetX(),player->GetY(), player->GetDirection(), away);
 
+		if(map[GetRow()][GetColumn()] == 4)
+		{
+			SetTarget(300, 280, -1, 0);
+		}
+
+		if(state != RETREATING)
 			AI(GhostID);
+		else
+			AI(BLACKY); //so it goes str8 into the ghost house
 	}
 
 	switch(direction)
@@ -119,6 +132,7 @@ void Ghost::ChangeState(int newState)
 	
 	if(state == CHASE)
 	{
+		ReverseDirection();
 		SetCollidable(true);
 		SetTarget(player->GetX(),player->GetY(), player->GetDirection(), away);
 		velocity = 2;
@@ -211,11 +225,9 @@ void Ghost::Clock() //it just doesn't feel right when I look at it. I might come
 		ChangeState(CHASE);
 	else if(state == CHASE && clock_tick == 0)
 	{
-		std::cout << "e";
 		ChangeState(SCATTER);
 	}
 
-	std::cout << clock_tick;
 	clock_tick++;
 			
 	if(clock_tick >= 27)
