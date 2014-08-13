@@ -27,11 +27,6 @@ ScatterPoint *pinkysScatterPoint;
 ScatterPoint *inkysScatterPoint;
 ScatterPoint *clydesScatterPoint;
 
-//std::list<Coin *> coins;
-//std::list<Coin *>::iterator iter;
-
-
-
 std::list<Ghost*> ghosts;  //what do u think about using it?
 
 std::list<Ghost *>::iterator iter2; //what is that for? ~sand3r // look up ~me
@@ -212,7 +207,7 @@ int main()
 
 				redraw = true;
 
-				if(player->GetState() != DYING) // if player is alive
+				if(player->GetState() != DYING && player->GetState() != WINNER) // if player is alive
 				{
 					if(spawn_clock < 2*FPS && spawn_clock++)	//ik it looks dumb, but w/e, didn't have anything better on my mind, sorry.			
 						continue;
@@ -242,18 +237,26 @@ int main()
 						
 						} //endof collisions check
 
+						int k = -1; //when all the coins are eaten the game says that there is somewhere one coin left! WTF :D
 						//destroying dead coins/powerups
 						for(iter = objects.begin(); iter != objects.end(); )
 						{
-							if(((*iter)->GetID() == COIN || (*iter)->GetID() == PILL) && ! (*iter)->GetAlive())    //temporary, should do it by changing collidable and checking collidable somewhere and make action - destroy for coins and changestate to fridgthened for ghosts(cause we dont want ghosts to be destroyed after collided)
+							if((*iter)->GetID() == COIN || (*iter)->GetID() == PILL)    //temporary, should do it by changing collidable and checking collidable somewhere and make action - destroy for coins and changestate to fridgthened for ghosts(cause we dont want ghosts to be destroyed after collided)
 							{
-								(*iter)->Destroy();
-								delete (*iter);
-								iter = objects.erase(iter);
+								k++;
+								if(!(*iter)->GetAlive())
+								{
+									(*iter)->Destroy();
+									delete (*iter);
+									iter = objects.erase(iter);
+								}
+								else iter++;
 							}
-							else
-								iter++;
+							else iter++;
 						}
+						//endgame checking - the lamest method ever, i wanted to use coin list but it generated so many errors i had to backup my main.cpp...
+						std::cout<<k<<"\n";
+						if(!k) player->ChangeState(WINNER);
 						
 						//Ghosts update
 						for(iter2 = ghosts.begin(); iter2 != ghosts.end(); ++iter2)       //ghosts list ? -    
@@ -262,14 +265,14 @@ int main()
 						}
 					}//endif after spawning timer
 				} //endif player is alive
-				else //if player is dead
+				else //if player is dead or completes level
 				{
 					if(++dead_clock > 2*FPS) //dying & spawning pauses
 					{
 						dead_clock = 0;
 						spawn_clock = 0;
 
-						player->TakeLive();
+						if(player->GetState() == DYING) player->TakeLive();
 						if(player->GetLives() > 0) //if player still got lives left
 						{
 							ChangeState(state, PLAYING); //entering PLAYING state again, even tho we're inside it. (to reinitialize pacaman and ghosts position)
@@ -337,6 +340,9 @@ int main()
 				
 				//rendering text after pacman's death
 				if(player->GetState() == DYING) al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH/2, HEIGHT/2, ALLEGRO_ALIGN_CENTER, "lel faget");
+
+				//rendering text after level completion
+				if(player->GetState() == WINNER) al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH/2, HEIGHT/2, ALLEGRO_ALIGN_CENTER, "Well done!");
 				
 				//rendering text at the start of the round
 				if(spawn_clock < 2 * FPS) al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH/2, HEIGHT/2, ALLEGRO_ALIGN_CENTER, "Ready?");
@@ -344,6 +350,8 @@ int main()
 			else if(state == LOST) //lost screen
 			{
 				al_draw_bitmap(lostImage,0, 0, 0);
+				al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2, HEIGHT - 90, ALLEGRO_ALIGN_CENTER, "You are dead (not big surprise)");
+				al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2, HEIGHT - 70, ALLEGRO_ALIGN_CENTER, "Your final score: %i", player->GetPoints());
 				al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2, HEIGHT - 30, ALLEGRO_ALIGN_CENTER, "Press ENTER to play again");
 			}
 
@@ -391,9 +399,33 @@ int main()
 void ChangeState(int &state, int newState)
 {
 	if(state == PLAYING)
+	{
+		if(player->GetState() == WINNER)			//temporary...
+		{
+			for(int i = 0; i < 21; i++)				
+			{
+				for(int j = 0; j < 20; j++)
+				{
+					if(map[i][j] && map[i][j] != 4 &&  map[i][j] != 5 )
+					{
+						Coin *coin = new Coin();
+						coin->Init((j)*tileSize, (i+1)*tileSize, 1, 1);			//TEMPORARY
+						objects.push_back(coin);
+					}
+					else if(map[i][j]  == 5)
+					{
+						PowerUp *powerup = new PowerUp();
+						powerup->Init((j)*tileSize, (i+1)*tileSize, 6, 6);			//TEMPORARY
+						objects.push_back(powerup);
+					}
+				}
+			}
+		}
 		player->Init((WIDTH + tileSize) / 2, (HEIGHT + tileSize * 8) / 2, 8, 8, player->GetLives()); 
+	}
 	else if(state == LOST || state == TITLE)
 	{
+		player->ResetPoints();
 		player->Init((WIDTH + tileSize) / 2, (HEIGHT + tileSize * 8) / 2, 8, 8, 3); 
 
 		//coins inits

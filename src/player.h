@@ -27,6 +27,7 @@ public:
 	int GetPoints();
 	int GetLives();
 	int GetState();
+	void ResetPoints();
 	void TakeLive();
 	void Clock();
 }; 

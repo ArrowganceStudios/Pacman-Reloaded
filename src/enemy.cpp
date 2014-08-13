@@ -309,7 +309,7 @@ void Ghost::AI(int GhostID)
 			SetDir(LEFT);
 		else 
 		{
-			std::cout << GhostID << std::endl;
+			//std::cout << GhostID << std::endl;
 			RandomMovement();
 		}
 	}
@@ -321,7 +321,7 @@ void Ghost::AI(int GhostID)
 			SetDir(UP);
 		else 
 		{
-			std::cout << GhostID << std::endl;
+			//std::cout << GhostID << std::endl;
 			RandomMovement();
 		}
 	}

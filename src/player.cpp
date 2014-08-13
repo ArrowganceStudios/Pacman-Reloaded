@@ -1,6 +1,8 @@
 #include "player.h"
 #include <iostream>
 
+static int n;
+
 Pacman::Pacman()
 {
 	SetID(PLAYER);
@@ -10,6 +12,7 @@ Pacman::Pacman()
 	boundX = 0;
 	boundY = 0;
 	velocity = 0;
+	points = 0;
 
 	image = NULL;
 };
@@ -27,8 +30,6 @@ void Pacman::Init(float x, float y, int boundX,  int boundY, float lives,  ALLEG
 	frameWidth = 32;
 	frameHeight = 32;
 	animationColumns = 6;
-
-	points = 0;
 
 	clock_tick = 0;
 
@@ -155,6 +156,7 @@ void Pacman::ChangeState(int newState)
 	}
 	else if(state == POWERUP)
 	{
+		n = 0;
 		velocity = 3;
 	}
 }
@@ -175,6 +177,10 @@ int Pacman::GetState()
 	return state;
 }
 
+void Pacman::ResetPoints()
+{
+	points = 0;
+}
 void Pacman::TakeLive()
 {
 	Pacman::lives--;
@@ -190,7 +196,10 @@ void Pacman::Collided(int ObjectID)
 			ChangeState(DYING); //we've gotta use the Ghost iterator in order to check the ghost state during collision
 		}
 		else
-			points += 200;
+		{
+			points += pow(2, n) * 200;
+			n++;
+		}
 	if(ObjectID == PILL)
 	{
 		points += 100;
