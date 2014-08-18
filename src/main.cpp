@@ -133,10 +133,10 @@ int main()
 	al_convert_mask_to_alpha(eyesImage, al_map_rgb(255, 255, 255));
 
 	player->Init((WIDTH + tileSize) / 2, (HEIGHT + tileSize * 8) / 2, 8, 8, 3, pmImage); 
-	blacky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, *blacky, *player, BLACKY, blackyImage, fearImage, eyesImage);
-	pinky->Init((WIDTH + tileSize * 3) / 2, tileSize * 5, 8, 8, *pinky, *player, PINKY, pinkyImage, fearImage, eyesImage);
-	inky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, *blacky, *player, INKY, inkyImage, fearImage, eyesImage);
-	clyde->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, *clyde, *player, CLYDE, clydeImage, fearImage, eyesImage);
+	blacky->Init((WIDTH + tileSize) / 2,  tileSize * 9,8, 8,0, *blacky, *player, BLACKY, blackyImage, fearImage, eyesImage);  //all ghost init here is needed only for images, cause the rest is overwritten after changing state
+	pinky->Init((WIDTH + tileSize * 3) / 2, tileSize * 9, 8, 8,4, *pinky, *player, PINKY, pinkyImage, fearImage, eyesImage);
+	inky->Init((WIDTH + tileSize) / 2, tileSize * 12, 8, 8, 2,*blacky, *player, INKY, inkyImage, fearImage, eyesImage);
+	clyde->Init((WIDTH + 2*tileSize) / 2, tileSize * 12, 8, 8, 0,*clyde, *player, CLYDE, clydeImage, fearImage, eyesImage);
 
 	
 
@@ -255,7 +255,7 @@ int main()
 							else iter++;
 						}
 						//endgame checking - the lamest method ever, i wanted to use coin list but it generated so many errors i had to backup my main.cpp...
-						std::cout<<k<<"\n";
+						//std::cout<<k<<"\n";
 						if(!k) player->ChangeState(WINNER);
 						
 						//Ghosts update
@@ -469,10 +469,10 @@ void ChangeState(int &state, int newState)
 		clydesScatterPoint->Init(tileSize * 18, tileSize);
 
 		//ghosts inits
-		blacky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8,*blacky, *player, BLACKY);
-		pinky->Init((WIDTH + tileSize * 3) / 2, tileSize * 5, 8, 8, *pinky, *player, PINKY);
-		inky->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8,*blacky, *player, INKY);
-		clyde->Init((WIDTH + tileSize) / 2, tileSize * 5, 8, 8, *clyde, *player, CLYDE);
+		blacky->Init((WIDTH + tileSize) / 2, tileSize * 9, 8, 8, 0, *blacky, *player, BLACKY);
+		pinky->Init((WIDTH + tileSize * 3) / 2, tileSize * 9, 8, 8,4, *pinky, *player, PINKY);
+		inky->Init((WIDTH + tileSize) / 2, tileSize * 12, 8, 8,2,*blacky, *player, INKY);
+		clyde->Init((WIDTH + tileSize) / 2 - tileSize, tileSize * 12, 8, 8,0, *clyde, *player, CLYDE);
 
 		
 		blacky->SetScatterPoint(blackysScatterPoint->GetX(), blackysScatterPoint->GetY());

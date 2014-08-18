@@ -13,11 +13,13 @@ Ghost::Ghost()
 	boundX = 0;
 	boundY = 0;
 	velocity = 1;
-
+	away = 0;
+	targetX = 0; 
+	targetY = 0;
 	image = NULL;
 }
 
-void Ghost::Init(float x, float y, int boundX, int boundY, Ghost &enemy, Pacman &player,int GhostID, ALLEGRO_BITMAP *image, ALLEGRO_BITMAP *fimage, ALLEGRO_BITMAP *eimage)
+void Ghost::Init(float x, float y, int boundX, int boundY,int away, Ghost &enemy, Pacman &player,int GhostID, ALLEGRO_BITMAP *image, ALLEGRO_BITMAP *fimage, ALLEGRO_BITMAP *eimage)
 {
 	MobileObject::Init(x, y, boundX, boundY, image);
 
@@ -53,12 +55,36 @@ void Ghost::Init(float x, float y, int boundX, int boundY, Ghost &enemy, Pacman 
 
 void Ghost::SetTarget(float targetX, float targetY, int targetDirection, int away)
 {
-	
-	Ghost::targetX = targetX;
-	Ghost::targetY = targetY;
-	Ghost::targetDirection = targetDirection;
-	Ghost::away = away;
-	
+
+	int dx = 0;
+	int dy = 0;
+
+	switch(targetDirection)
+	{
+	case UP:
+		dy -= away*tileSize;
+		break;
+	case DOWN:
+		dy += away*tileSize;
+		break;
+	case RIGHT:
+		dx += away*tileSize;
+		break;
+	case LEFT:
+		dx -= away*tileSize;
+		break;
+	}
+
+	Ghost::targetX = targetX + dx;
+	Ghost::targetY = targetY + dy;
+
+	if(GhostID == INKY && GetState() == CHASE)
+	{
+
+			Ghost::targetX -= enemy->GetX() - Ghost::targetX;
+			Ghost::targetY -= enemy->GetY() - Ghost::targetY;
+	}
+
 	
 }
 
@@ -75,7 +101,7 @@ void Ghost::Update()
 
 		if(GhostID == CLYDE && state != FRIGHTENED && state != RETREATING)
 		{
-			if(sqrt((pow(GetDistanceX(player->GetX(), 0),2) + pow(GetDistanceY(player->GetY(), 0),2))) <= 8*tileSize)
+			if(GetDistance(GetX(), GetY()) <= 8*tileSize)
 				ChangeState(CHASE);
 			else 
 				ChangeState(SCATTER);
@@ -86,13 +112,12 @@ void Ghost::Update()
 
 		if(map[GetRow()][GetColumn()] == 4) 
 		{
+
 			SetTarget(300, 280, -1, 0);
 		}
 
-		if(state != RETREATING)
 			AI(GhostID);
-		else
-			AI(BLACKY); //so it goes str8 into the ghost house  //why BLACKY?
+		
 	}
 
 	switch(direction)
@@ -131,8 +156,8 @@ void Ghost::ChangeState(int newState)
 	state = newState;
 	
 	if(state == CHASE)
-	{
-		ReverseDirection();
+	{		if(GhostID != CLYDE)  // so clyde doesn't behave as he is on amphetamine 
+			ReverseDirection();
 		SetCollidable(true);
 		SetTarget(player->GetX(),player->GetY(), player->GetDirection(), away);
 		velocity = 2;
@@ -234,15 +259,29 @@ void Ghost::Clock() //it just doesn't feel right when I look at it. I might come
 		clock_tick = 0;
 }
 
-float Ghost::GetDistanceX(float targetX, int dx)
+int Ghost::CanMove(int where)
 {
-	return  abs(enemy->x - targetX + dx);
+	if(where == UP && direction != DOWN)
+		return (map[GetRow() - 1][GetColumn()]);
+	else if(where == DOWN && direction != UP)
+		if(map[GetRow() + 1][GetColumn()] == 3 && state != RETREATING)
+			return 0;
+		else
+			return (map[GetRow() + 1][GetColumn()]);
+	else if(where == RIGHT && direction != LEFT)
+		return (map[GetRow()][GetColumn() + 1]);
+	else if(where == LEFT && direction != RIGHT)
+		return (map[GetRow()][GetColumn() - 1]);
+	else 
+		return 0;
 }
 
-float Ghost::GetDistanceY(float targetY, int dy)
+float Ghost::GetDistance(float x,float y)
 {
-	return  abs(enemy->y - targetY + dy);
+	
+	return  sqrt((pow(targetX - x, 2) + pow(targetY - y, 2)));
 }
+
 
 void Ghost::ReverseDirection()
 {
@@ -264,42 +303,36 @@ void Ghost::AI(int GhostID)
 		return;
 	}
 
-	if(GhostID == INKY && GetState() == RETREATING)
-		enemy = this;
+	
+	int dir[4];
+	int min = 999;
+	int chosenDirection;
 
-	float angle = 0;
+	dir[UP] = GetDistance(GetX(), GetY() - tileSize);
+	dir[DOWN] = GetDistance(GetX(), GetY() + tileSize);
+	dir[RIGHT] = GetDistance(GetX() + tileSize, GetY());
+	dir[LEFT] = GetDistance(GetX() - tileSize, GetY());
 
-	int distanceX = 0;
-	int distanceY = 0;
 
-	int dx = 0;
-	int dy = 0;
-	switch(targetDirection)
-	{
-	case UP:
-		dy += away*tileSize;
-		break;
-	case DOWN:
-		dy -= away*tileSize;
-		break;
-	case RIGHT:
-		dx -= away*tileSize;
-		break;
-	case LEFT:
-		dx += away*tileSize;
-		break;
-	}
+	for(int i = 0; i < 4;i++)
+		if(CanMove(i))
+			if(min > dir[i])
+			{
+				min = dir[i];
+				chosenDirection = i;
+			}
+	
 
-	distanceX = GetDistanceX(targetX, dx);
-	distanceY = GetDistanceY(targetY, dy);
+		SetDir(chosenDirection);
 
-	if(GhostID == INKY && GetState() != RETREATING)
-	{
-		dx += distanceX;
-		dy += distanceY;
-	}
+	
 
-	angle = AngleToTarget(targetX, targetY, dx, dy);
+	
+
+
+
+
+	/*angle = AngleToTarget(targetX, targetY, dx, dy);
 	
 	if(distanceX > distanceY && (CanMoveRight() || CanMoveLeft()))
 	{
@@ -309,7 +342,7 @@ void Ghost::AI(int GhostID)
 			SetDir(LEFT);
 		else 
 		{
-			//std::cout << GhostID << std::endl;
+			std::cout << GhostID << std::endl;
 			RandomMovement();
 		}
 	}
@@ -321,12 +354,13 @@ void Ghost::AI(int GhostID)
 			SetDir(UP);
 		else 
 		{
-			//std::cout << GhostID << std::endl;
+			std::cout << GhostID << std::endl;
 			RandomMovement();
 		}
 	}
 	else 
-		RandomMovement();
+		RandomMovement();*/
+
 }
 
 

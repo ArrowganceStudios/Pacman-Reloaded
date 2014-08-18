@@ -21,6 +21,9 @@ private:
 
 	int clock_tick;
 
+	int chosenDirection;
+	int min;
+
 	int GhostID;
 
 	ALLEGRO_BITMAP *defaultImage;
@@ -33,7 +36,7 @@ protected:
 public:
 	Ghost();
 
-	void Init(float x, float y, int boundX, int boundY, Ghost &enemy, Pacman &player,int GhostID, ALLEGRO_BITMAP *image = NULL, ALLEGRO_BITMAP *fimage = NULL, ALLEGRO_BITMAP *eimage = NULL);
+	void Init(float x, float y, int boundX, int boundY,int away, Ghost &enemy, Pacman &player,int GhostID, ALLEGRO_BITMAP *image = NULL, ALLEGRO_BITMAP *fimage = NULL, ALLEGRO_BITMAP *eimage = NULL);
 
 	void Destroy(){};
 	void Update();
@@ -50,14 +53,15 @@ public:
 
 	void AI(int GhostID);
 
-	float GetDistanceX(float targetX, int dx);
-	float GetDistanceY(float targetY, int dy);
+	float GetDistance(float x,float y);
 	
 	void Clock();
 	
 	void SetScatterPoint(float ScatterPointX, float ScatterPointY);
 	
 	void RandomMovement();
+
+	int CanMove(int direction);
 
 	void Collided(int ObjectID);
 }; 
