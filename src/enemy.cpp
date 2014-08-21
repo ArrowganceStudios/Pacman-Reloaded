@@ -112,10 +112,8 @@ void Ghost::Update()
 
 		if(map[GetRow()][GetColumn()] == 4) 
 		{
-
 			SetTarget(300, 280, -1, 0);
 		}
-
 			AI(GhostID);
 		
 	}
@@ -176,7 +174,6 @@ void Ghost::ChangeState(int newState)
 	}
 	else if(state == FRIGHTENED)
 	{
-		SetCollidable(true);
 		ReverseDirection();
 		clock_tick = 0;
 		velocity = 1.1;

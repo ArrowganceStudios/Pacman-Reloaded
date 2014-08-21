@@ -45,6 +45,4 @@ public:
 	void SetDir(int direction) {MobileObject::direction = direction;}
 	int GetDirection() {return direction;}
 
-	//float CheckDistance(MobileObject &o) {return sqrt((x-o.x)*(x-o.x) + (y-o.y)*(y-o.y));} //gotta modify this a lil' bit
-	float AngleToTarget(float targetX, float targetY, int dx = 0, int dy = 0) {return atan2(targetY - y - dy, targetX - x - dx);}
 };

@@ -190,22 +190,26 @@ void Pacman::Collided(int ObjectID)
 {
 	if(ObjectID == COIN)
 		points += 10;
-	if(ObjectID == ENEMY)
-		if(GetState() == NORMAL /* && ghost is not retreating*/) 
-		{						//it cannot work like this unluckily (i.e. ghost in retreating mode)
-			ChangeState(DYING); //we've gotta use the Ghost iterator in order to check the ghost state during collision
-		}
-		else
-		{
-			points += pow(2, n) * 200;
-			n++;
-		}
+	
 	if(ObjectID == PILL)
 	{
 		points += 100;
 		clock_tick = 0;
 	}
 
+}
+
+
+void Pacman::Collided(int ObjectID, int GhostState)
+{
+	if(ObjectID == ENEMY)
+		if (GetState() == POWERUP && GhostState == FRIGHTENED)
+		{
+			points += pow(2, n) * 200;
+			n++;
+		}
+		else if(GhostState == CHASE || GhostState == SCATTER)
+			ChangeState(DYING);
 }
 
 void Pacman::Clock()

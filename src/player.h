@@ -23,6 +23,7 @@ public:
 	void Render();
 
 	void Collided(int ObjectID);
+	void Collided(int ObjectID, int GhostState);
 	
 	int GetPoints();
 	int GetLives();

@@ -88,19 +88,15 @@ int main()
 	objects.push_back(player);
 
 	blacky = new Ghost();
-	objects.push_back(blacky);
 	ghosts.push_back(blacky);
 
 	pinky = new Ghost();
-	objects.push_back(pinky);
 	ghosts.push_back(pinky);
 
 	inky = new Ghost();
-	objects.push_back(inky);
 	ghosts.push_back(inky);
 
 	clyde = new Ghost();
-	objects.push_back(clyde);
 	ghosts.push_back(clyde);
 
 	blackysScatterPoint = new ScatterPoint();
@@ -234,8 +230,18 @@ int main()
 
 								}
 							}
+						}
+							for(iter2 = ghosts.begin();iter2 != ghosts.end(); iter2++)
+							{
+								if( ! (*iter2)->Collidable() ) continue;
+								if(player->CheckCollisions((*iter2)))
+								{
+									(*iter2)->Collided( player->GetID());
+									player->Collided( (*iter2)->GetID(), (*iter2)->GetState());
+			
+								}
 						
-						} //endof collisions check
+							} //endof collisions check
 
 						int k = -1; //when all the coins are eaten the game says that there is somewhere one coin left! WTF :D
 						//destroying dead coins/powerups
@@ -312,15 +318,13 @@ int main()
 				//rendering remaining coins/powerups
 				for(iter = objects.begin(); iter != objects.end(); ++iter)
 				{
-					if((*iter)->GetID() == COIN || (*iter)->GetID() == PILL)
 						(*iter)->Render();
 				}
 				
 				//rendering player & ghosts
-				for(iter = objects.begin(); iter != objects.end(); ++iter)
+				for(iter2 = ghosts.begin(); iter2 != ghosts.end(); ++iter2)
 				{
-					if((*iter)->GetID() == ENEMY || (*iter)->GetID() == PLAYER)
-						(*iter)->Render();
+						(*iter2)->Render();
 				}
 
 				//rendering remaining points text
