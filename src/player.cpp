@@ -127,16 +127,18 @@ void Pacman::Update(int keys)
 
 void Pacman::Render()
 {
-
+	float blink = 1;
 	MobileObject::Render();
+
+	if(clock_tick > 4 && curFrame > 3)
+		blink = 0.05;
 
 	int fx = (curFrame % animationColumns) * frameWidth;
 	int fy = (curFrame / animationColumns) * frameHeight;
 
-		al_draw_tinted_scaled_rotated_bitmap_region(image, fx, fy, frameWidth, frameHeight, 
-		al_map_rgba_f(1, 1, 1, 1.0), frameWidth / 2, frameHeight / 2, x - frameWidth / 2, 
+	al_draw_tinted_scaled_rotated_bitmap_region(image, fx, fy, frameWidth, frameHeight, 
+		al_map_rgba_f(1, 1, 1, blink), frameWidth / 2, frameHeight / 2, x - frameWidth / 2, 
 		y - frameHeight / 2, 1, 1, angle, 0);
-
 }
 
 void Pacman::ChangeState(int newState)

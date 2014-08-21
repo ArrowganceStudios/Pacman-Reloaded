@@ -47,8 +47,7 @@ int main()
 	int clock = 0;
 	int clock_tick = 0;
 	int dead_clock = 0;
-	int spawn_clock = 0; //this is gotta be moved to the Ghost class as static int, and be prompted from there
-	int fright_clock = 0; //same as above
+	int spawn_clock = 0;
 	int state = -1;
 
 

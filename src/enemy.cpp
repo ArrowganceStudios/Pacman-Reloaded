@@ -230,10 +230,15 @@ void Ghost::Render()
 		frameCount = 0;
 	}
 
-	int fx = (curFrame % animationColumns) * frameWidth;
-	int fy = (animationRows) * frameHeight;
-	
-	al_draw_bitmap_region(image, fx, fy, frameWidth, frameHeight, x - frameWidth, y - frameHeight, 0);
+	float blink = 1;
+
+		if(clock_tick > 4 && curFrame > 2 && GetState() == FRIGHTENED)
+			blink = 0.05;
+
+		int fx = (curFrame % animationColumns) * frameWidth;
+		int fy = (animationRows) * frameHeight;
+		
+		al_draw_tinted_bitmap_region(image, al_map_rgba_f(1, 1, 1, blink), fx, fy, frameWidth, frameHeight, x - frameWidth, y - frameHeight, 0);
 }
 
 void Ghost::SetImage(ALLEGRO_BITMAP *newImage)
