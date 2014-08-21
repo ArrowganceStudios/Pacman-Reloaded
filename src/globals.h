@@ -13,6 +13,8 @@ namespace
 	int keys = -1;
 	enum KEYS{UP, DOWN, LEFT, RIGHT, ENTER};
 	
+	int left_coins = 0;
+
 	const int mapSize = 19 * 20;
 	const int tileSize = 32;
 	

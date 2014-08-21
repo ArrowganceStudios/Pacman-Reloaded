@@ -243,26 +243,23 @@ int main()
 						
 							} //endof collisions check
 
-						int k = -1; //when all the coins are eaten the game says that there is somewhere one coin left! WTF :D
-						//destroying dead coins/powerups
 						for(iter = objects.begin(); iter != objects.end(); )
 						{
 							if((*iter)->GetID() == COIN || (*iter)->GetID() == PILL)    //temporary, should do it by changing collidable and checking collidable somewhere and make action - destroy for coins and changestate to fridgthened for ghosts(cause we dont want ghosts to be destroyed after collided)
 							{
-								k++;
 								if(!(*iter)->GetAlive())
 								{
 									(*iter)->Destroy();
 									delete (*iter);
 									iter = objects.erase(iter);
+									left_coins--;
 								}
 								else iter++;
 							}
 							else iter++;
 						}
 						//endgame checking - the lamest method ever, i wanted to use coin list but it generated so many errors i had to backup my main.cpp...
-						//std::cout<<k<<"\n";
-						if(!k) player->ChangeState(WINNER);
+						if(!left_coins) player->ChangeState(WINNER);
 						
 						//Ghosts update
 						for(iter2 = ghosts.begin(); iter2 != ghosts.end(); ++iter2)       //ghosts list ? -    
@@ -431,6 +428,7 @@ void ChangeState(int &state, int newState)
 	{
 		player->ResetPoints();
 		player->Init((WIDTH + tileSize) / 2, (HEIGHT + tileSize * 8) / 2, 8, 8, 3); 
+		left_coins = 0;
 
 		//coins inits
 		for(iter = objects.begin(); iter != objects.end();)			//removing old coins/pills
@@ -444,17 +442,19 @@ void ChangeState(int &state, int newState)
 		{
 			for(int j = 0; j < 20; j++)
 			{
-				if(map[i][j] && map[i][j] != 4 &&  map[i][j] != 5 )
+				if(map[i][j] == 1 || map[i][j] == 2)
 				{
 					Coin *coin = new Coin();
 					coin->Init((j)*tileSize, (i+1)*tileSize, 1, 1);			//TEMPORARY
 					objects.push_back(coin);
+					left_coins++;
 				}
 				else if(map[i][j]  == 5)
 				{
 					PowerUp *powerup = new PowerUp();
 					powerup->Init((j)*tileSize, (i+1)*tileSize, 6, 6);			//TEMPORARY
 					objects.push_back(powerup);
+					left_coins++;
 				}
 			}
 		}

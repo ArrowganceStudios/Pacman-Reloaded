@@ -205,7 +205,7 @@ void Pacman::Collided(int ObjectID, int GhostState)
 	if(ObjectID == ENEMY)
 		if (GetState() == POWERUP && GhostState == FRIGHTENED)
 		{
-			points += pow(2, n) * 200;
+			points += pow(2.0, n) * 200;
 			n++;
 		}
 		else if(GhostState == CHASE || GhostState == SCATTER)
