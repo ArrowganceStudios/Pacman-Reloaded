@@ -261,8 +261,8 @@ int main()
 								{
 									if((*iter2)->GetState() == FRIGHTENED) al_play_sample(eatGhost, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
 									else al_play_sample(dead, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
+									player->CollidedWithGhost((*iter2)->GetState());
 									(*iter2)->Collided( player->GetID());
-									player->Collided( (*iter2)->GetID(), (*iter2)->GetState());
 								}
 						
 							} //endof collisions check
