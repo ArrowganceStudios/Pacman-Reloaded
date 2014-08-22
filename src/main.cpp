@@ -241,7 +241,7 @@ int main()
 								}
 						
 							} //endof collisions check
-
+						std::cout << left_coins << std::endl;
 						for(iter = objects.begin(); iter != objects.end(); )
 						{
 							if((*iter)->GetID() == COIN || (*iter)->GetID() == PILL)    //temporary, should do it by changing collidable and checking collidable somewhere and make action - destroy for coins and changestate to fridgthened for ghosts(cause we dont want ghosts to be destroyed after collided)
@@ -406,17 +406,19 @@ void ChangeState(int &state, int newState)
 			{
 				for(int j = 0; j < 20; j++)
 				{
-					if(map[i][j] && map[i][j] != 4 &&  map[i][j] != 5 )
+					if(map[i][j] == 1 || map[i][j] == 2)
 					{
 						Coin *coin = new Coin();
 						coin->Init((j)*tileSize, (i+1)*tileSize, 1, 1);			//TEMPORARY
 						objects.push_back(coin);
+						left_coins++;
 					}
 					else if(map[i][j]  == 5)
 					{
 						PowerUp *powerup = new PowerUp();
 						powerup->Init((j)*tileSize, (i+1)*tileSize, 6, 6);			//TEMPORARY
 						objects.push_back(powerup);
+						left_coins++;
 					}
 				}
 			}
