@@ -3,6 +3,8 @@
 #include <allegro5\allegro_primitives.h>
 #include <allegro5\allegro_font.h>
 #include <allegro5\allegro_ttf.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 #include <iostream>
 #include <list>
 
@@ -69,6 +71,13 @@ int main()
 	ALLEGRO_BITMAP *titleImage = NULL;
 	ALLEGRO_BITMAP *lostImage = NULL;
 
+	ALLEGRO_SAMPLE *pickCoin = NULL;
+	ALLEGRO_SAMPLE *pickPill = NULL;
+	ALLEGRO_SAMPLE *eatGhost = NULL;
+	ALLEGRO_SAMPLE *dead = NULL;
+	ALLEGRO_SAMPLE *gameOver = NULL;
+	ALLEGRO_SAMPLE *ready = NULL;
+
 	////INITS
 	if(!al_init())
 		return -1;
@@ -78,10 +87,12 @@ int main()
 		return -1;
 
 	al_install_keyboard();
+	al_install_audio();
 	al_init_image_addon();
 	al_init_primitives_addon();
 	al_init_font_addon();
 	al_init_ttf_addon();
+	al_init_acodec_addon();
 
 	player = new Pacman();
 	objects.push_back(player);
@@ -105,6 +116,7 @@ int main()
 
 	event_queue = al_create_event_queue();
 	timer = al_create_timer(1.0 / FPS);
+	al_reserve_samples(10);
 
 	bgSheet = al_load_bitmap("data/img/bg.png");
 	pmImage = al_load_bitmap("data/img/pm.png");
@@ -118,6 +130,12 @@ int main()
 	titleImage = al_load_bitmap("data/img/pacman_Title.png");
 	lostImage = al_load_bitmap("data/img/pacman_Lose.png");
 
+	pickCoin = al_load_sample("data/sound/pickCoin.wav");
+	pickPill = al_load_sample("data/sound/pickPill.wav");
+	eatGhost = al_load_sample("data/sound/eatGhost.wav");
+	dead = al_load_sample("data/sound/dead.wav");
+	gameOver = al_load_sample("data/sound/gameOver.wav");
+	ready = al_load_sample("data/sound/ready.wav");
 
 	al_convert_mask_to_alpha(pmImage, al_map_rgb(255, 255, 255));
 	al_convert_mask_to_alpha(blackyImage, al_map_rgb(255, 255, 255));
@@ -175,7 +193,10 @@ int main()
 				break;
 			case ALLEGRO_KEY_ENTER:
 				if(state != PLAYING)
+				{
 					ChangeState(state, PLAYING); //entering PLAYING state
+					al_play_sample(ready, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
+				}
 				break;
 			}
 			
@@ -220,6 +241,7 @@ int main()
 								player->Collided( (*iter)->GetID());
 								if((*iter)->GetID() == PILL)
 								{
+									al_play_sample(pickPill, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
 									player->ChangeState(POWERUP);
 									for(iter2 = ghosts.begin(); iter2 != ghosts.end(); ++iter2)
 									{
@@ -228,6 +250,8 @@ int main()
 									}
 
 								}
+								if((*iter)->GetID() == COIN)
+									al_play_sample(pickCoin, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
 							}
 						}
 							for(iter2 = ghosts.begin();iter2 != ghosts.end(); iter2++)
@@ -235,9 +259,10 @@ int main()
 								if( ! (*iter2)->Collidable() ) continue;
 								if(player->CheckCollisions((*iter2)))
 								{
+									if((*iter2)->GetState() == FRIGHTENED) al_play_sample(eatGhost, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
+									else al_play_sample(dead, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
 									(*iter2)->Collided( player->GetID());
 									player->Collided( (*iter2)->GetID(), (*iter2)->GetState());
-			
 								}
 						
 							} //endof collisions check
@@ -251,6 +276,7 @@ int main()
 									(*iter)->Destroy();
 									delete (*iter);
 									iter = objects.erase(iter);
+									al_play_sample(pickCoin, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
 									left_coins--;
 								}
 								else iter++;
@@ -278,10 +304,14 @@ int main()
 						if(player->GetLives() > 0) //if player still got lives left
 						{
 							ChangeState(state, PLAYING); //entering PLAYING state again, even tho we're inside it. (to reinitialize pacaman and ghosts position)
+							al_play_sample(ready, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
 							player->ChangeState(NORMAL);
 						}
 						else
+						{
 							ChangeState(state, LOST);
+							al_play_sample(gameOver, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
+						}
 					}
 				}
 			} //endif playing state
@@ -390,6 +420,12 @@ int main()
 	al_destroy_bitmap(clydeImage);
 	al_destroy_bitmap(fearImage);
 	al_destroy_bitmap(eyesImage);
+	al_destroy_sample(pickCoin);
+	al_destroy_sample(pickPill);
+	al_destroy_sample(eatGhost);
+	al_destroy_sample(dead);
+	al_destroy_sample(gameOver);
+	al_destroy_sample(ready);
 	al_destroy_display(display);
 	al_destroy_event_queue(event_queue);
 	al_destroy_timer(timer);
