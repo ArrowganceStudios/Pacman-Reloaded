@@ -63,5 +63,5 @@ public:
 
 	int CanMove(int direction);
 
-	void Collided(int ObjectID);
+	void Collided();
 }; 

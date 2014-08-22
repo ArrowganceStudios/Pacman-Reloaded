@@ -8,7 +8,7 @@ public:
 	PowerUp();
 	void Init(float x, float y, int boundX, int boundY);
 
-	void Collided(int ObjectID);
+	void Collided() ;
 
 	void Destroy();
 	void Render();
