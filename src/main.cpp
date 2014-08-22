@@ -275,6 +275,8 @@ int main()
 									iter = objects.erase(iter);
 									al_play_sample(pickCoin, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
 									left_coins--;
+									for(iter2 = ghosts.begin(); iter2 != ghosts.end(); iter2++)
+										(*iter2)->CanGhostGoOut(left_coins);
 								}
 								else iter++;
 						}
@@ -510,7 +512,7 @@ void ChangeState(int &state, int newState)
 
 		//ghosts inits
 		blacky->Init((WIDTH + tileSize) / 2, tileSize * 9, 8, 8, 0, *blacky, *player, BLACKY);
-		pinky->Init((WIDTH + tileSize * 3) / 2, tileSize * 9, 8, 8,4, *pinky, *player, PINKY);
+		pinky->Init((WIDTH + tileSize * 3) / 2, tileSize * 12, 8, 8,4, *pinky, *player, PINKY);
 		inky->Init((WIDTH + tileSize) / 2, tileSize * 12, 8, 8,2,*blacky, *player, INKY);
 		clyde->Init((WIDTH + tileSize) / 2 - tileSize, tileSize * 12, 8, 8,0, *clyde, *player, CLYDE);
 

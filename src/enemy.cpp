@@ -112,8 +112,13 @@ void Ghost::Update()
 
 		if(map[GetRow()][GetColumn()] == 4) 
 		{
-			SetTarget(300, 280, -1, 0);
+			if(CanGhostGo)  
+				SetTarget(300, 280, -1, 0);  //needs to be changed, maybe for  ChangeState = WAIT ?
+			else 
+				SetTarget((WIDTH + tileSize * 3) / 2, tileSize * 12, -1, 0);
 		}
+
+
 			AI(GhostID);
 		
 	}
@@ -142,6 +147,15 @@ void Ghost::Update()
 	else if (y > HEIGHT+30)
 		y = 0;
 }
+
+void Ghost::CanGhostGoOut(int left_coins)
+{
+	if(GhostID*8 <= 173 - left_coins) //173 need to be changed into variable max coins
+		CanGhostGo = true;
+	else CanGhostGo = false;
+		
+}
+
 
 void Ghost::SetScatterPoint(float ScatterPointX, float ScatterPointY)
 {

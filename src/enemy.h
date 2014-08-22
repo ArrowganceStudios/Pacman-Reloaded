@@ -26,6 +26,8 @@ private:
 
 	int GhostID;
 
+	bool CanGhostGo;
+
 	ALLEGRO_BITMAP *defaultImage;
 	ALLEGRO_BITMAP *fImage;
 	ALLEGRO_BITMAP *eImage;
@@ -60,6 +62,8 @@ public:
 	void SetScatterPoint(float ScatterPointX, float ScatterPointY);
 	
 	void RandomMovement();
+
+	void CanGhostGoOut(int left_coins);
 
 	int CanMove(int direction);
 
