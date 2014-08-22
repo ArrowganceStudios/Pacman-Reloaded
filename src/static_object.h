@@ -15,5 +15,5 @@ class StaticObject : public GameObject
 	void virtual Destroy(){GameObject::Destroy();}
 	void virtual Render(){GameObject::Render();}
 	
-	void Collided();
+	void virtual Collided(){};
 };

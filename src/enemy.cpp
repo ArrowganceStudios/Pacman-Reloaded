@@ -386,7 +386,7 @@ void Ghost::RandomMovement()
 	}
 }
 
-void Ghost::Collided(int ObjectID)
+void Ghost::Collided()
 {
 	if(state == FRIGHTENED)
 		ChangeState(RETREATING);

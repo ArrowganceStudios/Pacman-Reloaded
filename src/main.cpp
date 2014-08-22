@@ -33,9 +33,9 @@ std::list<Ghost*> ghosts;  //what do u think about using it?
 
 std::list<Ghost *>::iterator iter2; //what is that for? ~sand3r // look up ~me
 
-std::list<GameObject*> objects;
+std::list<StaticObject*> objects;
 
-std::list<GameObject *>::iterator iter;
+std::list<StaticObject *>::iterator iter;
 
 
 void ChangeState(int &state, int newState);
@@ -95,7 +95,6 @@ int main()
 	al_init_acodec_addon();
 
 	player = new Pacman();
-	objects.push_back(player);
 
 	blacky = new Ghost();
 	ghosts.push_back(blacky);
@@ -237,7 +236,7 @@ int main()
 							if( ! (*iter)->Collidable() ) continue;
 							if(player->CheckCollisions((*iter)))
 							{
-								(*iter)->Collided( player->GetID());
+								(*iter)->Collided();
 								player->Collided( (*iter)->GetID());
 								if((*iter)->GetID() == PILL)
 								{
@@ -262,15 +261,13 @@ int main()
 									if((*iter2)->GetState() == FRIGHTENED) al_play_sample(eatGhost, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
 									else al_play_sample(dead, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
 									player->CollidedWithGhost((*iter2)->GetState());
-									(*iter2)->Collided( player->GetID());
+									(*iter2)->Collided();
 								}
 						
 							} //endof collisions check
 						std::cout << left_coins << std::endl;
 						for(iter = objects.begin(); iter != objects.end(); )
 						{
-							if((*iter)->GetID() == COIN || (*iter)->GetID() == PILL)    //temporary, should do it by changing collidable and checking collidable somewhere and make action - destroy for coins and changestate to fridgthened for ghosts(cause we dont want ghosts to be destroyed after collided)
-							{
 								if(!(*iter)->GetAlive())
 								{
 									(*iter)->Destroy();
@@ -280,8 +277,6 @@ int main()
 									left_coins--;
 								}
 								else iter++;
-							}
-							else iter++;
 						}
 						//endgame checking - the lamest method ever, i wanted to use coin list but it generated so many errors i had to backup my main.cpp...
 						if(!left_coins) player->ChangeState(WINNER);
@@ -353,6 +348,8 @@ int main()
 						(*iter2)->Render();
 				}
 
+				player->Render();
+
 				//rendering remaining points text
 				al_draw_textf(visitor18, al_map_rgb(255,255,255), 6, 6, 0, "Points: %i", player->GetPoints());
 
@@ -404,6 +401,8 @@ int main()
 	{
 			iter2 = ghosts.erase(iter2);
 	}
+
+	delete player;
 
 	delete blackysScatterPoint;
 	delete pinkysScatterPoint; 
