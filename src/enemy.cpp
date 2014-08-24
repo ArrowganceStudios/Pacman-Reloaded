@@ -40,7 +40,10 @@ void Ghost::Init(float x, float y, int boundX, int boundY,int away, Ghost &enemy
 	animationRows = 4;
 
 	dot_counter = 0;
-	CanGhostGo = false;
+	if(GhostID == BLACKY)
+		CanGhostGo = true;
+	else
+		CanGhostGo = false;
 
 	clock_tick = 0;
 
@@ -113,14 +116,8 @@ void Ghost::Update()
 		if(state == CHASE && GhostID != CLYDE)
 			SetTarget(player->GetX(),player->GetY(), player->GetDirection(), away);
 
-		if(map[GetRow()][GetColumn()] == 4) 
-		{
-			if(CanGhostGo)  
-				SetTarget(300, 280, -1, 0);  //needs to be changed, maybe for  ChangeState = WAIT ?
-			else 
-				SetTarget((WIDTH + tileSize * 2) / 2, tileSize * 12, -1, 0);
-		}
-
+		if(map[GetRow()][GetColumn()] == 4 && CanGhostGo)
+				SetTarget(300, 280, -1, 0);
 
 			AI(GhostID);
 		
@@ -319,35 +316,39 @@ void Ghost::ReverseDirection()
 
 void Ghost::AI(int GhostID)
 {
-	if(GetState() == FRIGHTENED)
+	if(!CanGhostGo)
+		SetDir(DOWN);
+	else
 	{
-		RandomMovement();
-		return;
-	}
+		if(GetState() == FRIGHTENED)
+		{
+			RandomMovement();
+			return;
+		}
 
 	
-	int dir[4];
-	int min = 999;
-	int chosenDirection;
+		int dir[4];
+		int min = 999;
+		int chosenDirection;
 
-	dir[UP] = GetDistance(GetX(), GetY() - tileSize);
-	dir[DOWN] = GetDistance(GetX(), GetY() + tileSize);
-	dir[RIGHT] = GetDistance(GetX() + tileSize, GetY());
-	dir[LEFT] = GetDistance(GetX() - tileSize, GetY());
+		dir[UP] = GetDistance(GetX(), GetY() - tileSize);
+		dir[DOWN] = GetDistance(GetX(), GetY() + tileSize);
+		dir[RIGHT] = GetDistance(GetX() + tileSize, GetY());
+		dir[LEFT] = GetDistance(GetX() - tileSize, GetY());
 
 
-	for(int i = 0; i < 4;i++)
-		if(CanMove(i))
-			if(min > dir[i])
-			{
-				min = dir[i];
-				chosenDirection = i;
-			}
+		for(int i = 0; i < 4;i++)
+			if(CanMove(i))
+				if(min > dir[i])
+				{
+					min = dir[i];
+					chosenDirection = i;
+				}
 	
 
-		SetDir(chosenDirection);
+			SetDir(chosenDirection);
 
-	
+		}
 
 	
 

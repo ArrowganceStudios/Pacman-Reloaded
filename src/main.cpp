@@ -50,6 +50,10 @@ int main()
 	int clock_tick = 0;
 	int dead_clock = 0;
 	int spawn_clock = 0;
+	int pause_clock = 0;
+
+	bool pause = false;
+	bool pausePrint = false;
 	int state = -1;
 
 
@@ -207,7 +211,14 @@ int main()
 		//UPDATE
 		else if(ev.type == ALLEGRO_EVENT_TIMER)
 		{
-			if(state == PLAYING) //if we're in playing state
+			if(pause)
+				if(pause_clock++ >= FPS)
+				{
+					pause = false;
+					pause_clock = 0;
+
+				}
+			if(state == PLAYING && pause == false) //if we're in playing state
 			{
 				clock++;
 				if(clock >= FPS ) 
@@ -262,6 +273,11 @@ int main()
 									else al_play_sample(dead, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
 									player->CollidedWithGhost((*iter2)->GetState());
 									(*iter2)->Collided();
+									if(player->GetState() != DYING)
+									{
+										pausePrint = true;
+										pause = true;
+									}
 								}
 						
 							} //endof collisions check
@@ -375,6 +391,12 @@ int main()
 				
 				//rendering text at the start of the round
 				if(spawn_clock < 2 * FPS) al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH/2, HEIGHT/2, ALLEGRO_ALIGN_CENTER, "Ready?");
+
+				if(pausePrint)
+				{
+					al_draw_textf(visitor18, al_map_rgb(255,255,255), player->GetX() - 40, player->GetY() - 40, ALLEGRO_ALIGN_LEFT, "%d", player->GetPowerUpPoints());
+					pausePrint = false;
+				}
 			} //endif PLAYING state
 			else if(state == LOST) //lost screen
 			{
@@ -516,7 +538,6 @@ void ChangeState(int &state, int newState)
 		inky->Init((WIDTH + tileSize) / 2, tileSize * 12, 8, 8,2,*blacky, *player, INKY);
 		clyde->Init((WIDTH + tileSize) / 2 - tileSize, tileSize * 12, 8, 8,0, *clyde, *player, CLYDE);
 
-		std::cout << "E";
 		
 		blacky->SetScatterPoint(blackysScatterPoint->GetX(), blackysScatterPoint->GetY());
 		pinky->SetScatterPoint(pinkysScatterPoint->GetX(), pinkysScatterPoint->GetY());

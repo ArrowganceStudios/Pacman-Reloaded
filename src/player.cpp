@@ -35,6 +35,8 @@ void Pacman::Init(float x, float y, int boundX,  int boundY, float lives,  ALLEG
 
 	angle = 0;
 
+	powerUpPoints = 0;
+
 	if(image != NULL)
 		Pacman::image = image;
 
@@ -169,6 +171,12 @@ int Pacman::GetPoints()
 	return points;
 }
 
+
+int Pacman::GetPowerUpPoints()
+{
+	return powerUpPoints;
+}
+
 int Pacman::GetLives()
 {
 	return lives;
@@ -202,11 +210,12 @@ void Pacman::Collided(int ObjectID)
 }
 
 
-void Pacman::CollidedWithGhost(int GhostState)
+void Pacman::CollidedWithGhost(int GhostState) // actually we can just modify collided so we dont have 2 functions for collision
 {
 		if (GetState() == POWERUP && GhostState == FRIGHTENED)
 		{
-			points += pow(2.0, n) * 200;
+			powerUpPoints = pow(2.0, n) * 200;
+			points += powerUpPoints;
 			n++;
 		}
 		else if(GhostState == CHASE || GhostState == SCATTER)

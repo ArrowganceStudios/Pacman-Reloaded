@@ -9,6 +9,8 @@ protected:
 	float angle;
 	int points;
 	int clock_tick;
+	int powerUpPoints;
+
 public:
 	Pacman();
 
@@ -26,6 +28,7 @@ public:
 	void CollidedWithGhost(int GhostState);
 	
 	int GetPoints();
+	int GetPowerUpPoints();
 	int GetLives();
 	int GetState();
 	void ResetPoints();
