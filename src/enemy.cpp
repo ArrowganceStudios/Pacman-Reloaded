@@ -39,6 +39,9 @@ void Ghost::Init(float x, float y, int boundX, int boundY,int away, Ghost &enemy
 	animationColumns = 4;
 	animationRows = 4;
 
+	dot_counter = 0;
+	CanGhostGo = false;
+
 	clock_tick = 0;
 
 	if(image != NULL && fimage != NULL && eimage != NULL)
@@ -115,7 +118,7 @@ void Ghost::Update()
 			if(CanGhostGo)  
 				SetTarget(300, 280, -1, 0);  //needs to be changed, maybe for  ChangeState = WAIT ?
 			else 
-				SetTarget((WIDTH + tileSize * 3) / 2, tileSize * 12, -1, 0);
+				SetTarget((WIDTH + tileSize * 2) / 2, tileSize * 12, -1, 0);
 		}
 
 
@@ -148,12 +151,15 @@ void Ghost::Update()
 		y = 0;
 }
 
-void Ghost::CanGhostGoOut(int left_coins)
+void Ghost::CanGhostGoOut()
 {
-	if(GhostID*8 <= 173 - left_coins) //173 need to be changed into variable max coins
-		CanGhostGo = true;
-	else CanGhostGo = false;
-		
+	if(map[GetRow()][GetColumn()] == 4)
+	{
+		dot_counter++;
+		if(dot_counter >= GhostID*8) 
+			CanGhostGo = true;
+		else CanGhostGo = false;
+		}
 }
 
 

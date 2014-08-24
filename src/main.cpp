@@ -265,7 +265,7 @@ int main()
 								}
 						
 							} //endof collisions check
-						std::cout << left_coins << std::endl;
+						//std::cout << left_coins << std::endl;
 						for(iter = objects.begin(); iter != objects.end(); )
 						{
 								if(!(*iter)->GetAlive())
@@ -276,7 +276,7 @@ int main()
 									al_play_sample(pickCoin, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
 									left_coins--;
 									for(iter2 = ghosts.begin(); iter2 != ghosts.end(); iter2++)
-										(*iter2)->CanGhostGoOut(left_coins);
+										(*iter2)->CanGhostGoOut();
 								}
 								else iter++;
 						}
@@ -505,10 +505,10 @@ void ChangeState(int &state, int newState)
 	else if(state == PLAYING)
 	{
 		//scatter points inits
-		blackysScatterPoint->Init(tileSize, tileSize * 21);
+		blackysScatterPoint->Init(tileSize* 18, tileSize);
 		pinkysScatterPoint->Init(tileSize * 18, tileSize * 21);
 		inkysScatterPoint->Init(tileSize, tileSize);
-		clydesScatterPoint->Init(tileSize * 18, tileSize);
+		clydesScatterPoint->Init(tileSize , tileSize*21);
 
 		//ghosts inits
 		blacky->Init((WIDTH + tileSize) / 2, tileSize * 9, 8, 8, 0, *blacky, *player, BLACKY);
@@ -516,6 +516,7 @@ void ChangeState(int &state, int newState)
 		inky->Init((WIDTH + tileSize) / 2, tileSize * 12, 8, 8,2,*blacky, *player, INKY);
 		clyde->Init((WIDTH + tileSize) / 2 - tileSize, tileSize * 12, 8, 8,0, *clyde, *player, CLYDE);
 
+		std::cout << "E";
 		
 		blacky->SetScatterPoint(blackysScatterPoint->GetX(), blackysScatterPoint->GetY());
 		pinky->SetScatterPoint(pinkysScatterPoint->GetX(), pinkysScatterPoint->GetY());

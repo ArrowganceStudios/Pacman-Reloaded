@@ -21,8 +21,7 @@ private:
 
 	int clock_tick;
 
-	int chosenDirection;
-	int min;
+	int dot_counter;
 
 	int GhostID;
 
@@ -63,7 +62,7 @@ public:
 	
 	void RandomMovement();
 
-	void CanGhostGoOut(int left_coins);
+	void CanGhostGoOut();
 
 	int CanMove(int direction);
 
