@@ -255,7 +255,7 @@ int main()
 									player->ChangeState(POWERUP);
 									for(iter2 = ghosts.begin(); iter2 != ghosts.end(); ++iter2)
 									{
-										if((*iter2)->GetState() != RETREATING)
+										if((*iter2)->GetState() != RETREATING && map[(*iter2)->GetRow()][(*iter2)->GetColumn()] != 4)
 											(*iter2)->ChangeState(FRIGHTENED);
 									}
 
