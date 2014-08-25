@@ -62,7 +62,11 @@ public:
 	
 	void RandomMovement();
 
-	void CanGhostGoOut();
+	bool GetIfCanGhostGo();
+
+	void SetCanGhostGo(bool CanGhostGo);
+
+	void CheckIfGhostCanGoOut();
 
 	int CanMove(int direction);
 

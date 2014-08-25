@@ -216,7 +216,7 @@ void Pacman::CollidedWithGhost(int GhostState) // actually we can just modify co
 		{
 			powerUpPoints = pow(2.0, n) * 200;
 			points += powerUpPoints;
-			n++;
+			++n;
 		}
 		else if(GhostState == CHASE || GhostState == SCATTER)
 			ChangeState(DYING);

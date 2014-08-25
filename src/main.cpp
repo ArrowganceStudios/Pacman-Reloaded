@@ -51,6 +51,7 @@ int main()
 	int dead_clock = 0;
 	int spawn_clock = 0;
 	int pause_clock = 0;
+	int time_after_eating_coin = 0;
 
 	bool pause = false;
 	bool pausePrint = false;
@@ -228,8 +229,13 @@ int main()
 					{
 						(*iter2)->Clock();
 					}
+
+					if(time_after_eating_coin >= 1)
+					time_after_eating_coin++;
+
 					clock = 0;
 				}//till here
+
 
 				redraw = true;
 
@@ -255,13 +261,16 @@ int main()
 									player->ChangeState(POWERUP);
 									for(iter2 = ghosts.begin(); iter2 != ghosts.end(); ++iter2)
 									{
-										if((*iter2)->GetState() != RETREATING && map[(*iter2)->GetRow()][(*iter2)->GetColumn()] != 4)
+										if((*iter2)->GetState() != RETREATING && map[(*iter2)->GetRow()][(*iter2)->GetColumn()] != 4 && map[(*iter2)->GetRow()][(*iter2)->GetColumn()] != 3)
 											(*iter2)->ChangeState(FRIGHTENED);
 									}
 
 								}
 								if((*iter)->GetID() == COIN)
+								{
 									al_play_sample(pickCoin, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
+									time_after_eating_coin = 1;
+								}
 							}
 						}
 							for(iter2 = ghosts.begin();iter2 != ghosts.end(); iter2++)
@@ -292,10 +301,31 @@ int main()
 									al_play_sample(pickCoin, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
 									left_coins--;
 									for(iter2 = ghosts.begin(); iter2 != ghosts.end(); iter2++)
-										(*iter2)->CanGhostGoOut();
+									{
+										if(! (*iter2)->GetIfCanGhostGo())
+											(*iter2)->CheckIfGhostCanGoOut();
+									}
 								}
 								else iter++;
 						}
+
+						if(! (pinky->GetIfCanGhostGo()) && time_after_eating_coin >= 5)
+							{
+								pinky->SetCanGhostGo(true);
+								time_after_eating_coin = 1;
+							}
+						else if(! (inky->GetIfCanGhostGo()) && time_after_eating_coin >= 5)
+							{
+								inky->SetCanGhostGo(true);
+								time_after_eating_coin = 1;
+							}
+						else if(! (clyde->GetIfCanGhostGo()) && time_after_eating_coin >= 5)
+							{
+								clyde->SetCanGhostGo(true);
+								time_after_eating_coin = 1;
+							}
+
+
 						//endgame checking - the lamest method ever, i wanted to use coin list but it generated so many errors i had to backup my main.cpp...
 						if(!left_coins) player->ChangeState(WINNER);
 						
@@ -313,7 +343,11 @@ int main()
 						dead_clock = 0;
 						spawn_clock = 0;
 
-						if(player->GetState() == DYING) player->TakeLive();
+						if(player->GetState() == DYING) 
+							{
+								player->TakeLive();
+								time_after_eating_coin = 1;
+							}
 						if(player->GetLives() > 0) //if player still got lives left
 						{
 							ChangeState(state, PLAYING); //entering PLAYING state again, even tho we're inside it. (to reinitialize pacaman and ghosts position)

@@ -117,7 +117,7 @@ void Ghost::Update()
 			SetTarget(player->GetX(),player->GetY(), player->GetDirection(), away);
 
 		if(map[GetRow()][GetColumn()] == 4 && CanGhostGo)
-				SetTarget(300, 280, -1, 0);
+				SetTarget(316, 272, -1, 0);
 
 			AI(GhostID);
 		
@@ -148,15 +148,28 @@ void Ghost::Update()
 		y = 0;
 }
 
-void Ghost::CanGhostGoOut()
+void Ghost::SetCanGhostGo(bool CanGhostGo)
+{
+	Ghost::CanGhostGo = CanGhostGo;
+}
+
+
+bool Ghost::GetIfCanGhostGo()
+{
+	return CanGhostGo;
+}
+
+void Ghost::CheckIfGhostCanGoOut()
 {
 	if(map[GetRow()][GetColumn()] == 4)
 	{
 		dot_counter++;
 		if(dot_counter >= GhostID*8) 
-			CanGhostGo = true;
-		else CanGhostGo = false;
-		}
+			SetCanGhostGo(true);
+		else
+			SetCanGhostGo(false);
+	}
+
 }
 
 
@@ -176,6 +189,7 @@ void Ghost::ChangeState(int newState)
 		SetCollidable(true);
 		SetTarget(player->GetX(),player->GetY(), player->GetDirection(), away);
 		velocity = 2;
+
 	}
 	else if(state == SCATTER)
 	{
