@@ -82,6 +82,7 @@ int main()
 	ALLEGRO_SAMPLE *dead = NULL;
 	ALLEGRO_SAMPLE *gameOver = NULL;
 	ALLEGRO_SAMPLE *ready = NULL;
+	ALLEGRO_SAMPLE *fanfares = NULL;
 
 	////INITS
 	if(!al_init())
@@ -140,6 +141,7 @@ int main()
 	dead = al_load_sample("data/sound/dead.wav");
 	gameOver = al_load_sample("data/sound/gameOver.wav");
 	ready = al_load_sample("data/sound/ready.wav");
+	fanfares = al_load_sample("data/sound/fanfares.wav");
 
 	al_convert_mask_to_alpha(pmImage, al_map_rgb(255, 255, 255));
 	al_convert_mask_to_alpha(blackyImage, al_map_rgb(255, 255, 255));
@@ -327,7 +329,11 @@ int main()
 
 
 						//endgame checking - the lamest method ever, i wanted to use coin list but it generated so many errors i had to backup my main.cpp...
-						if(!left_coins) player->ChangeState(WINNER);
+						if(!left_coins) 
+						{
+							player->ChangeState(WINNER);
+							al_play_sample(fanfares, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
+						}
 						
 						//Ghosts update
 						for(iter2 = ghosts.begin(); iter2 != ghosts.end(); ++iter2)       //ghosts list ? -    
@@ -483,6 +489,7 @@ int main()
 	al_destroy_sample(dead);
 	al_destroy_sample(gameOver);
 	al_destroy_sample(ready);
+	al_destroy_sample(fanfares);
 	al_destroy_display(display);
 	al_destroy_event_queue(event_queue);
 	al_destroy_timer(timer);
