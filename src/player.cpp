@@ -72,12 +72,6 @@ void Pacman::Movement(int keys)
 		}
 }
 
-void Pacman::Destroy()
-{
-	MobileObject::Destroy();
-
-}
-
 void Pacman::Update(int keys)
 {
 	Pacman::Movement(direction);
@@ -130,7 +124,6 @@ void Pacman::Update(int keys)
 void Pacman::Render()
 {
 	float blink = 1;
-	MobileObject::Render();
 
 	if(clock_tick > 4 && curFrame > 3)
 		blink = 0.05;

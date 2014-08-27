@@ -297,7 +297,6 @@ int main()
 						{
 								if(!(*iter)->GetAlive())
 								{
-									(*iter)->Destroy();
 									delete (*iter);
 									iter = objects.erase(iter);
 									al_play_sample(pickCoin, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
@@ -456,7 +455,6 @@ int main()
 
 	for(iter = objects.begin(); iter != objects.end(); )
 	{
-			(*iter)->Destroy();
 			delete (*iter);
 			iter = objects.erase(iter);
 	}

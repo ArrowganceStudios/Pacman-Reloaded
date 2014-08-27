@@ -13,10 +13,6 @@ void Coin::Init(float x, float y, int boundX, int boundY)
 	Coin::SetCollidable(true);
 }
 
-void Coin::Destroy()
-{
-}
-
 void Coin::Render()
 {
 	al_draw_filled_circle(GetX() - 16, GetY() - 16, 2, al_map_rgb_f(1, 1, 0));			//TEMPORARY

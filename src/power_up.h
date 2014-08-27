@@ -10,7 +10,6 @@ public:
 
 	void Collided() ;
 
-	void Destroy();
 	void Render();
 
 };

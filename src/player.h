@@ -20,7 +20,6 @@ public:
 
 	void ChangeState(int newState);
 
-	void Destroy();
 	void Update(int keys);
 	void Render();
 

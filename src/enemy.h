@@ -39,7 +39,6 @@ public:
 
 	void Init(float x, float y, int boundX, int boundY,int away, Ghost &enemy, Pacman &player,int GhostID, ALLEGRO_BITMAP *image = NULL, ALLEGRO_BITMAP *fimage = NULL, ALLEGRO_BITMAP *eimage = NULL);
 
-	void Destroy(){};
 	void Update();
 	void Render();
 

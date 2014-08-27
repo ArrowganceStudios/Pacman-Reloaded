@@ -9,7 +9,6 @@ public:
 
 	void Init(float x, float y, int boundX, int boundY);
 
-	void Destroy();
 	void Render();
 
 	void Collided();

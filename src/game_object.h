@@ -35,7 +35,6 @@ public:
 	void Init(float x, float y, int boundX, int boundY, ALLEGRO_BITMAP *image);
 
 	void virtual Render(){};
-	void virtual Destroy(){};
 	void virtual Update(){};
 
 	float GetX() {return x;}

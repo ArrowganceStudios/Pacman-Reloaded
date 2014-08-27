@@ -12,7 +12,6 @@ class StaticObject : public GameObject
 
 	void Init(float x, float y, int boundX, int boundY, ALLEGRO_BITMAP *image);
 
-	void virtual Destroy(){GameObject::Destroy();}
 	void virtual Render(){GameObject::Render();}
 	
 	void virtual Collided(){};

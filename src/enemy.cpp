@@ -213,8 +213,6 @@ void Ghost::ChangeState(int newState)
 
 void Ghost::Render()
 {
-	MobileObject::Render(); //srsly? Do we actually need that?
-	
 	if(state != FRIGHTENED)
 	{
 		switch(GetDirection())
