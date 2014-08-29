@@ -46,7 +46,7 @@ void Ghost::Init(float x, float y, int boundX, int boundY,int away, Ghost &enemy
 		CanGhostGo = false;
 
 	clock_tick = 0;
-	clock_tick_fright = 0;
+	//clock_tick_fright = 0;
 
 	if(image != NULL && fimage != NULL && eimage != NULL)
 	{
@@ -208,6 +208,7 @@ void Ghost::ChangeState(int newState)
 	{
 		ReverseDirection();
 		velocity = 1.1;
+		clock_tick = 0;
 	}
 }
 
@@ -261,7 +262,7 @@ void Ghost::Render()
 
 	float blink = 1;
 
-		if(clock_tick_fright > 4 && curFrame > 2 && GetState() == FRIGHTENED)
+		if(clock_tick/*_fright*/ > 4 && curFrame > 2 && GetState() == FRIGHTENED)
 			blink = 0.05;
 
 		int fx = (curFrame % animationColumns) * frameWidth;
@@ -276,24 +277,14 @@ void Ghost::SetImage(ALLEGRO_BITMAP *newImage)
 }
 void Ghost::Clock()
 {
-	if(state == FRIGHTENED)
-	{
-		clock_tick_fright++;
-		if(clock_tick_fright == 7)
-		{
-			clock_tick_fright = 0;
-			clock_tick = 0;
-			ChangeState(SCATTER);
-		}
-	}
-	if(state == SCATTER && clock_tick == 7)
+	if((state == FRIGHTENED || state == SCATTER) && clock_tick == 7)
 		ChangeState(CHASE);
 	else if(state == CHASE && clock_tick == 0)
 		ChangeState(SCATTER);
 
 	clock_tick++;
 			
-	if(clock_tick >= 22)
+	if(clock_tick >= 17)
 		clock_tick = 0;
 }
 

@@ -75,22 +75,22 @@ void Pacman::Movement(int keys)
 void Pacman::Update(int keys)
 {
 	Pacman::Movement(direction);
-	if((direction != keys) && !((int)x % tileSize) && !((int)y % tileSize))
+	if((direction != keys))
 	{
 		bool c = false;
 		switch(keys)
 		{
 		case UP:
-			if(CanMoveUp()) c = true;
+			if(CanMoveUp() && !((int)x % tileSize)) c = true;
 			break;
 		case DOWN:
-			if(CanMoveDown()) c = true;
+			if(CanMoveDown() && !((int)x % tileSize)) c = true;
 			break;
 		case RIGHT:
-			if(CanMoveRight()) c = true;
+			if(CanMoveRight() && !((int)y % tileSize)) c = true;
 			break;
 		case LEFT:
-			if(CanMoveLeft()) c = true;
+			if(CanMoveLeft() && !((int)y % tileSize)) c = true;
 			break;
 		}
 
