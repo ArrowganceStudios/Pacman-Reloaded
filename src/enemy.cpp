@@ -46,6 +46,7 @@ void Ghost::Init(float x, float y, int boundX, int boundY,int away, Ghost &enemy
 		CanGhostGo = false;
 
 	clock_tick = 0;
+	clock_tick_fright = 0;
 
 	if(image != NULL && fimage != NULL && eimage != NULL)
 	{
@@ -99,8 +100,8 @@ void Ghost::Update()
 	//AI
 	if(!((int)x % tileSize) && !((int)y % tileSize) && ((map[GetRow()][GetColumn()] == 2) || (map[GetRow()][GetColumn()] == 4)))
 	{
-		if(GetState() == RETREATING && map[GetRow()][GetColumn()] == 4) //not sure whether it should stay here
-		{																//or be put into AI somehow
+		if(GetState() == RETREATING && map[GetRow()][GetColumn()] == 4)
+		{															
 			ChangeState(CHASE);
 			return;
 		}
@@ -184,7 +185,7 @@ void Ghost::ChangeState(int newState)
 	state = newState;
 	
 	if(state == CHASE)
-	{		if(GhostID != CLYDE)  // so clyde doesn't behave as he is on amphetamine 
+	{		if(GhostID != CLYDE) 
 			ReverseDirection();
 		SetCollidable(true);
 		SetTarget(player->GetX(),player->GetY(), player->GetDirection(), away);
@@ -206,7 +207,6 @@ void Ghost::ChangeState(int newState)
 	else if(state == FRIGHTENED)
 	{
 		ReverseDirection();
-		clock_tick = 0;
 		velocity = 1.1;
 	}
 }
@@ -261,7 +261,7 @@ void Ghost::Render()
 
 	float blink = 1;
 
-		if(clock_tick > 4 && curFrame > 2 && GetState() == FRIGHTENED)
+		if(clock_tick_fright > 4 && curFrame > 2 && GetState() == FRIGHTENED)
 			blink = 0.05;
 
 		int fx = (curFrame % animationColumns) * frameWidth;
@@ -274,19 +274,26 @@ void Ghost::SetImage(ALLEGRO_BITMAP *newImage)
 {
 	Ghost::image = newImage;
 }
-//idk how, but imo the stuff underneath should be handled different way. but srsly don't ask me how coz i have no idea.
-void Ghost::Clock() //it just doesn't feel right when I look at it. I might come up with something interesting soon tho.
+void Ghost::Clock()
 {
-	if((state == FRIGHTENED || state == SCATTER) && clock_tick == 7)
+	if(state == FRIGHTENED)
+	{
+		clock_tick_fright++;
+		if(clock_tick_fright == 7)
+		{
+			clock_tick_fright = 0;
+			clock_tick = 0;
+			ChangeState(SCATTER);
+		}
+	}
+	if(state == SCATTER && clock_tick == 7)
 		ChangeState(CHASE);
 	else if(state == CHASE && clock_tick == 0)
-	{
 		ChangeState(SCATTER);
-	}
 
 	clock_tick++;
 			
-	if(clock_tick >= 27)
+	if(clock_tick >= 22)
 		clock_tick = 0;
 }
 
@@ -401,7 +408,7 @@ void Ghost::AI(int GhostID)
 
 void Ghost::RandomMovement()
 {
-	//there is no loop here, as this function is being called every 0.016s when needed anyway.
+	
 	switch(rand() % 4)
 	{
 	case UP:
@@ -423,6 +430,5 @@ void Ghost::Collided()
 {
 	if(state == FRIGHTENED)
 		ChangeState(RETREATING);
-	//std::cout << GhostID << " has collided!\n";
 }
 

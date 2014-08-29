@@ -152,7 +152,7 @@ int main()
 	al_convert_mask_to_alpha(eyesImage, al_map_rgb(255, 255, 255));
 
 	player->Init((WIDTH + tileSize) / 2, (HEIGHT + tileSize * 8) / 2, 8, 8, 3, pmImage); 
-	blacky->Init((WIDTH + tileSize) / 2,  tileSize * 9,8, 8,0, *blacky, *player, BLACKY, blackyImage, fearImage, eyesImage);  //all ghost init here is needed only for images, cause the rest is overwritten after changing state
+	blacky->Init((WIDTH + tileSize) / 2,  tileSize * 9,8, 8,0, *blacky, *player, BLACKY, blackyImage, fearImage, eyesImage);
 	pinky->Init((WIDTH + tileSize * 3) / 2, tileSize * 9, 8, 8,4, *pinky, *player, PINKY, pinkyImage, fearImage, eyesImage);
 	inky->Init((WIDTH + tileSize) / 2, tileSize * 12, 8, 8, 2,*blacky, *player, INKY, inkyImage, fearImage, eyesImage);
 	clyde->Init((WIDTH + 2*tileSize) / 2, tileSize * 12, 8, 8, 0,*clyde, *player, CLYDE, clydeImage, fearImage, eyesImage);
@@ -243,7 +243,7 @@ int main()
 
 				if(player->GetState() != DYING && player->GetState() != WINNER) // if player is alive
 				{
-					if(spawn_clock < 2*FPS && spawn_clock++)	//ik it looks dumb, but w/e, didn't have anything better on my mind, sorry.			
+					if(spawn_clock < 2*FPS && spawn_clock++)
 						continue;
 					else 
 					{//after spawning timer
@@ -292,7 +292,7 @@ int main()
 								}
 						
 							} //endof collisions check
-						//std::cout << left_coins << std::endl;
+			
 						for(iter = objects.begin(); iter != objects.end(); )
 						{
 								if(!(*iter)->GetAlive())
@@ -327,7 +327,7 @@ int main()
 							}
 
 
-						//endgame checking - the lamest method ever, i wanted to use coin list but it generated so many errors i had to backup my main.cpp...
+						//endgame checking
 						if(!left_coins) 
 						{
 							player->ChangeState(WINNER);
@@ -335,8 +335,8 @@ int main()
 						}
 						
 						//Ghosts update
-						for(iter2 = ghosts.begin(); iter2 != ghosts.end(); ++iter2)       //ghosts list ? -    
-						{                                                                // ^ good idea ~sand3r
+						for(iter2 = ghosts.begin(); iter2 != ghosts.end(); ++iter2)   
+						{                                                        
 								(*iter2)->Update();
 						}
 					}//endif after spawning timer
@@ -411,10 +411,10 @@ int main()
 				al_draw_textf(visitor18, al_map_rgb(255,255,255), 6, 6, 0, "Points: %i", player->GetPoints());
 
 				//debug for ghost states
-				/*al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2, BLACKY*30, ALLEGRO_ALIGN_CENTER, "blacky %i",blacky->GetState());
+				al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2, BLACKY*30, ALLEGRO_ALIGN_CENTER, "blacky %i",blacky->GetState());
 				al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2, PINKY*30, ALLEGRO_ALIGN_CENTER, "pinky %i", pinky->GetState());
 				al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2, INKY*30, ALLEGRO_ALIGN_CENTER, "inky %i", inky->GetState());
-				al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2,  CLYDE*30, ALLEGRO_ALIGN_CENTER, "clyde %i", clyde->GetState());*/
+				al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH / 2,  CLYDE*30, ALLEGRO_ALIGN_CENTER, "clyde %i", clyde->GetState());
 				
 				//rendering ghost house doors
 				al_draw_line(283, 305, 325, 305, al_map_rgb(0, 0, 0), 8);
@@ -423,7 +423,7 @@ int main()
 					al_draw_filled_circle(20*(i+1), HEIGHT - 14, 7, al_map_rgb_f(1, 1, 0));
 				
 				//rendering text after pacman's death
-				if(player->GetState() == DYING) al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH/2, HEIGHT/2, ALLEGRO_ALIGN_CENTER, "lel faget");
+				if(player->GetState() == DYING) al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH/2, HEIGHT/2, ALLEGRO_ALIGN_CENTER, "Busted!");
 
 				//rendering text after level completion
 				if(player->GetState() == WINNER) al_draw_textf(visitor18, al_map_rgb(255,255,255), WIDTH/2, HEIGHT/2, ALLEGRO_ALIGN_CENTER, "Well done!");
@@ -507,14 +507,14 @@ void ChangeState(int &state, int newState)
 					if(map[i][j] == 1 || map[i][j] == 2)
 					{
 						Coin *coin = new Coin();
-						coin->Init((j)*tileSize, (i+1)*tileSize, 1, 1);			//TEMPORARY
+						coin->Init((j)*tileSize, (i+1)*tileSize, 1, 1);	
 						objects.push_back(coin);
 						left_coins++;
 					}
 					else if(map[i][j]  == 5)
 					{
 						PowerUp *powerup = new PowerUp();
-						powerup->Init((j)*tileSize, (i+1)*tileSize, 6, 6);			//TEMPORARY
+						powerup->Init((j)*tileSize, (i+1)*tileSize, 6, 6);
 						objects.push_back(powerup);
 						left_coins++;
 					}
@@ -544,14 +544,14 @@ void ChangeState(int &state, int newState)
 				if(map[i][j] == 1 || map[i][j] == 2)
 				{
 					Coin *coin = new Coin();
-					coin->Init((j)*tileSize, (i+1)*tileSize, 1, 1);			//TEMPORARY
+					coin->Init((j)*tileSize, (i+1)*tileSize, 1, 1);		
 					objects.push_back(coin);
 					left_coins++;
 				}
 				else if(map[i][j]  == 5)
 				{
 					PowerUp *powerup = new PowerUp();
-					powerup->Init((j)*tileSize, (i+1)*tileSize, 6, 6);			//TEMPORARY
+					powerup->Init((j)*tileSize, (i+1)*tileSize, 6, 6);		
 					objects.push_back(powerup);
 					left_coins++;
 				}

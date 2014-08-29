@@ -15,7 +15,7 @@ void PowerUp::Init(float x, float y, int boundX, int boundY)
 
 void PowerUp::Render()
 {
-	al_draw_filled_circle(GetX() - 16, GetY() - 16, 6, al_map_rgb_f(1, 1, 0));			//TEMPORARY
+	al_draw_filled_circle(GetX() - 16, GetY() - 16, 6, al_map_rgb_f(1, 1, 0));	
 }
 
 void PowerUp::Collided()

@@ -164,7 +164,6 @@ int Pacman::GetPoints()
 	return points;
 }
 
-
 int Pacman::GetPowerUpPoints()
 {
 	return powerUpPoints;
@@ -203,7 +202,7 @@ void Pacman::Collided(int ObjectID)
 }
 
 
-void Pacman::CollidedWithGhost(int GhostState) // actually we can just modify collided so we dont have 2 functions for collision
+void Pacman::CollidedWithGhost(int GhostState)
 {
 		if (GetState() == POWERUP && GhostState == FRIGHTENED)
 		{
