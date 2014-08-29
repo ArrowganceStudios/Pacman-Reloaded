@@ -46,7 +46,6 @@ void Ghost::Init(float x, float y, int boundX, int boundY,int away, Ghost &enemy
 		CanGhostGo = false;
 
 	clock_tick = 0;
-	//clock_tick_fright = 0;
 
 	if(image != NULL && fimage != NULL && eimage != NULL)
 	{
@@ -262,7 +261,7 @@ void Ghost::Render()
 
 	float blink = 1;
 
-		if(clock_tick/*_fright*/ > 4 && curFrame > 2 && GetState() == FRIGHTENED)
+		if(clock_tick > 4 && curFrame > 2 && GetState() == FRIGHTENED)
 			blink = 0.05;
 
 		int fx = (curFrame % animationColumns) * frameWidth;
@@ -359,41 +358,6 @@ void Ghost::AI(int GhostID)
 			SetDir(chosenDirection);
 
 		}
-
-	
-
-
-
-
-	/*angle = AngleToTarget(targetX, targetY, dx, dy);
-	
-	if(distanceX > distanceY && (CanMoveRight() || CanMoveLeft()))
-	{
-		if(cos(angle) >= 0 && CanMoveRight() && (GetDirection() != LEFT))
-			SetDir(RIGHT);
-		else if(cos(angle) < 0 && CanMoveLeft() && (GetDirection() != RIGHT))
-			SetDir(LEFT);
-		else 
-		{
-			std::cout << GhostID << std::endl;
-			RandomMovement();
-		}
-	}
-	else if(distanceX < distanceY && (CanMoveUp() || CanMoveDown()))
-	{
-		if(sin(angle) >= 0 && CanMoveDown() && (GetDirection() != UP))
-			SetDir(DOWN);
-		else if(sin(angle) < 0 && CanMoveUp() && (GetDirection() != DOWN))
-			SetDir(UP);
-		else 
-		{
-			std::cout << GhostID << std::endl;
-			RandomMovement();
-		}
-	}
-	else 
-		RandomMovement();*/
-
 }
 
 

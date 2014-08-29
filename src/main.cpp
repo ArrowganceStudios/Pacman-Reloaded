@@ -466,6 +466,11 @@ int main()
 
 	delete player;
 
+	delete blacky;
+	delete pinky;
+	delete inky;
+	delete clyde;
+
 	delete blackysScatterPoint;
 	delete pinkysScatterPoint; 
 	delete inkysScatterPoint; 

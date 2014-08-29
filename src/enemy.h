@@ -20,7 +20,6 @@ private:
 	float ScatterPointY;
 
 	int clock_tick;
-	//int clock_tick_fright;
 
 	int dot_counter;
 
