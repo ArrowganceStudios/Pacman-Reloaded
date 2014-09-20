@@ -69,6 +69,4 @@ bool MobileObject::CanMoveRight()
 }
 
 void MobileObject::Collided(int ObjectID)
-{
-	//eeeee????????
-}
+{}

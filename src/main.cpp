@@ -11,7 +11,6 @@
 #include "game_object.h"
 #include "enemy.h"
 #include "player.h"
-#include "menu.h"
 #include "globals.h"
 #include "scatter_point.h"
 #include "coin.h"
@@ -29,9 +28,9 @@ ScatterPoint *pinkysScatterPoint;
 ScatterPoint *inkysScatterPoint;
 ScatterPoint *clydesScatterPoint;
 
-std::list<Ghost*> ghosts;  //what do u think about using it?
+std::list<Ghost*> ghosts;
 
-std::list<Ghost *>::iterator iter2; //what is that for? ~sand3r // look up ~me
+std::list<Ghost *>::iterator iter2;
 
 std::list<StaticObject*> objects;
 
@@ -503,7 +502,7 @@ void ChangeState(int &state, int newState)
 {
 	if(state == PLAYING)
 	{
-		if(player->GetState() == WINNER)			//temporary...
+		if(player->GetState() == WINNER)
 		{
 			for(int i = 0; i < 21; i++)				
 			{
@@ -566,9 +565,7 @@ void ChangeState(int &state, int newState)
 
 	state = newState;
 
-	if(state ==TITLE)
-	{}
-	else if(state == PLAYING)
+	if(state == PLAYING)
 	{
 		//scatter points inits
 		blackysScatterPoint->Init(tileSize* 18, tileSize);
@@ -587,10 +584,6 @@ void ChangeState(int &state, int newState)
 		pinky->SetScatterPoint(pinkysScatterPoint->GetX(), pinkysScatterPoint->GetY());
 		inky->SetScatterPoint(inkysScatterPoint->GetX(), inkysScatterPoint->GetY());
 		clyde->SetScatterPoint(clydesScatterPoint->GetX(), clydesScatterPoint->GetY());
-	}
-	else if(state == LOST)
-	{
-		
 	}
 }
 
