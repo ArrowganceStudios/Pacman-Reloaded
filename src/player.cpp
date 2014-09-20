@@ -1,5 +1,4 @@
 #include "player.h"
-#include <iostream>
 
 static int n;
 

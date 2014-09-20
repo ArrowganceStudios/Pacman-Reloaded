@@ -49,7 +49,6 @@ public:
 	bool GetAlive() {return alive;}
 	void SetAlive(bool alive) {GameObject::alive = alive;}
 
-	bool GetCollidable() {return collidable;}
 	void SetCollidable(bool collidable) {GameObject::collidable = collidable;}
 
 	int GetBoundX() {return boundX;}
