@@ -246,7 +246,6 @@ int main()
 						continue;
 					else 
 					{//after spawning timer
-						player->Update(keys);
 
 						//COLLISIONS CHECK
 						for(iter = objects.begin(); iter != objects.end(); ++iter)           
@@ -338,6 +337,8 @@ int main()
 						{                                                        
 								(*iter2)->Update();
 						}
+						
+						player->Update(keys);
 					}//endif after spawning timer
 				} //endif player is alive
 				else //if player is dead or completes level

@@ -203,7 +203,7 @@ void Pacman::Collided(int ObjectID)
 
 void Pacman::CollidedWithGhost(int GhostState)
 {
-		if (GetState() == POWERUP && GhostState == FRIGHTENED)
+		if (GhostState == FRIGHTENED)
 		{
 			powerUpPoints = pow(2.0, n) * 200;
 			points += powerUpPoints;
