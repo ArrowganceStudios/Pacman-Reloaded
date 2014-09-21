@@ -137,14 +137,15 @@ void Ghost::Update()
 			if(CanMoveRight() || (int)x % tileSize) MoveRight();
 			break;
 	}
-	if(x < 2)
+
+	if(x < 1)
 		x = WIDTH + tileSize;
-	else if(x > WIDTH+30)
-		x = 0;
-	if(y < 2)
+	else if(x > WIDTH+31)
+		x = 1;
+	if(y < 1)
 		y = HEIGHT + tileSize;
-	else if (y > HEIGHT+30)
-		y = 0;
+	else if (y > HEIGHT+31)
+		y = 1;
 }
 
 void Ghost::SetCanGhostGo(bool CanGhostGo)
