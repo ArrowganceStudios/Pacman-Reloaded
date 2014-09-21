@@ -83,7 +83,7 @@ void Ghost::SetTarget(float targetX, float targetY, int targetDirection, int awa
 	Ghost::targetX = targetX + dx;
 	Ghost::targetY = targetY + dy;
 
-	if(GhostID == INKY && GetState() == CHASE)
+	if(GhostID == INKY && GetState() == CHASE && map[GetRow()][GetColumn()] != 4)
 	{
 
 			Ghost::targetX -= enemy->GetX() - Ghost::targetX;
@@ -117,7 +117,6 @@ void Ghost::Update()
 
 		if(map[GetRow()][GetColumn()] == 4 && CanGhostGo)
 				SetTarget(316, 272, -1, 0);
-
 			AI(GhostID);
 		
 	}
