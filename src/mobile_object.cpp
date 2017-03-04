@@ -3,8 +3,6 @@
 
 MobileObject::MobileObject()
 {
-	GameObject::GameObject();
-	
 	state = -1;
 }
 

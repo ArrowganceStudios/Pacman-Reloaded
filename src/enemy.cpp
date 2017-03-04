@@ -6,7 +6,6 @@ Ghost::Ghost()
 {
 	SetID(ENEMY);
 
-	MobileObject::MobileObject();
 	x = 0;
 	y = 0;
 	boundX = 0;
@@ -385,4 +384,3 @@ void Ghost::Collided()
 	if(state == FRIGHTENED)
 		ChangeState(RETREATING);
 }
-

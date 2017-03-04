@@ -1,0 +1,5 @@
+# Game binary
+pacman
+
+# Object files
+**/*.o
