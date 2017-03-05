@@ -5,7 +5,7 @@
 class Coin : public StaticObject
 {
 public:
-	Coin::Coin();
+	Coin();
 
 	void Init(float x, float y, int boundX, int boundY);
 

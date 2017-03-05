@@ -3,7 +3,6 @@
 Coin::Coin()
 {
 	SetID(COIN);
-	StaticObject::StaticObject();
 }
 
 void Coin::Init(float x, float y, int boundX, int boundY)

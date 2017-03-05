@@ -3,7 +3,6 @@
 PowerUp::PowerUp()
 {
 	SetID(PILL);
-	StaticObject::StaticObject();
 }
 
 void PowerUp::Init(float x, float y, int boundX, int boundY)

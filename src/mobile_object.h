@@ -3,8 +3,8 @@
 #include "game_object.h"
 #include "globals.h"
 #include "math.h"
-#include <allegro5\allegro.h>
-#include <allegro5\allegro_primitives.h>
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
 
 class MobileObject : public GameObject
 {
@@ -14,7 +14,7 @@ protected:
 	int state;
 
 public:
-	MobileObject::MobileObject(void);
+	MobileObject(void);
 
 
 	int GetState() {return state;}
