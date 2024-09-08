@@ -10,6 +10,12 @@ __2D Graphic Engine:__ Allegro 5.0.10
 ### CMake - Windows
 _Building with CMake is currently only supported on Windows._
 
+Supported compilers:
+- Visual Studio 2019
+- Visual Studio 2022
+
+Building in both 32- and 64-bit mode should be supported, although the 32-bit build wasn't tested.
+
 Requires CMake 3.15+. 
 To obtain it, either:
 - download it from official distributor [here](https://cmake.org/download/)

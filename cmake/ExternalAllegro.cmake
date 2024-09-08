@@ -49,10 +49,16 @@ else()
     message(STATUS "Allegro5 binaries already extracted.")
 endif()
 
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(ARCH "x64")
+else()
+    set(ARCH "win32")
+endif()
+
 # Step 3: Set the CMake variables used by src/CMakeLists.txt
 set(ALLEGRO_INCLUDES ${ALLEGRO_DIR}/build/native/include)
-set(ALLEGRO_LIB_DIR ${ALLEGRO_DIR}/build/native/v143/x64/deps/lib;
-                    ${ALLEGRO_DIR}/build/native/v143/x64/lib)
+set(ALLEGRO_LIB_DIR ${ALLEGRO_DIR}/build/native/v${MSVC_TOOLSET_VERSION}/${ARCH}/deps/lib;
+                    ${ALLEGRO_DIR}/build/native/v${MSVC_TOOLSET_VERSION}/${ARCH}/lib)
 
 list(APPEND ALLEGRO_LIBS allegro)
 list(APPEND ALLEGRO_LIBS allegro_primitives)
@@ -63,4 +69,4 @@ list(APPEND ALLEGRO_LIBS allegro_audio)
 list(APPEND ALLEGRO_LIBS allegro_acodec)
 
 # Copy .dlls to the bin/ directory
-file(INSTALL ${ALLEGRO_DIR}/build/native/v143/x64/bin/ DESTINATION ${OUTPUT_BINARY_DIR})
+file(INSTALL ${ALLEGRO_DIR}/build/native/v${MSVC_TOOLSET_VERSION}/${ARCH}/bin/ DESTINATION ${OUTPUT_BINARY_DIR})
