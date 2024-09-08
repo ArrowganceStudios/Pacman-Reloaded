@@ -336,7 +336,7 @@ void Ghost::AI(int GhostID)
 	
 		int dir[4];
 		int min = 999;
-		int chosenDirection;
+		int chosenDirection = -1;
 
 		dir[UP] = GetDistance(GetX(), GetY() - tileSize);
 		dir[DOWN] = GetDistance(GetX(), GetY() + tileSize);
@@ -352,7 +352,7 @@ void Ghost::AI(int GhostID)
 					chosenDirection = i;
 				}
 	
-
+		if (chosenDirection != -1)
 			SetDir(chosenDirection);
 
 		}
