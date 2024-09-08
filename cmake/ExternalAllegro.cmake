@@ -1,47 +1,66 @@
-include(FetchContent)
-set(FETCHCONTENT_BASE_DIR ${CMAKE_BINARY_DIR}/3rdparty)
-set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
+# Define the download URL and the output file paths
+set(ALLEGRO_URL "https://www.nuget.org/api/v2/package/Allegro/5.2.9")
+set(ALLEGRO_DEPS_URL "https://www.nuget.org/api/v2/package/AllegroDeps/1.15.0-nightly.20240817")
+set(ALLEGRO_ZIP "${CMAKE_BINARY_DIR}/allegro.zip")
+set(ALLEGRO_DEPS_ZIP "${CMAKE_BINARY_DIR}/allegro_deps.zip")
+set(ALLEGRO_DIR "${CMAKE_BINARY_DIR}/allegro")
 
-set(ALLEGRO_PROJECT "allegro_project")
+# Step 1: Download the Allegro5 zip file
+if(NOT EXISTS ${ALLEGRO_ZIP})
+  message(STATUS "Downloading Allegro5 binaries...")
+  file(DOWNLOAD ${ALLEGRO_URL} ${ALLEGRO_ZIP} SHOW_PROGRESS)
+endif()
 
-# Setting options by set() instead of CMAKE_ARGS in FetchContent
-# because the policy CMP0077 wasn't set to NEW in allegro project.
-# In other words, the CMAKE_ARGS cache variable settings are 
-# overwritten by the default cache values determined by allegro,
-# when this policy is not set.
-set(WANT_DOCS OFF CACHE INTERNAL "")
-set(WANT_DOCS_HTML OFF CACHE INTERNAL "")
-set(WANT_DOCS_MAN OFF CACHE INTERNAL "")
-set(WANT_DEMO OFF CACHE INTERNAL "")
-set(WANT_EXAMPLES OFF CACHE INTERNAL "")
-set(WANT_POPUP_EXAMPLES OFF CACHE INTERNAL "")
-set(WANT_POPUP_EXAMPLES OFF CACHE INTERNAL "")
-set(WANT_TESTS OFF CACHE INTERNAL "")
+# Step 1.5: Download the Allegro5 deps zip file
+if(NOT EXISTS ${ALLEGRO_DEPS_ZIP})
+  message(STATUS "Downloading Allegro5-deps binaries...")
+  file(DOWNLOAD ${ALLEGRO_DEPS_URL} ${ALLEGRO_DEPS_ZIP} SHOW_PROGRESS)
+endif()
 
-FetchContent_Declare(
-  ${ALLEGRO_PROJECT}
-  GIT_REPOSITORY      "https://github.com/liballeg/allegro5.git"
-  CMAKE_ARGS          -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-  GIT_SHALLOW         TRUE
-)
-FetchContent_MakeAvailable(${ALLEGRO_PROJECT})
+# Step 2: Extract the ZIP file
+if(NOT EXISTS ${ALLEGRO_DIR})
+    message(STATUS "Extracting Allegro5 and deps binaries...")
 
-# Base allegro includes and targets
-list(APPEND ALLEGRO_INCLUDES ${${ALLEGRO_PROJECT}_BINARY_DIR}/include)
-list(APPEND ALLEGRO_INCLUDES ${${ALLEGRO_PROJECT}_SOURCE_DIR}/include)
+    # Create the directory to extract files
+    file(MAKE_DIRECTORY ${ALLEGRO_DIR})
+
+    # Use execute_process to unzip allegro
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E tar x ${ALLEGRO_ZIP}
+        RESULT_VARIABLE res WORKING_DIRECTORY ${ALLEGRO_DIR}
+    )
+
+    if(NOT res EQUAL "0")
+        message(FATAL_ERROR "Failed to extract Allegro5 binaries!")
+        file(REMOVE RECURSE ${ALLEGRO_DIR})
+    endif()
+
+    # Use execute_process to unzip allegro deps
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E tar x ${ALLEGRO_DEPS_ZIP}
+        RESULT_VARIABLE res WORKING_DIRECTORY ${ALLEGRO_DIR}
+    )
+
+    if(NOT res EQUAL "0")
+        message(FATAL_ERROR "Failed to extract Allegro5 binaries!")
+        file(REMOVE RECURSE ${ALLEGRO_DIR})
+    endif()
+else()
+    message(STATUS "Allegro5 binaries already extracted.")
+endif()
+
+# Step 3: Set the CMake variables used by src/CMakeLists.txt
+set(ALLEGRO_INCLUDES ${ALLEGRO_DIR}/build/native/include)
+set(ALLEGRO_LIB_DIR ${ALLEGRO_DIR}/build/native/v143/x64/deps/lib;
+                    ${ALLEGRO_DIR}/build/native/v143/x64/lib)
+
 list(APPEND ALLEGRO_LIBS allegro)
-
-# Addons includes and targets
-set(ALLEGRO_ADDON_PATH ${${ALLEGRO_PROJECT}_SOURCE_DIR}/addons)
-list(APPEND ALLEGRO_INCLUDES ${ALLEGRO_ADDON_PATH}/primitives)
-list(APPEND ALLEGRO_INCLUDES ${ALLEGRO_ADDON_PATH}/image)
-list(APPEND ALLEGRO_INCLUDES ${ALLEGRO_ADDON_PATH}/font)
-list(APPEND ALLEGRO_INCLUDES ${ALLEGRO_ADDON_PATH}/ttf)
-list(APPEND ALLEGRO_INCLUDES ${ALLEGRO_ADDON_PATH}/audio)
-list(APPEND ALLEGRO_INCLUDES ${ALLEGRO_ADDON_PATH}/acodec)
 list(APPEND ALLEGRO_LIBS allegro_primitives)
 list(APPEND ALLEGRO_LIBS allegro_image)
 list(APPEND ALLEGRO_LIBS allegro_font)
 list(APPEND ALLEGRO_LIBS allegro_ttf)
 list(APPEND ALLEGRO_LIBS allegro_audio)
 list(APPEND ALLEGRO_LIBS allegro_acodec)
+
+# Copy .dlls to the bin/ directory
+file(INSTALL ${ALLEGRO_DIR}/build/native/v143/x64/bin/ DESTINATION ${OUTPUT_BINARY_DIR})

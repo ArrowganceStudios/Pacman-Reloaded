@@ -7,8 +7,10 @@ __2D Graphic Engine:__ Allegro 5.0.10
 
 ## Build
 
-### CMake
-Requires CMake 3.14+. 
+### CMake - Windows
+_Building with CMake is currently only supported on Windows._
+
+Requires CMake 3.15+. 
 To obtain it, either:
 - download it from official distributor [here](https://cmake.org/download/)
 - install it using pip `pip install cmake` or `pip install --user cmake` if you don't have root privilages
@@ -21,17 +23,7 @@ cd build
 cmake ..
 cmake --build .
 ```
-Pacman will then be built and installed to `PROJECT_ROOT/bin` directory and should be ready to be played.
-
-#### Note for Windows users:
-When running `cmake ..` command for generating build files, and you want to use MSVC to compile Pacman, 
-you first have to run vcvarsall.bat ([see where to find it](https://social.msdn.microsoft.com/Forums/en-US/1071be0e-2a46-4c30-9546-ea9d7c4755fa/where-is-vcvarsallbat-file?forum=visualstudiogeneral)) in the shell you'll use and then choose one of the following generators using -G switch.
-```bash
-cmake -G"Visual Studio <VERSION> <RELEASE YEAR>" ..
-cmake -G"NMake Makefiles" ..
-cmake -G"NMake Makefiles JOM" .. // if you have jom build system installed
-```
-`"Visual Studio <VERSION> <RELEASE YEAR>"` can be for example `"Visual Studio 16 2019"`. To find out all generators available, type `cmake --help`.
+Pacman will built to `build/bin` directory with necessary assets copied, ready to be launched.
 
 ### Debian/Ubuntu Linux:
 
